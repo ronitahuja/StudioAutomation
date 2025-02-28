@@ -3,6 +3,7 @@ const { LLMController } = require("../../controllers");
 const LLMRouter = express.Router();
 
 LLMRouter.post("/query", (req, res, next) => {
+  console.log("inside route")
   const { model } = req.body;
   const llmControllerInstance = new LLMController(model);
   return llmControllerInstance.queryLLM(req, res, next);

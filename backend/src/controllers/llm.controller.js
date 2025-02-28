@@ -7,6 +7,8 @@ class LLMController {
   async queryLLM(req, res, next) {
     try {
       const queryObj = req.body;
+      console.log("inside controller")
+      console.log(queryObj)
       const response = await this.llmService.queryLLM(queryObj);
       return res.status(200).json({
         success: true,
