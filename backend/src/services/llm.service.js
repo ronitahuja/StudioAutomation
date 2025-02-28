@@ -6,9 +6,8 @@ class LLMService {
     this.history = "";
   }
   async queryLLM(queryObj) {
-    console.log("inside service")
     
-    let res = await fetch("http://localhost:4000/api/v1/functions/search", {
+    let res = await fetch("http://localhost:3000/api/v1/functions/search", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -19,7 +18,6 @@ class LLMService {
     });
     
     res = await res.json();
-    console.log(res);
     if (res) {
       res = res.data;
       const parsedResult = res.map((data, i) => {
