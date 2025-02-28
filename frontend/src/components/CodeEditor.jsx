@@ -19,7 +19,6 @@ const CodeEditor = ({ transactionRows }) => {
 
   const handleSubmit = async (event) => {
     event.preventDefault();
-    console.log("working fine");
   
     if (!inputValue.trim()) return;
   
@@ -28,8 +27,6 @@ const CodeEditor = ({ transactionRows }) => {
     setIsAiResponseVisible(true);
   
     try {
-      console.log(apiData);
-  
       const response = await fetch(llm_query, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
@@ -40,14 +37,12 @@ const CodeEditor = ({ transactionRows }) => {
           model: model,
         }),
       });
-      console.log("Response Object:",response);
   
       if (!response.ok) {
         throw new Error(`Server error: ${response.status}`);
       }
   
       const data = await response.json();  
-      console.log("Response from API:", data);
   
       setAiCode(data.data || "No response received"); 
   
