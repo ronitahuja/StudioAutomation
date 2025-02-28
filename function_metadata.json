@@ -1,0 +1,601 @@
+[
+    {
+        "name": "DBSDecodeFileBase64",
+        "description": "This function helps to decode a file using base64.",
+        "syntax": "DBSDecodeFileBase64(\"input_file_path\", \"output_file_path\")",
+        "parameters": [
+            {
+                "name": "input_file_path",
+                "type": "String",
+                "description": "The path of the file that needs to be decoded using base64."
+            },
+            {
+                "name": "output_file_path",
+                "type": "String",
+                "description": "The path of the file where the base64 decoded content will be stored."
+            }
+        ],
+        "return_value": "String",
+        "example": "DBSDecodeFileBase64(\"Root:\\Users\\A\", \"Root:\\Users\\B\")"
+    },
+    {
+        "name": "DBSAPIHeaders",
+        "description": "The DBSAPIHeaders() function fetches headers from a specific URL.",
+        "syntax": "DBSAPIHeaders()",
+        "parameters": [],
+        "return_value": "None",
+        "example": null
+    },
+    {
+        "name": "DBSCsvToExcel",
+        "description": "This function helps convert a CSV file to an Excel sheet.",
+        "syntax": "DBSCsvToExcel(\"input_file_path\",\"output_file_path\")",
+        "parameters": [
+            {
+                "name": "input_file_path",
+                "type": "String",
+                "description": "The path of the CSV file that needs to be converted."
+            },
+            {
+                "name": "output_file_path",
+                "type": "String",
+                "description": "The path where the Excel file will be stored."
+            }
+        ],
+        "return_value": "String",
+        "example": "DBSCsvToExcel(\"Root:\\Users\\A\", \"Root:\\Users\\B\")"
+    },
+    {
+        "name": "DBSDecodeTextBase64",
+        "description": "This function helps to decode text using Base64.",
+        "syntax": "DBSDecodeTextBase64(\"string to decode\")",
+        "parameters": [
+            {
+                "name": "string to decode",
+                "type": "String",
+                "description": "The string to decode."
+            }
+        ],
+        "return_value": "String",
+        "example": "DBSDecodeTextBase64(\"XYZ\")"
+    },
+    {
+        "name": "DBSDecryptFileAes256",
+        "description": "This function helps decrypt a file using AES256.",
+        "syntax": "DBSDecryptFileAes256(\"input_file_path\",\"output_file_path\",\"key\")",
+        "parameters": [
+            {
+                "name": "input_file_path",
+                "type": "String",
+                "description": "The path of the file that needs to be decrypted."
+            },
+            {
+                "name": "output_file_path",
+                "type": "String",
+                "description": "The path of the file where the decrypted content will be stored."
+            },
+            {
+                "name": "key",
+                "type": "String",
+                "description": "The decryption key that must be at least 32 characters."
+            }
+        ],
+        "return_value": "String",
+        "example": "DBSDecryptFileAes256(\"Root:\\Users\\A\", \"Root:\\Users\\B\", \"1q2w3e4r5t6y7u8i9o0p1a2s3d4f5g6\")"
+    },
+    {
+        "name": "DBSDecryptFilePgp",
+        "description": "This function helps decrypt a file using PGP.",
+        "syntax": "DBSDecryptFilePgp(\"input_file_path\",\"output_file_path\",\"key\")",
+        "parameters": [
+            {
+                "name": "input_file_path",
+                "type": "String",
+                "description": "The path of the file that needs to be decrypted."
+            },
+            {
+                "name": "output_file_path",
+                "type": "String",
+                "description": "The path of the file where the decrypted content will be stored."
+            },
+            {
+                "name": "key",
+                "type": "String",
+                "description": "The decryption key that must be at least 32 characters."
+            }
+        ],
+        "return_value": "String",
+        "example": "DBSDecryptFilePgp(\"Root:\\Users\\A\", \"Root:\\Users\\B\", \"1q2w3e4r5t6y7u8i9o0p1a2s3d4f5g6\")"
+    },
+    {
+        "name": "DBSEmail",
+        "description": "The DBSEmail() function empowers you to craft and send emails with customizable content, subject, attachments, CC, sender, and recipient.",
+        "syntax": "DBSEmail(email_body, send_to, subject, attachment, file_name, send_cc, from_email, date_format)",
+        "parameters": [
+            {
+                "name": "email_body",
+                "type": "String",
+                "description": "Email body data"
+            },
+            {
+                "name": "send_to",
+                "type": "String",
+                "description": "List of email addresses to which this email must be sent."
+            },
+            {
+                "name": "subject",
+                "type": "String",
+                "description": "Subject line of the email."
+            },
+            {
+                "name": "attachment",
+                "type": "String/List",
+                "description": "Email Attachments"
+            },
+            {
+                "name": "file_name",
+                "type": "String",
+                "description": "Name of the file being attached."
+            },
+            {
+                "name": "send_cc",
+                "type": "String/List",
+                "description": "List of email addresses to which this email must be cc'ed."
+            },
+            {
+                "name": "from_email",
+                "type": "String",
+                "description": "Email ID from which the email is being sent."
+            },
+            {
+                "name": "date_format",
+                "type": "Integer",
+                "description": "Date on which the email is sent."
+            }
+        ],
+        "return_value": "None",
+        "example": "DBSEmail(\"Hi All\", \"jdoe@janedoe.org\", \"Intro\", attachment=None, file_name=None, send_cc=None, from_email=\"noreply@darwinbox.in\", date_format=1)"
+    },
+    {
+        "name": "DBSEncodeFileBase64",
+        "description": "Encodes a file using Base64.",
+        "syntax": "DBSEncodeFileBase64(\"input_file_path\",\"output_file_path\")",
+        "parameters": {
+            "input_file_path": {
+                "type": "String",
+                "description": "The path of the file that needs to be encoded using base64."
+            },
+            "output_file_path": {
+                "type": "String",
+                "description": "The path of the file where the base64 encoded content will be stored."
+            }
+        },
+        "return_value": "String",
+        "example": "DBSEncodeFileBase64(\"Root:\\Users\\A\", \"Root:\\Users\\B\")"
+    },
+    {
+        "name": "DBSEncodeTextBase64",
+        "description": "Encodes text using Base64.",
+        "syntax": "DBSEncodeTextBase64(\"string to encode\")",
+        "parameters": {
+            "string to encode": {
+                "type": "String",
+                "description": "The string to encode."
+            }
+        },
+        "return_value": "String",
+        "example": "DBSEncodeTextBase64(\"XYZ\")"
+    },
+    {
+        "name": "DBSEncryptFileAes256",
+        "description": "Encrypts a file using AES256.",
+        "syntax": "DBSEncryptFileAes256(\"input_file_path\",\"output_file_path\",\"key\")",
+        "parameters": {
+            "input_file_path": {
+                "type": "String",
+                "description": "The path of the file that needs to be encrypted."
+            },
+            "output_file_path": {
+                "type": "String",
+                "description": "The path of the file where the encrypted content will be stored."
+            },
+            "key": {
+                "type": "String",
+                "description": "The encryption key that must be at least 32 characters."
+            }
+        },
+        "return_value": "String",
+        "example": "DBSEncryptFileAes256(\"Root:\\Users\\A\", \"Root:\\Users\\B\", \"1q2w3e4r5t6y7u8i9o0p1a2s3d4f5g6\")"
+    },
+    {
+        "name": "DBSEncryptFilePgp",
+        "description": "Encrypts a file using PGP.",
+        "syntax": "DBSEncryptFilePgp(\"input_file_path\",\"output_file_path\",\"key\")",
+        "parameters": {
+            "input_file_path": {
+                "type": "String",
+                "description": "The path of the file that needs to be encrypted."
+            },
+            "output_file_path": {
+                "type": "String",
+                "description": "The path of the file where the encrypted content will be stored."
+            },
+            "key": {
+                "type": "String",
+                "description": "The encryption key that must be at least 32 characters."
+            }
+        },
+        "return_value": "String",
+        "example": "DBSEncryptFilePgp(\"Root:\\Users\\A\", \"Root:\\Users\\B\", \"1q2w3e4r5t6y7u8i9o0p1a2s3d4f5g6\")"
+    },
+    {
+        "name": "DBSEncryptTextAes256",
+        "description": "This function helps encrypt text using AES256.",
+        "syntax": "DBSEncryptAes256(\"text to encrypt\",\"key\")",
+        "parameters": [
+            {
+                "name": "text to encrypt",
+                "type": "String",
+                "description": "The text that needs to be encrypted."
+            },
+            {
+                "name": "key",
+                "type": "String",
+                "description": "The encryption key that must be at least 32 characters."
+            }
+        ],
+        "return_value": "The return value is in the String format.",
+        "example": "DBSEncryptAes256(\"Demo Encryption Text\",\"1q2w3e4r5t6y7u8i9o0p1a2s3d4f5g6\")"
+    },
+    {
+        "name": "DBSEncryptTextPgp",
+        "description": "This function helps encrypt a text using PGP.",
+        "syntax": "DBSEncryptPgp(\"text to encrypt\",\"key\")",
+        "parameters": [
+            {
+                "name": "text to encrypt",
+                "type": "String",
+                "description": "The text that needs to be encrypted."
+            },
+            {
+                "name": "key",
+                "type": "String",
+                "description": "The encryption key that must be at least 32 characters."
+            }
+        ],
+        "return_value": "The return value is in the String format.",
+        "example": "DBSEncryptPgp(\"Demo Encryption Text\",\"1q2w3e4r5t6y7u8i9o0p1a2s3d4f5g6\")"
+    },
+    {
+        "name": "DBSEval",
+        "description": "DBSEval function evaluates a mathematical expression string using basic arithmetic operations like addition, subtraction, multiplication, division, etc. It implements a custom expression evaluator with operator precedence.",
+        "syntax": "DBSEval(expression, globals=None, locals=None)",
+        "parameters": [
+            {
+                "name": "expression",
+                "type": "String",
+                "description": "The mathematical expression to be evaluated. It can include numbers, operators (e.g., +, -, *, /), parentheses for grouping, and variable names."
+            },
+            {
+                "name": "globals",
+                "type": "dict",
+                "description": "A dictionary representing the global namespace. Variables in the expression that aren't numbers are first looked up in this dictionary. Default is an empty dict."
+            },
+            {
+                "name": "locals",
+                "type": "dict",
+                "description": "A dictionary representing the local namespace. Variables not found in \u2018globals\u2019 are looked up here. Default is an empty dict."
+            }
+        ],
+        "return_value": "The result of evaluating the expression. It will be a numeric result (int or float) based on the values provided and the operations performed.",
+        "example": "The following function picks value for x from globals_dict, y from locals_dict and evaluates the expressionIf, globals_dict = {'x': 10} and locals_dict = {'y': 5} DBSEval('x + y*2', globals=globals_dict, locals=locals_dict) Output: 20"
+    },
+    {
+        "name": "DBSEvent",
+        "description": "This function enables you to fetch event data.",
+        "syntax": "def DBSEvent(json_arg, node)",
+        "parameters": [
+            {
+                "name": "json_arg",
+                "type": "Boolean",
+                "description": "Specifies whether the event data is in JSON format or not."
+            },
+            {
+                "name": "node",
+                "type": "Integer",
+                "description": "To get data from a specific JSON node."
+            }
+        ],
+        "return_value": "The return value can be Any.",
+        "example": "DBSEvent(True)"
+    },
+    {
+        "name": "DBSExcelToCsv",
+        "description": "This function enables you to fetch event data.",
+        "syntax": "def DBSEvent(json_arg, node)",
+        "parameters": [],
+        "return_value": "The return value can be Any.",
+        "example": "DBSEvent(True)"
+    },
+    {
+        "name": "DBSFetchCombinedReportDataframe",
+        "description": "This function reads all the sub-reports received from the reports builder and merges all the sub-reports after converting them to data frames row-wise, ignoring the index, so that they are combined into a continuous data frame and return the resultant combined data frame.",
+        "syntax": "DBSFetchCombinedReportDataFrame()",
+        "parameters": [],
+        "return_value": "The return value is Data Frame.",
+        "example": "DBSFetchCombinedReportDataFrame();"
+    },
+    {
+        "name": "DBSFile",
+        "description": "This function enables you to read a file.",
+        "syntax": "DBSFile(val)",
+        "parameters": [
+            {
+                "name": "val",
+                "type": "String",
+                "description": "File Name"
+            }
+        ],
+        "return_value": "The return value is in Bytes.",
+        "example": "DBSFile(\"abc.csv\")"
+    },
+    {
+        "name": "DBSFileAppend",
+        "description": "The DBSFileAppend() function helps to append a file.",
+        "syntax": "DBSFileAppend(\"input_file_path\", \"output_file_path\", data)",
+        "parameters": [
+            {
+                "name": "input_file_path",
+                "type": "String",
+                "description": "The full path of the input file."
+            },
+            {
+                "name": "output_file_path",
+                "type": "String",
+                "description": "The full path of the output file."
+            },
+            {
+                "name": "data",
+                "type": "String",
+                "description": "Data that must be appended."
+            }
+        ],
+        "return_value": "None: There is no return value for this function.",
+        "example": "DBSFileAppend(\"Root:\\Users\\XYZ\", \"Root:\\Users\\ABC\", \"Test Data 123\")"
+    },
+    {
+        "name": "DBSFileRead",
+        "description": "The DBSFileRead() function helps to read a file's content.",
+        "syntax": "DBSFileRead(\"full_file_path\")",
+        "parameters": [
+            {
+                "name": "full_file_path",
+                "type": "String",
+                "description": "Read the contents of a file at path full_file_path."
+            }
+        ],
+        "return_value": "The return value is the contents of the file to be read in String format.",
+        "example": "DBSFileRead(\"C:\\Users\\XYZ\\XYZ.docx\")"
+    },
+    {
+        "name": "DBSFileWrite",
+        "description": "The DBSFileWrite() function helps to write a file's content.",
+        "syntax": "DBSFileWrite(\"full_file_path\", data)",
+        "parameters": [
+            {
+                "name": "full_file_path",
+                "type": "String",
+                "description": "Write the contents of the file at path full_file_path. A new file is created at the given path. The file types: .zip .pdf .docx .xlsx .csv .txt .json .xml .html are currently supported."
+            },
+            {
+                "name": "data",
+                "type": "String",
+                "description": "Contents of the file."
+            }
+        ],
+        "return_value": "None: There is no return value for this function.",
+        "example": "DBSFileWrite(\"C:\\Users\\XYZ\\\", \"Test Data 123\")"
+    },
+    {
+        "name": "DBSGetConnectorParams",
+        "description": "The DBSGetConnectorParams() function retrieves connector parameter data, specifically fetching the values assigned to the parameter fields.",
+        "syntax": "DBSGetConnectorParams()",
+        "parameters": [],
+        "return_value": "The return value is dict.",
+        "example": ""
+    },
+    {
+        "name": "DBSHtmlToPdf",
+        "description": "This function helps convert an HTML file to a PDF.",
+        "syntax": "DBSHtmlToPdf(\"input_file_path\", \"output_file_path\")",
+        "parameters": [
+            {
+                "name": "input_file_path",
+                "type": "String",
+                "description": "The path of the HTML file that needs to be converted."
+            },
+            {
+                "name": "output_file_path",
+                "type": "String",
+                "description": "The path where the PDF file will be stored."
+            }
+        ],
+        "return_value": "The return value is in String format.",
+        "example": "DBSHtmlToPdf(\"Root:\\Users\\A\", \"Root:\\Users\\B\")"
+    },
+    {
+        "name": "DBSLogger",
+        "description": "This function helps create various logs that can be viewed on the Consumption & Logs page on Darwinbox Studio.",
+        "syntax": "DBSLogger(val, level)",
+        "parameters": [
+            {
+                "name": "val",
+                "type": "String",
+                "description": "Data to Log"
+            },
+            {
+                "name": "level",
+                "type": "String",
+                "description": "Log Level (I = Info, D = Debug, E = Error, W = Warn, T = Trace)"
+            }
+        ],
+        "return_value": "None: There is no return value for this function.",
+        "example": "DBSLogger(\"Hello\", \"I\")"
+    },
+    {
+        "name": "DBSParameters",
+        "description": "This function retrieves the value of a parameter set in the Studio Designer page's settings.",
+        "syntax": "DBSParameters(param_name, parameter_settings_id)",
+        "parameters": [
+            {
+                "name": "param_name",
+                "type": "String",
+                "description": "Name of the parameter to be fetched from Studio Parameter Settings."
+            },
+            {
+                "name": "parameter_settings_id",
+                "type": "String",
+                "description": "The Parameter Settings ID to which the parameter belongs."
+            }
+        ],
+        "return_value": "The return value is a String.",
+        "example": "DBSParameters(\"p1\", \"param_settings_id1\")"
+    },
+    {
+        "name": "DBSReadLookupTable",
+        "description": "This function helps lookup record(s) from a Lookup Table based on the input column and value.",
+        "syntax": "DBSReadLookupTable(\"Lookuptable_Code\", \"Column\", \"value\", [columns, to, lookup], fetchAll)",
+        "parameters": [
+            {
+                "name": "Lookuptable_Code",
+                "type": "String",
+                "description": "The lookup table code for referencing the right table."
+            },
+            {
+                "name": "Column",
+                "type": "String",
+                "description": "The column for the given value."
+            },
+            {
+                "name": "value",
+                "type": "String",
+                "description": "The value to lookup in the given column."
+            },
+            {
+                "name": "[columns, to, lookup]",
+                "type": "Array",
+                "description": "The columns that need to be fetched."
+            },
+            {
+                "name": "fetchFirst/fetchAll",
+                "type": "Boolean",
+                "description": "Default: False. If False, fetches the first matching record\u2019s values. If True, fetches all matching record values."
+            }
+        ],
+        "return_value": "The return value is a list of columns for records that match Column, Value.",
+        "example": "DBSReadLookupTable(\"\")"
+    },
+    {
+        "name": "DBSReportPresignedURL",
+        "description": "This function generates a pre-signed URL for a specified S3 key. The URL grants temporary, time-limited access to the associated object in S3 and expires after one hour.",
+        "syntax": "DBSReportPresignedUrl(object_name=None)",
+        "parameters": [
+            {
+                "name": "object_name",
+                "type": "String",
+                "description": "S3 key of the file for which a presigned S3 URL needs to be generated."
+            }
+        ],
+        "return_value": "The return value is a dict({\"url\":\"<presigned s3 URL>\"}).",
+        "example": "DBSReportPresignedUrl(\"QA_5a83f04c27823_2/integrations/a206712959566a0cbc9057c3__a66a0cbc903cc6_testing-1.csv\")"
+    },
+    {
+        "name": "DBSResponse",
+        "description": "This function manages responses within Darwinbox connectors, assigning values to key response components.",
+        "syntax": "DBSResponse(data, apibuilder, status, http_status, http_headers)",
+        "parameters": [
+            {
+                "name": "data",
+                "type": "String",
+                "description": "Response Data"
+            },
+            {
+                "name": "apibuilder",
+                "type": "Boolean",
+                "description": "To specify if the response is for API Builder. If true, applies Base64 encoding to message1."
+            },
+            {
+                "name": "status",
+                "type": "Integer",
+                "description": "Status for the integration (0 = Data Error, 1 = Success)."
+            },
+            {
+                "name": "http_status",
+                "type": "Integer",
+                "description": "HTTP Response status for API Builder response."
+            },
+            {
+                "name": "http_headers",
+                "type": "String",
+                "description": "HTTP Response Headers for API Builder response."
+            }
+        ],
+        "return_value": "None: There is no return value for this function.",
+        "example": "DBSResponse(data, apibuilder=True, status=1, http_status=200, http_headers=\"\")"
+    },
+    {
+        "name": "DBSSendToReportBuilder",
+        "description": "This function prepares a response for the Reports Builder by assigning message1 and including request_id, report_id, tenant_id, and s3Details.",
+        "syntax": "DBSSendToReportBuilder(message, report_s3_details)",
+        "parameters": [
+            {
+                "name": "message",
+                "type": "String",
+                "description": "Response data"
+            },
+            {
+                "name": "report_s3_details",
+                "type": "Dictionary",
+                "description": "Dictionary containing the S3 key of the customized file that needs to be sent to Reports Builder."
+            }
+        ],
+        "return_value": "None: There is no return value for this function.",
+        "example": "DBSSendToReportBuilder(\"Successfully processed\", {\"key\": \"<s3 key>\"})"
+    },
+    {
+        "name": "DBSSource",
+        "description": "This function allows importing files stored in Darwinbox's master files section.",
+        "syntax": "DBSSource(filename)",
+        "parameters": [
+            {
+                "name": "filename",
+                "type": "String",
+                "description": "Name of the file being imported."
+            }
+        ],
+        "return_value": "The return value is in importlib.ModuleType format.",
+        "example": "DBSSource(\"xyz.docx\")"
+    },
+    {
+        "name": "DBSTxnVariables",
+        "description": "This function returns transaction parameters commonly used within the Automation Hub for various automation processes and workflows.",
+        "syntax": "DBSTxnVariables()",
+        "parameters": [],
+        "return_value": "The return value is a dictionary containing transaction parameters.",
+        "example": "txn_data = DBSTxnVariables()"
+    },
+    {
+        "name": "DBSUploadReport",
+        "description": "This function uploads a specified file to Amazon S3 storage and returns the corresponding S3 key.",
+        "syntax": "DBSUploadReport(object_name=None)",
+        "parameters": [
+            {
+                "name": "object_name",
+                "type": "String",
+                "description": "File path (name) of the report file to be uploaded to S3."
+            }
+        ],
+        "return_value": "The return value is a dictionary with the S3 key of the uploaded file.",
+        "example": "DBSUploadReport(\"folder1/report1.csv\")"
+    }
+]

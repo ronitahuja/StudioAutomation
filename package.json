@@ -1,0 +1,30 @@
+{
+  "dependencies": {
+    "@huggingface/inference": "^3.3.6",
+    "@huggingface/transformers": "^3.3.3",
+    "@xenova/transformers": "^2.17.2",
+    "body-parser": "^1.20.3",
+    "cors": "^2.8.5",
+    "dotenv": "^16.4.7",
+    "express": "^4.21.2",
+    "http-status-codes": "^2.3.0",
+    "mongodb": "^6.13.1",
+    "mongoose": "^8.10.1",
+    "ollama": "^0.5.14",
+    "winston": "^3.17.0",
+    "winston-mongodb": "^6.0.0"
+  },
+  "name": "ai-code-generation",
+  "version": "1.0.0",
+  "main": "index.js",
+  "scripts": {
+    "dev": "npx nodemon src/index.js",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "",
+  "license": "ISC",
+  "description": "",
+  "devDependencies": {
+    "nodemon": "^3.1.9"
+  }
+}
