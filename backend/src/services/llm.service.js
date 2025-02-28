@@ -6,7 +6,9 @@ class LLMService {
     this.history = "";
   }
   async queryLLM(queryObj) {
-    let res = await fetch("http://localhost:3000/api/v1/functions/search", {
+    console.log("inside service")
+    
+    let res = await fetch("http://localhost:4000/api/v1/functions/search", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -15,8 +17,9 @@ class LLMService {
         query: queryObj.query,
       }),
     });
-
+    
     res = await res.json();
+    console.log(res);
     if (res) {
       res = res.data;
       const parsedResult = res.map((data, i) => {
@@ -67,8 +70,8 @@ class LLMService {
           stream: false,
         }),
       });
-
-      const data = await response.json();
+            const data = await response.json();
+      console.log(data.response);
       return data.response;
     }
   }
