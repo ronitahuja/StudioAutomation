@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useRef } from "react";
 import Editor from "@monaco-editor/react";
 import apiData from "../data/apiData";
-import {llm_query}  from "../constants/llm-api";
+import { llm_query } from "../constants/llm-api";
 import ModalSelector from "./ModalSelector";
 
 const CodeEditor = ({ transactionRows }) => {
@@ -19,14 +19,17 @@ const CodeEditor = ({ transactionRows }) => {
 
   const handleSubmit = async (event) => {
     event.preventDefault();
-  
+    console.log("working fine");
+
     if (!inputValue.trim()) return;
-  
+
     setLoading(true);
     setAiCode("");
     setIsAiResponseVisible(true);
-  
+
     try {
+      console.log(apiData);
+
       const response = await fetch(llm_query, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
@@ -37,15 +40,17 @@ const CodeEditor = ({ transactionRows }) => {
           model: model,
         }),
       });
-  
+      console.log("Response Object:", response);
+
       if (!response.ok) {
         throw new Error(`Server error: ${response.status}`);
       }
-  
-      const data = await response.json();  
-  
-      setAiCode(data.data || "No response received"); 
-  
+
+      const data = await response.json();
+      console.log("Response from API:", data);
+
+      setAiCode(data.data || "No response received");
+
     } catch (err) {
       console.error("Error sending request:", err);
     } finally {
@@ -53,10 +58,6 @@ const CodeEditor = ({ transactionRows }) => {
       setInputvalue("");
     }
   };
-  
-  
-
-
 
   useEffect(() => {
     const handleKeyDown = async (event) => {
@@ -108,7 +109,7 @@ const CodeEditor = ({ transactionRows }) => {
         {/* In-Editor Modal */}
         {isModalOpen && position && (
           <div
-            className="absolute bg-white p-3 rounded-lg shadow-lg border w-64"
+            className="absolute bg-white p-3 rounded-lg shadow-lg border w-96"
             style={{
               top: position.top + 20,
               left: position.left,
@@ -139,11 +140,22 @@ const CodeEditor = ({ transactionRows }) => {
         )}
       </div>
       {isAiResponseVisible && (
-        <div className="mt-4 p-3 border rounded-lg shadow-lg bg-gray-100 w-full overflow-auto">
+        <div className="mt-4 p-3 border rounded-lg shadow-lg max-h-[300px] bg-gray-100 w-full overflow-auto relative">
           <h2 className="text-sm font-bold mb-2">AI Response</h2>
-          <pre className="bg-gray-800 text-green-400 p-2 rounded-lg overflow-auto">
+          <pre className="bg-gray-800 text-green-400 p-2 rounded-lg overflow-auto relative">
             {aiCode || (loading ? "Generating code..." : "No response yet.")}
           </pre>
+          {aiCode && (
+            <button
+              onClick={() => {
+                navigator.clipboard.writeText(aiCode);
+                alert("Code copied!");
+              }}
+              className="absolute top-3 right-3 px-2 py-1 bg-blue-600 text-white text-xs rounded"
+            >
+              Copy
+            </button>
+          )}
         </div>
       )}
     </div>
