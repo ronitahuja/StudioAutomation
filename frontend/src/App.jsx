@@ -1,5 +1,3 @@
-
-import CodeEditor from './components/CodeEditor'
 import Header from './components/Header'
 import Form from './components/Form'
 
