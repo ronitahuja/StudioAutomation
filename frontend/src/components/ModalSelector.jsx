@@ -5,10 +5,7 @@ const ModelSelector = ({ onSelect }) => {
 
   const models = [
     "llama3.1:8b",
-    "llama3.1:70b",
-    "mistral:7b",
-    "gemma:7b",
-    "phi3:3.8b"
+    "deepseek-r1:1.5b"
   ];
 
   const handleChange = (event) => {

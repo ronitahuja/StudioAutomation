@@ -90,9 +90,7 @@ const CodeEditor = ({ transactionRows }) => {
 
       <div className="p-6">
         <ModalSelector onSelect={setModel} />
-        <p className="mt-4 text-gray-700">
-          <strong> Selected Model:</strong> {model}
-        </p>
+       
       </div>
 
       <div className="border rounded flex-grow overflow-hidden relative">
