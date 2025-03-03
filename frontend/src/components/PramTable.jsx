@@ -15,6 +15,13 @@ const ParamTable = ({rows,setRows}) => {
     setRows([...rows, { paramName: "", paramType: "Text", mandatory: false, sensitive: false, variableName: "", description: "" }]);
   };
 
+  //handle delete
+  const handleDelete = (index) => {
+    const updatedRows = rows.filter((_, i) => i !== index);
+    setRows(updatedRows);
+  };
+  
+
   return (
     <div>
       <table className="min-w-full border border-gray-300 shadow-md rounded-lg">
@@ -79,6 +86,9 @@ const ParamTable = ({rows,setRows}) => {
                   onChange={(e) => handleInputChange(index, "description", e.target.value)}
                   className="w-full border p-1"
                 />
+              </td>
+              <td>
+                <button onClick={()=>handleDelete(index)}>Delete</button>
               </td>
             </tr>
           ))}

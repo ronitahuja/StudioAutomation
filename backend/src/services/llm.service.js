@@ -1,7 +1,7 @@
   const ollama = require("ollama");
 
   class LLMService {
-    constructor(model = "llama3.1:8b") {
+    constructor(model = "deepseek-r1:1.5b") {
       this.model = model;
       this.history = "";
     }
@@ -65,7 +65,7 @@
   DO NOT generate explanations, opinions, or unrelated content.
 
       `;
-
+        console.log(this.model);
         const response = await fetch("http://localhost:11434/api/generate", {
           method: "POST",
           headers: {
@@ -78,7 +78,7 @@
             temperature : 0.2
           }),
         });
-              const data = await response.json();
+        const data = await response.json();
         console.log(data.response);
         return data.response;
       }
