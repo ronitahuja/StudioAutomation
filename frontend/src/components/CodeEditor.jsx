@@ -71,15 +71,19 @@ const CodeEditor = ({ transactionRows }) => {
           setIsModalOpen(true);
         }
       }
-
     };
 
     document.addEventListener("keydown", handleKeyDown, true);
     return () => {
       document.removeEventListener("keydown", handleKeyDown, true);
     };
-  }, []);
 
+  }, []);
+  useEffect(() => {
+    if (aiCode) {
+      setIsModalOpen(false);
+    }
+  }, [aiCode])
   const handleEditorDidMount = (editor) => {
     editorRef.current = editor;
   };
@@ -90,7 +94,7 @@ const CodeEditor = ({ transactionRows }) => {
 
       <div className="p-6">
         <ModalSelector onSelect={setModel} />
-       
+
       </div>
 
       <div className="border rounded flex-grow overflow-hidden relative">
@@ -107,15 +111,15 @@ const CodeEditor = ({ transactionRows }) => {
         {/* In-Editor Modal */}
         {isModalOpen && position && (
           <div
-            className="absolute bg-white p-3 rounded-lg shadow-lg border w-96"
+            className="absolute bg-white p-3 rounded-lg shadow-lg border w-96 left-78px"
             style={{
               top: position.top + 20,
               left: position.left,
             }}
           >
-            <h2 className="text-sm font-bold mb-2">Ask a Question</h2>
+            <h2 className="text-sm font-bold mb-2">Write a Query</h2>
             <form onSubmit={handleSubmit}>
-              <input
+              <textarea
                 type="text"
                 value={inputValue}
                 onChange={(e) => setInputvalue(e.target.value)}
@@ -129,7 +133,7 @@ const CodeEditor = ({ transactionRows }) => {
                 >
                   Close
                 </button>
-                <button className="px-3 py-1 bg-blue-600 text-white rounded text-sm" type="submit" disabled={loading}> {loading ? "Loading..." : "Submit"}
+                <button className="px-3 py-1 bg-blue-600 text-white rounded text-sm" type="submit" disabled={loading}> {loading ? "Loading..." : "Generate"}
                 </button>
               </div>
             </form>
@@ -144,16 +148,40 @@ const CodeEditor = ({ transactionRows }) => {
             {aiCode || (loading ? "Generating code..." : "No response yet.")}
           </pre>
           {aiCode && (
-            <button
-              onClick={() => {
-                navigator.clipboard.writeText(aiCode);
-                alert("Code copied!");
-              }}
-              className="absolute top-3 right-3 px-2 py-1 bg-blue-600 text-white text-xs rounded"
-            >
-              Copy
-            </button>
+            <div className="flex justify-end space-x-2 mt-2">
+              <button
+                onClick={() => {
+                  if (editorRef.current) {
+                    editorRef.current.setValue(aiCode); // Insert AI-generated code into the editor
+                    setIsAiResponseVisible(false); // Hide AI response after accepting
+                  }
+                }}
+                className="px-3 py-1 bg-green-600 text-white rounded text-sm"
+              >
+                Accept
+              </button>
+
+              <button
+                onClick={() => {
+                  setAiCode(""); // Clear AI response
+                  setIsAiResponseVisible(false); // Hide AI response section
+                }}
+                className="px-3 py-1 bg-red-600 text-white rounded text-sm"
+              >
+                Reject
+              </button>
+              <button
+                onClick={() => {
+                  navigator.clipboard.writeText(aiCode);
+                  alert("Code copied!");
+                }}
+                className="px-3 py-1 bg-blue-600 text-white text-sm rounded"
+              >
+                Copy
+              </button>
+            </div>
           )}
+
         </div>
       )}
     </div>

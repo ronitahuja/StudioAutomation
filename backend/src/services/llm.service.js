@@ -18,6 +18,7 @@
       });
       
       res = await res.json();
+      console.log(res)
       if (res) {
         res = res.data;
         const parsedResult = res.map((data, i) => {
@@ -41,7 +42,8 @@
     **"Error: This assistant only supports generating SDK-based scripts. Please provide a relevant script generation query."**
   3. **Do NOT Hallucinate Functions**: Only use the following SDK functions:
     ${parsedResult}
-  4. **Follow Internal Standards**: The generated script must strictly adhere to our SDK requirements and best practices.
+  4. You should use the function retrieved to generate the script. you should not create your own functions.
+
 
   ---
   ### **User Query:**
