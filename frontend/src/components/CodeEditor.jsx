@@ -14,7 +14,8 @@ const CodeEditor = ({ transactionRows }) => {
   const [inputValue, setInputvalue] = useState("");
   const [aiCode, setAiCode] = useState("");
   const [isAiResponseVisible, setIsAiResponseVisible] = useState(false);
-  const [model, setModel] = useState("llama3.1:8b")
+  const [model, setModel] = useState("llama3.1:8b");
+  const [output,setOutput] = useState("");
 
 
   const handleSubmit = async (event) => {
@@ -59,6 +60,16 @@ const CodeEditor = ({ transactionRows }) => {
     }
   };
 
+  const runCode = ()=>{
+      try{
+        //const result = eval(code);
+        setOutput(String(result));
+      }
+      catch(error){
+        setOutput(String(error));
+      }
+  }
+
   useEffect(() => {
     const handleKeyDown = async (event) => {
       if (event.ctrlKey && event.key.toLowerCase() === "k") {
@@ -98,6 +109,14 @@ const CodeEditor = ({ transactionRows }) => {
       </div>
 
       <div className="border rounded flex-grow overflow-hidden relative">
+        <div className="flex justify-end mt-2 space-x-2">
+          <button
+            onClick={runCode}
+            className="px-3 py-1 bg-green-600 text-white rounded text-sm"
+          >
+            Run Code
+          </button>
+        </div>
         <Editor
           height="100%"
           theme="light"
