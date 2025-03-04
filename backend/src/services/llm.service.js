@@ -14,7 +14,7 @@
         },
         body: JSON.stringify({
           query: queryObj.query,
-        }),
+        }), 
       });
       
       res = await res.json();
