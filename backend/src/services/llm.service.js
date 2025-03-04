@@ -18,7 +18,6 @@
       });
       
       res = await res.json();
-      console.log(res)
       if (res) {
         res = res.data;
         const parsedResult = res.map((data, i) => {
@@ -67,7 +66,6 @@
   DO NOT generate explanations, opinions, or unrelated content.
 
       `;
-        console.log(this.model);
         const response = await fetch("http://localhost:11434/api/generate", {
           method: "POST",
           headers: {
