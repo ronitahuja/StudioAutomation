@@ -1,7 +1,7 @@
 const LLMService = require("../services/llm.service");
 
 class LLMController {
-  constructor(model = "llama3.1:8b") {
+  constructor(model) {
     this.llmService = new LLMService(model);
   }
   async queryLLM(req, res, next) {
