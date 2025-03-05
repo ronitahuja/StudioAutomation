@@ -6,17 +6,26 @@ import AppForm from './components/AppForm'
 function App() {
   return (
     <>
-
-      <Header/>
+      <Header />
       <Routes>
-        <Route path='/app' element={<AppForm />}/>
-        <Route path='/appActions' element={<Form/>}/>
+        <Route
+          path="/"
+          element={
+            <div>
+              <a href="/app" style={{ display: "block", color: "blue" }}>
+                App
+              </a>
+              <a href="/appActions" style={{ display: "block", color: "blue" }}>
+                AppAction
+              </a>
+            </div>
+          }
+        />
+        <Route path="/app" element={<AppForm />} />
+        <Route path="/appActions" element={<Form />} />
       </Routes>
-     
-     
-
     </>
-  )
+  );
 }
 
 export default App;
