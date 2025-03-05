@@ -72,7 +72,6 @@ async function getConnectionLevelParams(req,res,next){
     try{
         
         const {appName} = req.params;
-        console.log(appName);
         const connectionLevelParams = await appService.getConnectionLevelParams(appName);
         
         return res.status(StatusCodes.OK).json({
