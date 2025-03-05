@@ -53,10 +53,46 @@ async function getAuthenticationType(req,res,next){
     }
 }
 
+async function getAppNames(req,res,next){
+    try{
+        const appNames = await appService.getAppNames();
+        return res.status(StatusCodes.OK).json({
+            success:true,
+            message:"succesfully fetched application Names",
+            error:{},
+            data : appNames
+        })
+    }
+    catch(err){
+        next(err);
+    }
+}
+
+async function getConnectionLevelParams(req,res,next){
+    try{
+        
+        const {appName} = req.params;
+        console.log(appName);
+        const connectionLevelParams = await appService.getConnectionLevelParams(appName);
+        
+        return res.status(StatusCodes.OK).json({
+            success:true,
+            message:"succesfully fetched connection Level Param fields",
+            error:{},
+            data : connectionLevelParams
+        })
+    }
+    catch(err){
+        next(err);
+    }
+}
+
 
 module.exports ={
     pingAppController,
     createApp,
     getAppCategory,
-    getAuthenticationType
+    getAuthenticationType,
+    getAppNames,
+    getConnectionLevelParams
 }
