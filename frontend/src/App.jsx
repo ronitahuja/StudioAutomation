@@ -1,13 +1,18 @@
 import Header from './components/Header'
 import Form from './components/Form'
-
+import {Routes,Route} from 'react-router-dom'
+import AppForm from './components/AppForm'
 
 function App() {
   return (
-
     <>
+
       <Header/>
-      <Form />
+      <Routes>
+        <Route path='/app' element={<AppForm />}/>
+        <Route path='/appActions' element={<Form/>}/>
+      </Routes>
+     
      
 
     </>
