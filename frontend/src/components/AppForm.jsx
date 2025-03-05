@@ -1,3 +1,4 @@
+
 import React, { useState, useEffect } from "react";
 import axios from "axios";
 import { Link } from "lucide-react";
@@ -6,26 +7,27 @@ import ParamTable from "./PramTable";
 function App() {
     const [rows, setRows] = useState([]);
     const [appName, setAppName] = useState("");
-    const [appCategory, setAppCategory] = useState("");
-    const [authType, setAuthenticationType] = useState("");
+    const [allCat, setAllCat] = useState([]); // Store categories from backend
+    const [appCategory, setAppCategory] = useState(""); // Selected category
+    const [authType, setAuthenticationType] = useState(""); // Selected auth type
     const [description, setDescription] = useState("");
-    const [appCategories, setAppCategories] = useState([]);
-    const [authTypes, setAuthTypes] = useState([]);
+    const [authTypes, setAuthTypes] = useState([]); // Store auth types
 
-    // Fetch options from the backend
+    // Fetch dropdown options from the backend
     useEffect(() => {
         const fetchDropdownOptions = async () => {
             try {
                 const [categoriesRes, authTypesRes] = await Promise.all([
-                    axios.get("http://localhost:5000/api/app-categories"),
-                    axios.get("http://localhost:5000/api/auth-types"),
-                ]);
-                setAppCategories(categoriesRes.data); // Expecting an array from backend
-                setAuthTypes(authTypesRes.data);
+                    axios.get("http://localhost:3000/api/v1/app/appCategories"),
+                    axios.get("http://localhost:3000/api/v1/app/authenticationType"),
+                ]);               
+                setAllCat(categoriesRes.data.data); // Store categories
+                setAuthTypes(authTypesRes.data.data); // Store auth types
             } catch (error) {
                 console.error("Error fetching dropdown options:", error);
             }
         };
+
         fetchDropdownOptions();
     }, []);
 
@@ -40,7 +42,7 @@ function App() {
         };
 
         try {
-            await axios.post("http://localhost:5000/api/save-application", payload);
+            await axios.post("http://localhost:3000/api/v1/app/", payload);
             alert("Application saved successfully!");
         } catch (error) {
             console.error("Error saving application:", error);
@@ -77,9 +79,9 @@ function App() {
                             className="w-full p-2 border rounded-md"
                         >
                             <option value="">Select Application Category</option>
-                            {appCategories.map((category) => (
-                                <option key={category.id} value={category.name}>
-                                    {category.name}
+                            {allCat.map((category, index) => (
+                                <option key={index} value={category}>
+                                    {category}
                                 </option>
                             ))}
                         </select>
@@ -94,9 +96,9 @@ function App() {
                             className="w-full p-2 border rounded-md"
                         >
                             <option value="">Select Authentication Type</option>
-                            {authTypes.map((auth) => (
-                                <option key={auth.id} value={auth.name}>
-                                    {auth.name}
+                            {authTypes.map((auth, index) => (
+                                <option key={index} value={auth}>
+                                    {auth}
                                 </option>
                             ))}
                         </select>

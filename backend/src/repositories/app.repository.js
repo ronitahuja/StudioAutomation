@@ -17,5 +17,25 @@ class AppRepository{
             throw err;
         }
     }
+    async getAppCategory(){
+        try{
+            const appCategories = ['payroll','travel','finance'];
+            return appCategories;
+        }
+        catch(err){
+            console.log(err);
+            throw err;
+        }
+    }
+    async getAuthenticationType(){
+        try{
+            const authenticationTypes = ['No Auth','auth 2.0','basic auth'];
+            return authenticationTypes;
+        }
+        catch(err){
+            console.log(err);
+            throw err;
+        }
+    }
 }
 module.exports = AppRepository;
