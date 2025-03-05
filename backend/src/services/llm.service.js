@@ -18,6 +18,7 @@
       });
       
       res = await res.json();
+     
       if (res) {
         res = res.data;
         const parsedResult = res.map((data, i) => {
