@@ -34,27 +34,26 @@ const Form = () => {
     }, []);
 
     // Fetch Connection Level Params when an application is selected
-    useEffect(() => {       
-            const fetchParams = async () => {
-                try {
-                    
-                    const response = await axios.get(`http://localhost:3000/api/v1/app/appNames/${formData.application}`);
-                    
-                    
+    useEffect(() => {
+        const fetchParams = async () => {
+            try {
+                const response = await axios.get(`http://localhost:3000/api/v1/app/appNames/${formData.application}`);
 
-                    if (Array.isArray(response.data.data)) {
-                        setConnectionLevelParams(response.data.data[0]?.connectionLevelParamFields);
-                    } else {
-                        console.error("Invalid data format for params:", response.data);
-                        setConnectionLevelParams([]);
-                    }
-                } catch (error) {
-                    console.error("Error fetching connection level params:", error);
+
+                if (Array.isArray(response.data.data)) {
+                    setConnectionLevelParams(response.data.data[0]?.connectionLevelParamFields);
+
+                } else {
+                    console.error("Invalid data format for params:", response.data);
                     setConnectionLevelParams([]);
                 }
-            };
-            fetchParams();
-         
+            } catch (error) {
+                console.error("Error fetching connection level params:", error);
+                setConnectionLevelParams([]);
+            }
+        };
+        fetchParams();
+
     }, [formData.application]); // Runs whenever application changes
 
     const languages = ["Python", "R"];
@@ -105,7 +104,6 @@ const Form = () => {
                     </div>
 
                     {/* Select Application */}
-                    {/* Select Application */}
                     <div>
                         <label className="block text-lg font-medium text-gray-700">Application Name</label>
                         <select
@@ -141,30 +139,30 @@ const Form = () => {
                                         </tr>
                                     </thead>
                                     <tbody>
-                                        {connectionLevelParams.map((item) =>{
+                                        {connectionLevelParams.map((item) => {
                                             return (
                                                 <tr key={item.id} className="border-t hover:bg-gray-50 transition duration-200">
-                                                <td className="px-4 py-2 border">{item.paramName}</td>
-                                                <td className="px-4 py-2 border">{item.paramType}</td>
-                                                <td className="px-4 py-2 border text-center">
-                                                    <input
-                                                        type="checkbox"
-                                                        checked={item.mandatory}
-                                                        disabled
-                                                        className="w-5 h-5 cursor-not-allowed accent-blue-500"
-                                                    />
-                                                </td>
-                                                <td className="px-4 py-2 border text-center">
-                                                    <input
-                                                        type="checkbox"
-                                                        checked={item.sensitive}
-                                                        disabled
-                                                        className="w-5 h-5 cursor-not-allowed accent-red-500"
-                                                    />
-                                                </td>
-                                                <td className="px-4 py-2 border">{item.variableName}</td>
-                                                <td className="px-4 py-2 border">{item.description}</td>
-                                            </tr>
+                                                    <td className="px-4 py-2 border">{item.paramName}</td>
+                                                    <td className="px-4 py-2 border">{item.paramType}</td>
+                                                    <td className="px-4 py-2 border text-center">
+                                                        <input
+                                                            type="checkbox"
+                                                            checked={item.mandatory}
+                                                            disabled
+                                                            className="w-5 h-5 cursor-not-allowed accent-blue-500"
+                                                        />
+                                                    </td>
+                                                    <td className="px-4 py-2 border text-center">
+                                                        <input
+                                                            type="checkbox"
+                                                            checked={item.sensitive}
+                                                            disabled
+                                                            className="w-5 h-5 cursor-not-allowed accent-red-500"
+                                                        />
+                                                    </td>
+                                                    <td className="px-4 py-2 border">{item.variableName}</td>
+                                                    <td className="px-4 py-2 border">{item.description}</td>
+                                                </tr>
                                             )
                                         })}
                                     </tbody>
@@ -206,7 +204,7 @@ const Form = () => {
 
             {/* Right Side - Code Editor */}
             <div>
-                <MonacoEditor transactionRows={rows} connectionRows ={connectionLevelParams}/>
+                <MonacoEditor transactionRows={rows} connectionRows={connectionLevelParams} />
             </div>
         </div>
     );
