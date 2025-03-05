@@ -107,12 +107,12 @@ const CodeEditor = ({ transactionRows , connectionRows}) => {
 
       <div className="border rounded flex-grow overflow-hidden relative">
         <div className="flex justify-end mt-2 space-x-2">
-          <button
+          {/* <button
             onClick={runCode}
             className="px-3 py-1 bg-green-600 text-white rounded text-sm"
           >
             Run Code
-          </button>
+          </button> */}
         </div>
         <Editor
           height="100%"
