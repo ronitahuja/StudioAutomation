@@ -5,7 +5,8 @@ const ModelSelector = ({ onSelect }) => {
 
   const models = [
     "llama3.1:8b",
-    "deepseek-r1:1.5b"
+    "deepseek-r1:1.5b",
+    "codellama"
   ];
 
   const handleChange = (event) => {
