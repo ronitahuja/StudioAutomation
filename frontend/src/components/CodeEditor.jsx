@@ -158,9 +158,9 @@ const CodeEditor = ({ transactionRows , connectionRows}) => {
         )}
       </div>
       {isAiResponseVisible && (
-        <div className="mt-4 p-3 border rounded-lg shadow-lg max-h-[300px] bg-gray-100 w-full overflow-auto relative">
+        <div className="mt-4 p-3 border rounded-lg shadow-lg max-h-[300px] bg-white-100 w-full overflow-auto relative">
           <h2 className="text-sm font-bold mb-2">AI Response</h2>
-          <pre className="bg-gray-800 text-green-400 p-2 rounded-lg overflow-auto relative">
+          <pre className="bg-white-800 text-blue-1000 p-2 rounded-lg overflow-auto relative">
             {aiCode || (loading ? "Generating code..." : "No response yet.")}
           </pre>
           {aiCode && (

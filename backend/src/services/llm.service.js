@@ -1,4 +1,5 @@
   const ollama = require("ollama");
+  const axios = require("axios");
 
   class LLMService {
     constructor(model = "deepseek-r1:1.5b") {
@@ -6,18 +7,19 @@
       this.history = "";
     }
     async queryLLM(queryObj) {
-      
-      let res = await fetch("http://localhost:3000/api/v1/functions/search", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
+      let res = await axios.post(
+        "http://localhost:3000/api/v1/functions/search",
+        {
           query: queryObj.query,
-        }), 
-      });
-      
-      res = await res.json();
+        },
+        {
+          headers: {
+            "Content-Type": "application/json",
+          },
+        }
+      );
+
+      res = res.data;
       if (res) {
         res = res.data;
         const parsedResult = res.map((data, i) => {
