@@ -14,5 +14,13 @@ class AppService{
         const authenticationTypes = await this.appRepository.getAuthenticationType();
         return authenticationTypes;
     }
+    async getAppNames(){
+        const appNames = await this.appRepository.getAppNames();
+        return appNames;
+    }
+    async getConnectionLevelParams(appName){
+        const connectionLevelParams = await this.appRepository.getConnectionLevelParams(appName);
+        return connectionLevelParams;
+    }
 }
 module.exports = AppService;

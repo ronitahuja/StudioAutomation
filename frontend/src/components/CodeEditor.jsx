@@ -1,10 +1,9 @@
 import React, { useState, useEffect, useRef } from "react";
 import Editor from "@monaco-editor/react";
-import apiData from "../data/apiData";
 import { llm_query } from "../constants/llm-api";
 import ModalSelector from "./ModalSelector";
 
-const CodeEditor = ({ transactionRows }) => {
+const CodeEditor = ({ transactionRows , connectionRows}) => {
   const editorRef = useRef(null);
   const [code, setCode] = useState("// Write your code here...");
   const [language, setLanguage] = useState("python");
@@ -20,7 +19,6 @@ const CodeEditor = ({ transactionRows }) => {
 
   const handleSubmit = async (event) => {
     event.preventDefault();
-    console.log("working fine");
 
     if (!inputValue.trim()) return;
 
@@ -29,26 +27,25 @@ const CodeEditor = ({ transactionRows }) => {
     setIsAiResponseVisible(true);
 
     try {
-      console.log(apiData);
 
       const response = await fetch(llm_query, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({  // ✅ Fixed JSON body serialization
           query: inputValue,
-          connectionLevelParamFields: apiData,
+          connectionLevelParamFields: connectionRows,
           transactionLevelParamFields: transactionRows,
           model: model,
         }),
       });
-      console.log("Response Object:", response);
+     
 
       if (!response.ok) {
         throw new Error(`Server error: ${response.status}`);
       }
 
       const data = await response.json();
-      console.log("Response from API:", data);
+   
 
       setAiCode(data.data || "No response received");
 
