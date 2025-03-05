@@ -3,12 +3,14 @@ const App = require("../models/app.model");
 class AppRepository{
     async createApp(appData){
         try{
+            console.log(appData.appName);
+            console.log(appData.description)
             const app = await App.create({
                 appName : appData.appName,
-                appCategory : appData.appCategory,
-                authenticationType: appData.authenticationType,
-                appDescription : appData.appDescription,
-                connectionLevelParamFields: appData.connectionLevelParamFields
+                appCategory : appData.appCategory,  
+                authenticationType: appData.authType,
+                appDescription : appData.description,
+                connectionLevelParamFields: appData.connectionParams
             })
             return app;
         }

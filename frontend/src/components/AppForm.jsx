@@ -109,19 +109,16 @@ function App() {
                         <label className="flex items-center gap-1">
                             App Description<span className="text-red-500">*</span>
                         </label>
-                        <div className="border rounded-md">
-                            <div className="flex items-center gap-1 border-b p-2">
-                                <button className="p-1 hover:bg-gray-100 rounded">
-                                    <Link size={16} />
-                                </button>
+                            <div className="border rounded-md">
+                                <textarea
+                                    value={description}
+                                    onChange={(e) =>{
+                                        setDescription(e.target.value);
+                                    }}
+                                    className="w-full p-2 min-h-[100px] resize-none"
+                                    placeholder="Enter description..."
+                                />
                             </div>
-                            <textarea
-                                value={description}
-                                onChange={(e) => setDescription(e.target.value)}
-                                className="w-full p-2 min-h-[100px] resize-none"
-                                placeholder="Enter description..."
-                            />
-                        </div>
                     </div>
 
                     {/* Connection Parameters Table */}
