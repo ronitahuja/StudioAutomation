@@ -5,7 +5,7 @@ const { AppActionRepository } = require("../repositories");
 const appActionService = new AppActionService(new AppActionRepository());
 
 async function pingAppActionController(req, res) {
-  return res.status(StatusCodes.OK, {
+  return res.json(StatusCodes.OK, {
     message: "App Action Controller is working",
   });
 }
