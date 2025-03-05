@@ -1,10 +1,9 @@
 
 import React, { useState, useEffect } from "react";
 import axios from "axios";
-import { Link } from "lucide-react";
 import ParamTable from "./PramTable";
 
-function App() {
+function AppForm() {
     const [rows, setRows] = useState([]);
     const [appName, setAppName] = useState("");
     const [allCat, setAllCat] = useState([]); // Store categories from backend
@@ -149,4 +148,4 @@ function App() {
     );
 }
 
-export default App;
+export default AppForm;
