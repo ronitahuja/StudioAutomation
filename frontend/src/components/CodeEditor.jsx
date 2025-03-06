@@ -59,7 +59,6 @@ const CodeEditor = ({ transactionRows , connectionRows}) => {
 
   const runCode = ()=>{
       try{
-        //const result = eval(code);
         setOutput(String(result));
       }
       catch(error){
@@ -102,7 +101,6 @@ const CodeEditor = ({ transactionRows , connectionRows}) => {
 
       <div className="p-6">
         <ModalSelector onSelect={setModel} />
-
       </div>
 
       <div className="border rounded flex-grow overflow-hidden relative">
@@ -141,6 +139,12 @@ const CodeEditor = ({ transactionRows , connectionRows}) => {
                 onChange={(e) => setInputvalue(e.target.value)}
                 className="w-full p-2 border rounded mb-2"
                 placeholder="Type your question..."
+                onKeyDown={(e) => {
+                  if (e.key === "Enter" && !e.shiftKey) {
+                    e.preventDefault(); 
+                    handleSubmit(e); 
+                  }
+                }}
               />
               <div className="flex justify-end space-x-2">
                 <button
@@ -149,11 +153,16 @@ const CodeEditor = ({ transactionRows , connectionRows}) => {
                 >
                   Close
                 </button>
-                <button className="px-3 py-1 bg-blue-600 text-white rounded text-sm" type="submit" disabled={loading}> {loading ? "Loading..." : "Generate"}
+                <button
+                  className="px-3 py-1 bg-blue-600 text-white rounded text-sm"
+                  type="submit"
+                  disabled={loading}
+                >
+                  {" "}
+                  {loading ? "Loading..." : "Generate"}
                 </button>
               </div>
             </form>
-
           </div>
         )}
       </div>
@@ -197,7 +206,6 @@ const CodeEditor = ({ transactionRows , connectionRows}) => {
               </button>
             </div>
           )}
-
         </div>
       )}
     </div>
