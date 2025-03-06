@@ -84,7 +84,7 @@ const CodeEditor = ({ transactionRows, connectionRows }) => {
   };
 
   return (
-    <div className="fixed top-[80px] right-[25px] p-5 border rounded-lg shadow-lg bg-white w-2/5 h-4/5 flex flex-col">
+    <div className="top-[80px] right-[25px] p-5 border rounded-lg shadow-lg bg-white w-5/5 h-full flex flex-col">
       {/* Code Editor */}
       <div className="p-6">
         <ModalSelector onSelect={setModel} />
