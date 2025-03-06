@@ -206,7 +206,7 @@ const Form = () => {
             </div>
 
             {/* Right Side - Code Editor */}
-            <div>
+            <div className="w-1/2">
                 <MonacoEditor transactionRows={rows} connectionRows={connectionLevelParams} />
             </div>
         </div>
