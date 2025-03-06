@@ -5,9 +5,9 @@ import models from "../constants/models";
 import DropDown from "./DropDown";
 import themes from "../constants/themes";
 
-
 const CodeEditor = ({ transactionRows, connectionRows }) => {
   const editorRef = useRef(null);
+  const textareaRef = useRef(null); // Reference for the textarea
   const [code, setCode] = useState("");
   const [language, setLanguage] = useState("python");
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -18,8 +18,7 @@ const CodeEditor = ({ transactionRows, connectionRows }) => {
   const [isAiResponseVisible, setIsAiResponseVisible] = useState(true);
   const [model, setModel] = useState("llama3.1:8b");
   const [output, setOutput] = useState("");
-  const [theme,setTheme] =useState("");
-
+  const [theme, setTheme] = useState("");
 
   const handleSubmit = async (event) => {
     event.preventDefault();
@@ -35,7 +34,6 @@ const CodeEditor = ({ transactionRows, connectionRows }) => {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
-          // ✅ Fixed JSON body serialization
           query: inputValue,
           connectionLevelParamFields: connectionRows,
           transactionLevelParamFields: transactionRows,
@@ -44,9 +42,7 @@ const CodeEditor = ({ transactionRows, connectionRows }) => {
       });
 
       if (!response.ok) throw new Error(`Server error: ${response.status}`);
-      const data = await response.json();   
-
-   
+      const data = await response.json();
       setAiCode(data.data || "No response received");
     } catch (err) {
       console.error("Error sending request:", err);
@@ -76,11 +72,19 @@ const CodeEditor = ({ transactionRows, connectionRows }) => {
     };
   }, []);
 
+  // Focus the textarea when the modal opens
+  useEffect(() => {
+    if (isModalOpen && textareaRef.current) {
+      textareaRef.current.focus();
+    }
+  }, [isModalOpen]);
+
   useEffect(() => {
     if (aiCode) {
       setIsModalOpen(false);
     }
   }, [aiCode]);
+
   const handleEditorDidMount = (editor) => {
     editorRef.current = editor;
   };
@@ -89,11 +93,11 @@ const CodeEditor = ({ transactionRows, connectionRows }) => {
     <div className="top-[80px] right-[25px] p-5 border rounded-lg shadow-lg bg-white w-5/5 h-full flex flex-col">
       {/* Code Editor */}
       <div className="p-6">
-        <DropDown onSelect={setModel} models={models} topic={"Model"}/>
+        <DropDown onSelect={setModel} models={models} topic={"Model"} />
       </div>
 
       <div className="p-6">
-        <DropDown onSelect={setTheme} models={themes} topic={"Theme"}/>
+        <DropDown onSelect={setTheme} models={themes} topic={"Theme"} />
       </div>
 
       <div className="border rounded flex-grow overflow-hidden relative">
@@ -128,6 +132,7 @@ const CodeEditor = ({ transactionRows, connectionRows }) => {
             <h2 className="text-sm font-bold mb-2">Write a Query</h2>
             <form onSubmit={handleSubmit}>
               <textarea
+                ref={textareaRef} // Attach the ref to the textarea
                 value={inputValue}
                 onChange={(e) => setInputvalue(e.target.value)}
                 className="w-full p-2 border rounded mb-2"
