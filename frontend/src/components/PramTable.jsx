@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import { AiOutlineDelete } from "react-icons/ai";
 
 const ParamTable = ({rows,setRows}) => {
   
@@ -33,6 +34,7 @@ const ParamTable = ({rows,setRows}) => {
             <th className="border p-2">SENSITIVE</th>
             <th className="border p-2">VARIABLE NAME</th>
             <th className="border p-2">DESCRIPTION</th>
+            <th classNamr="border p-2">ACTIONS</th>
           </tr>
         </thead>
         <tbody>
@@ -87,8 +89,10 @@ const ParamTable = ({rows,setRows}) => {
                   className="w-full border p-1"
                 />
               </td>
-              <td>
-                <button onClick={()=>handleDelete(index)}>Delete</button>
+              <td className="border p-2 text-center">
+                <button onClick={()=>handleDelete(index)}
+                  
+                  ><AiOutlineDelete /></button>
               </td>
             </tr>
           ))}
