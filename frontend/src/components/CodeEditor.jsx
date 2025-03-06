@@ -6,7 +6,7 @@ import './CodeEditor.css';
 
 const CodeEditor = ({ transactionRows, connectionRows }) => {
   const editorRef = useRef(null);
-  const [code, setCode] = useState("// Write your code here...");
+  const [code, setCode] = useState("");
   const [language, setLanguage] = useState("python");
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [loading, setLoading] = useState(false);
@@ -16,6 +16,7 @@ const CodeEditor = ({ transactionRows, connectionRows }) => {
   const [isAiResponseVisible, setIsAiResponseVisible] = useState(true);
   const [model, setModel] = useState("llama3.1:8b");
   const [output, setOutput] = useState("");
+  const [theme,setTheme] =useState("");
 
 
   const handleSubmit = async (event) => {
@@ -28,11 +29,11 @@ const CodeEditor = ({ transactionRows, connectionRows }) => {
     setIsAiResponseVisible(true);
 
     try {
-
       const response = await fetch(llm_query, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({  // ✅ Fixed JSON body serialization
+        body: JSON.stringify({
+          // ✅ Fixed JSON body serialization
           query: inputValue,
           connectionLevelParamFields: connectionRows,
           transactionLevelParamFields: transactionRows,
@@ -47,9 +48,7 @@ const CodeEditor = ({ transactionRows, connectionRows }) => {
 
       const data = await response.json();
 
-
       setAiCode(data.data || "No response received");
-
     } catch (err) {
       console.error("Error sending request:", err);
     } finally {
@@ -58,14 +57,13 @@ const CodeEditor = ({ transactionRows, connectionRows }) => {
     }
   };
 
-  const runCode = ()=>{
-      try{
-        setOutput(String(result));
-      }
-      catch(error){
-        setOutput(String(error));
-      }
-  }
+  const runCode = () => {
+    try {
+      setOutput(String(result));
+    } catch (error) {
+      setOutput(String(error));
+    }
+  };
 
   useEffect(() => {
     const handleKeyDown = async (event) => {
@@ -85,13 +83,12 @@ const CodeEditor = ({ transactionRows, connectionRows }) => {
     return () => {
       document.removeEventListener("keydown", handleKeyDown, true);
     };
-
   }, []);
   useEffect(() => {
     if (aiCode) {
       setIsModalOpen(false);
     }
-  }, [aiCode])
+  }, [aiCode]);
   const handleEditorDidMount = (editor) => {
     editorRef.current = editor;
   };
@@ -104,7 +101,7 @@ const CodeEditor = ({ transactionRows, connectionRows }) => {
         <ModalSelector onSelect={setModel} />
       </div>
 
-      <div className="border rounded flex-grow overflow-hidden relative">
+      <div className="border rounded flex-grow overflow-hidden relative ">
         <div className="flex justify-end mt-2 space-x-2">
           {/* <button
             onClick={runCode}
@@ -113,14 +110,27 @@ const CodeEditor = ({ transactionRows, connectionRows }) => {
             Run Code
           </button> */}
         </div>
+
         <Editor
           height="100%"
-          theme="light"
+          theme={theme}
           language={language}
           value={code}
           onChange={(value) => setCode(value || "")}
           onMount={handleEditorDidMount}
-          options={{ minimap: { enabled: false } }}
+          options={{
+            minimap: { enabled: false },
+            fontSize: 14,
+            scrollBeyondLastLine: false,
+            automaticLayout: true,
+            lineNumbers: "on",
+            tabSize: 2,
+            wordWrap: "on",
+            padding: { top: 10, bottom: 10 },
+            placeholder:
+              "Press Ctrl + k to ask DarwinAI to do something. Start typing to dismiss.",
+          }}
+          className="border rounded-2xl shadow-lg p-2 bg-white w-full h-full max-w-full max-h-full "
         />
 
         {/* In-Editor Modal */}
@@ -142,8 +152,8 @@ const CodeEditor = ({ transactionRows, connectionRows }) => {
                 placeholder="Type your question..."
                 onKeyDown={(e) => {
                   if (e.key === "Enter" && !e.shiftKey) {
-                    e.preventDefault(); 
-                    handleSubmit(e); 
+                    e.preventDefault();
+                    handleSubmit(e);
                   }
                 }}
               />
@@ -251,3 +261,6 @@ const CodeEditor = ({ transactionRows, connectionRows }) => {
 };
 
 export default CodeEditor;
+
+
+
