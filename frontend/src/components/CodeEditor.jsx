@@ -2,21 +2,20 @@ import React, { useState, useEffect, useRef } from "react";
 import Editor from "@monaco-editor/react";
 import { llm_query } from "../constants/llm-api";
 import ModalSelector from "./ModalSelector";
-import './CodeEditor.css';
+
 
 const CodeEditor = ({ transactionRows, connectionRows }) => {
   const editorRef = useRef(null);
-  const [code, setCode] = useState("// Write your code here...");
+  const [code, setCode] = useState("");
   const [language, setLanguage] = useState("python");
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [loading, setLoading] = useState(false);
   const [position, setPosition] = useState(null);
   const [inputValue, setInputvalue] = useState("");
-  const [aiCode, setAiCode] = useState("def factorial(n): \nfact = 1 \nfor num in range(2, n + 1):\n fact *= num r\n eturn fact");
+  const [aiCode, setAiCode] = useState("");
   const [isAiResponseVisible, setIsAiResponseVisible] = useState(true);
   const [model, setModel] = useState("llama3.1:8b");
-  const [output, setOutput] = useState("");
-
+  const [theme, setTheme] = useState("");
 
   const handleSubmit = async (event) => {
     event.preventDefault();
@@ -28,11 +27,10 @@ const CodeEditor = ({ transactionRows, connectionRows }) => {
     setIsAiResponseVisible(true);
 
     try {
-
       const response = await fetch(llm_query, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({  // ✅ Fixed JSON body serialization
+        body: JSON.stringify({
           query: inputValue,
           connectionLevelParamFields: connectionRows,
           transactionLevelParamFields: transactionRows,
@@ -40,16 +38,10 @@ const CodeEditor = ({ transactionRows, connectionRows }) => {
         }),
       });
 
-
-      if (!response.ok) {
-        throw new Error(`Server error: ${response.status}`);
-      }
-
-      const data = await response.json();
-
+      if (!response.ok) throw new Error(`Server error: ${response.status}`);
+      const data = await response.json();   
 
       setAiCode(data.data || "No response received");
-
     } catch (err) {
       console.error("Error sending request:", err);
     } finally {
@@ -57,15 +49,6 @@ const CodeEditor = ({ transactionRows, connectionRows }) => {
       setInputvalue("");
     }
   };
-
-  const runCode = ()=>{
-      try{
-        setOutput(String(result));
-      }
-      catch(error){
-        setOutput(String(error));
-      }
-  }
 
   useEffect(() => {
     const handleKeyDown = async (event) => {
@@ -85,13 +68,14 @@ const CodeEditor = ({ transactionRows, connectionRows }) => {
     return () => {
       document.removeEventListener("keydown", handleKeyDown, true);
     };
-
   }, []);
+
   useEffect(() => {
     if (aiCode) {
       setIsModalOpen(false);
     }
-  }, [aiCode])
+  }, [aiCode]);
+
   const handleEditorDidMount = (editor) => {
     editorRef.current = editor;
   };
@@ -99,51 +83,49 @@ const CodeEditor = ({ transactionRows, connectionRows }) => {
   return (
     <div className="fixed top-[80px] right-[25px] p-5 border rounded-lg shadow-lg bg-white w-2/5 h-4/5 flex flex-col">
       {/* Code Editor */}
-
       <div className="p-6">
         <ModalSelector onSelect={setModel} />
       </div>
 
       <div className="border rounded flex-grow overflow-hidden relative">
-        <div className="flex justify-end mt-2 space-x-2">
-          {/* <button
-            onClick={runCode}
-            className="px-3 py-1 bg-green-600 text-white rounded text-sm"
-          >
-            Run Code
-          </button> */}
-        </div>
         <Editor
           height="100%"
-          theme="light"
+          theme={theme}
           language={language}
           value={code}
           onChange={(value) => setCode(value || "")}
           onMount={handleEditorDidMount}
-          options={{ minimap: { enabled: false } }}
+          options={{
+            minimap: { enabled: false },
+            fontSize: 14,
+            scrollBeyondLastLine: false,
+            automaticLayout: true,
+            lineNumbers: "on",
+            tabSize: 2,
+            wordWrap: "on",
+            padding: { top: 10, bottom: 10 },
+            placeholder:  "Press Ctrl + k to ask DarwinAI to do something. Start typing to dismiss.",
+          }}
+          className="border rounded-2xl shadow-lg p-2 bg-white w-full h-full max-w-full max-h-full"
         />
 
         {/* In-Editor Modal */}
         {isModalOpen && position && (
           <div
-            className="absolute bg-white p-3 rounded-lg shadow-lg border w-96 left-78px"
-            style={{
-              top: position.top + 20,
-              left: position.left,
-            }}
+            className="absolute bg-white p-3 rounded-lg shadow-lg border w-96"
+            style={{ top: position.top + 20, left: position.left }}
           >
             <h2 className="text-sm font-bold mb-2">Write a Query</h2>
             <form onSubmit={handleSubmit}>
               <textarea
-                type="text"
                 value={inputValue}
                 onChange={(e) => setInputvalue(e.target.value)}
                 className="w-full p-2 border rounded mb-2"
                 placeholder="Type your question..."
                 onKeyDown={(e) => {
                   if (e.key === "Enter" && !e.shiftKey) {
-                    e.preventDefault(); 
-                    handleSubmit(e); 
+                    e.preventDefault();
+                    handleSubmit(e);
                   }
                 }}
               />
@@ -159,7 +141,6 @@ const CodeEditor = ({ transactionRows, connectionRows }) => {
                   type="submit"
                   disabled={loading}
                 >
-                  {" "}
                   {loading ? "Loading..." : "Generate"}
                 </button>
               </div>
@@ -167,8 +148,9 @@ const CodeEditor = ({ transactionRows, connectionRows }) => {
           </div>
         )}
       </div>
+
       {isAiResponseVisible && (
-        <div className="mt-4 p-3 border rounded-lg shadow-lg max-h-[300px] bg-white-100 w-full overflow-auto relative">
+        <div className="mt-4 p-3 border rounded-lg shadow-lg max-h-[300px] bg-white w-full overflow-auto relative">
           <h2 className="text-sm font-bold mb-2">AI Response</h2>
           <pre className="bg-white-800 text-blue-1000 p-2 rounded-lg overflow-auto relative">
             {aiCode || (loading ? "Generating code..." : "No response yet.")}
@@ -179,15 +161,7 @@ const CodeEditor = ({ transactionRows, connectionRows }) => {
                 onClick={() => {
                   if (editorRef.current) {
                     const editor = editorRef.current;
-                    const model = editor.getModel();
-
-                    if (!model) return;
-
-                    const totalLinesBefore = model.getLineCount(); // Before inserting AI code
-                    const position = editor.getPosition(); // Cursor position
-
-                    const aiLines = aiCode.split("\n").length; // Number of lines in AI-generated code
-                    const insertEndLine = position.lineNumber + aiLines - 1; // Exact last AI-inserted line
+                    const position = editor.getPosition();
 
                     // Insert AI-generated code at cursor position
                     editor.executeEdits(null, [
@@ -195,39 +169,23 @@ const CodeEditor = ({ transactionRows, connectionRows }) => {
                         range: new monaco.Range(position.lineNumber, 1, position.lineNumber, 1),
                         text: aiCode + "\n",
                         forceMoveMarkers: true,
-                      }
+                      },
                     ]);
 
-                    // Move cursor to the next line after AI-generated code
-                    editor.setPosition(new monaco.Position(insertEndLine + 1, 1));
+                    // Move cursor to the next line
+                    editor.setPosition(new monaco.Position(position.lineNumber + aiCode.split("\n").length, 1));
 
-                    // Apply green highlight ONLY to AI-inserted lines
-                    editor.deltaDecorations(
-                      [], // Remove previous decorations
-                      [
-                        {
-                          range: new monaco.Range(position.lineNumber, 1, insertEndLine, model.getLineMaxColumn(insertEndLine)),
-                          options: {
-                            isWholeLine: true,
-                            className: "highlight-full-line", // Custom CSS class for styling
-                          },
-                        },
-                      ]
-                    );
-
-                    setIsAiResponseVisible(false); // Hide AI response after accepting
+                    setIsAiResponseVisible(false); // Hide AI response after inserting
                   }
                 }}
                 className="px-3 py-1 bg-green-600 text-white rounded text-sm"
               >
                 Accept
               </button>
-
-
               <button
                 onClick={() => {
                   setAiCode(""); // Clear AI response
-                  setIsAiResponseVisible(false); // Hide AI response section
+                  setIsAiResponseVisible(false);
                 }}
                 className="px-3 py-1 bg-red-600 text-white rounded text-sm"
               >
