@@ -1,9 +1,8 @@
 import React, { useState, useEffect, useRef } from "react";
 import Editor from "@monaco-editor/react";
 import { llm_query } from "../constants/llm-api";
-// import ModalSelector from "./ModalSelector";
 import models from "../constants/models";
-import DropDown from "./ModalSelector";
+import DropDown from "./DropDown";
 import themes from "../constants/themes";
 
 
