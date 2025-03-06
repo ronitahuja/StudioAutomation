@@ -1,3 +1,5 @@
+const mongoose = require("mongoose");
+
 const CodeVersionSchema = new mongoose.Schema({
   code: {
     type: String,
@@ -14,16 +16,16 @@ const CodeVersionSchema = new mongoose.Schema({
     default: Date.now,
   },
 
-//   author: {
-//     type: mongoose.Schema.Types.ObjectId,
-//     ref: "User", 
-//     required: true,
-//   },
+  //   author: {
+  //     type: mongoose.Schema.Types.ObjectId,
+  //     ref: "User",
+  //     required: true,
+  //   },
 
   description: {
     type: String,
     default: "",
-  }
+  },
 });
 
 module.exports = mongoose.model("CodeVersion", CodeVersionSchema);
