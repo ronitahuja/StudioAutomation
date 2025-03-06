@@ -1,7 +1,10 @@
 import React, { useState, useEffect, useRef } from "react";
 import Editor from "@monaco-editor/react";
 import { llm_query } from "../constants/llm-api";
-import ModalSelector from "./ModalSelector";
+// import ModalSelector from "./ModalSelector";
+import models from "../constants/models";
+import DropDown from "./ModalSelector";
+import themes from "../constants/themes";
 
 
 const CodeEditor = ({ transactionRows, connectionRows }) => {
@@ -87,7 +90,11 @@ const CodeEditor = ({ transactionRows, connectionRows }) => {
     <div className="top-[80px] right-[25px] p-5 border rounded-lg shadow-lg bg-white w-5/5 h-full flex flex-col">
       {/* Code Editor */}
       <div className="p-6">
-        <ModalSelector onSelect={setModel} />
+        <DropDown onSelect={setModel} models={models} topic={"Model"}/>
+      </div>
+
+      <div className="p-6">
+        <DropDown onSelect={setTheme} models={themes} topic={"Theme"}/>
       </div>
 
       <div className="border rounded flex-grow overflow-hidden relative">
@@ -107,7 +114,8 @@ const CodeEditor = ({ transactionRows, connectionRows }) => {
             tabSize: 2,
             wordWrap: "on",
             padding: { top: 10, bottom: 10 },
-            placeholder:  "Press Ctrl + k to ask DarwinAI to do something. Start typing to dismiss.",
+            placeholder:
+              "Press Ctrl + k to ask DarwinAI to do something. Start typing to dismiss.",
           }}
           className="border rounded-2xl shadow-lg p-2 bg-white w-full h-full max-w-full max-h-full"
         />
@@ -169,14 +177,24 @@ const CodeEditor = ({ transactionRows, connectionRows }) => {
                     // Insert AI-generated code at cursor position
                     editor.executeEdits(null, [
                       {
-                        range: new monaco.Range(position.lineNumber, 1, position.lineNumber, 1),
+                        range: new monaco.Range(
+                          position.lineNumber,
+                          1,
+                          position.lineNumber,
+                          1
+                        ),
                         text: aiCode + "\n",
                         forceMoveMarkers: true,
                       },
                     ]);
 
                     // Move cursor to the next line
-                    editor.setPosition(new monaco.Position(position.lineNumber + aiCode.split("\n").length, 1));
+                    editor.setPosition(
+                      new monaco.Position(
+                        position.lineNumber + aiCode.split("\n").length,
+                        1
+                      )
+                    );
 
                     setIsAiResponseVisible(false); // Hide AI response after inserting
                   }
