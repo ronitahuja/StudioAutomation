@@ -37,11 +37,14 @@ const Form = () => {
     useEffect(() => {
         const fetchParams = async () => {
             try {
+                if (!formData.application) {
+                    setConnectionLevelParams([]); // Reset when no application is selected
+                    return;
+                }
                 const response = await axios.get(`http://localhost:3000/api/v1/app/appNames/${formData.application}`);
-
-
-                if (Array.isArray(response.data.data)) {
-                    setConnectionLevelParams(response.data.data[0]?.connectionLevelParamFields);
+                console.log("API Response:", response.data);
+                if (Array.isArray(response.data.data) && response.data.data.length>0) {
+                    setConnectionLevelParams(response.data.data[0]?.connectionLevelParamFields);                    
 
                 } else {
                     console.error("Invalid data format for params:", response.data);

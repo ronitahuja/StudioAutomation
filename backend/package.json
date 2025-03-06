@@ -10,7 +10,7 @@
     "express": "^4.21.2",
     "http-status-codes": "^2.3.0",
     "mongodb": "^6.13.1",
-    "mongoose": "^8.10.1",
+    "mongoose": "^8.12.1",
     "ollama": "^0.5.14",
     "winston": "^3.17.0",
     "winston-mongodb": "^6.0.0"
