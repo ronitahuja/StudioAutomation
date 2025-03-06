@@ -15,7 +15,7 @@ class FunctionService{
                 Return Type : ${func.return_value}
                 Example : ${func.example}
                 `
-                const embedding = await generateEmbedding(functionText)
+                const embedding = await generateEmbedding(functionText);
 
                 return {
                     name: func.name,

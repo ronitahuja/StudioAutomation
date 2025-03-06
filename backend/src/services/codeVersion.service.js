@@ -1,8 +1,10 @@
 class codeVersionService {
-    constructor(coddeVersionRepository) {
-        this.coddeVersionRepository = coddeVersionRepository;
+    constructor(codeVersionRepository) {
+        this.codeVersionRepository = codeVersionRepository;
     }
     async insertCodeVersions(codeVersionsData) {
-        
+        return await this.codeVersionRepository.insertCodeVersions(codeVersionsData);
     }
 }
+
+module.exports = codeVersionService;
