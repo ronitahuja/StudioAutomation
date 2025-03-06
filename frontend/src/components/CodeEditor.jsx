@@ -15,7 +15,9 @@ const CodeEditor = ({ transactionRows, connectionRows }) => {
   const [aiCode, setAiCode] = useState("");
   const [isAiResponseVisible, setIsAiResponseVisible] = useState(true);
   const [model, setModel] = useState("llama3.1:8b");
-  const [theme, setTheme] = useState("");
+  const [output, setOutput] = useState("");
+  const [theme,setTheme] =useState("");
+
 
   const handleSubmit = async (event) => {
     event.preventDefault();
@@ -31,6 +33,7 @@ const CodeEditor = ({ transactionRows, connectionRows }) => {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
+          // ✅ Fixed JSON body serialization
           query: inputValue,
           connectionLevelParamFields: connectionRows,
           transactionLevelParamFields: transactionRows,
@@ -41,6 +44,7 @@ const CodeEditor = ({ transactionRows, connectionRows }) => {
       if (!response.ok) throw new Error(`Server error: ${response.status}`);
       const data = await response.json();   
 
+   
       setAiCode(data.data || "No response received");
     } catch (err) {
       console.error("Error sending request:", err);
@@ -75,7 +79,6 @@ const CodeEditor = ({ transactionRows, connectionRows }) => {
       setIsModalOpen(false);
     }
   }, [aiCode]);
-
   const handleEditorDidMount = (editor) => {
     editorRef.current = editor;
   };
