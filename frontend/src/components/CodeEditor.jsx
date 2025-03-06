@@ -2,8 +2,9 @@ import React, { useState, useEffect, useRef } from "react";
 import Editor from "@monaco-editor/react";
 import { llm_query } from "../constants/llm-api";
 import ModalSelector from "./ModalSelector";
+import './CodeEditor.css';
 
-const CodeEditor = ({ transactionRows , connectionRows}) => {
+const CodeEditor = ({ transactionRows, connectionRows }) => {
   const editorRef = useRef(null);
   const [code, setCode] = useState("// Write your code here...");
   const [language, setLanguage] = useState("python");
@@ -11,10 +12,10 @@ const CodeEditor = ({ transactionRows , connectionRows}) => {
   const [loading, setLoading] = useState(false);
   const [position, setPosition] = useState(null);
   const [inputValue, setInputvalue] = useState("");
-  const [aiCode, setAiCode] = useState("");
-  const [isAiResponseVisible, setIsAiResponseVisible] = useState(false);
+  const [aiCode, setAiCode] = useState("def factorial(n): \nfact = 1 \nfor num in range(2, n + 1):\n fact *= num r\n eturn fact");
+  const [isAiResponseVisible, setIsAiResponseVisible] = useState(true);
   const [model, setModel] = useState("llama3.1:8b");
-  const [output,setOutput] = useState("");
+  const [output, setOutput] = useState("");
 
 
   const handleSubmit = async (event) => {
@@ -38,14 +39,14 @@ const CodeEditor = ({ transactionRows , connectionRows}) => {
           model: model,
         }),
       });
-     
+
 
       if (!response.ok) {
         throw new Error(`Server error: ${response.status}`);
       }
 
       const data = await response.json();
-   
+
 
       setAiCode(data.data || "No response received");
 
@@ -177,7 +178,43 @@ const CodeEditor = ({ transactionRows , connectionRows}) => {
               <button
                 onClick={() => {
                   if (editorRef.current) {
-                    editorRef.current.setValue(aiCode); // Insert AI-generated code into the editor
+                    const editor = editorRef.current;
+                    const model = editor.getModel();
+
+                    if (!model) return;
+
+                    const totalLinesBefore = model.getLineCount(); // Before inserting AI code
+                    const position = editor.getPosition(); // Cursor position
+
+                    const aiLines = aiCode.split("\n").length; // Number of lines in AI-generated code
+                    const insertEndLine = position.lineNumber + aiLines - 1; // Exact last AI-inserted line
+
+                    // Insert AI-generated code at cursor position
+                    editor.executeEdits(null, [
+                      {
+                        range: new monaco.Range(position.lineNumber, 1, position.lineNumber, 1),
+                        text: aiCode + "\n",
+                        forceMoveMarkers: true,
+                      }
+                    ]);
+
+                    // Move cursor to the next line after AI-generated code
+                    editor.setPosition(new monaco.Position(insertEndLine + 1, 1));
+
+                    // Apply green highlight ONLY to AI-inserted lines
+                    editor.deltaDecorations(
+                      [], // Remove previous decorations
+                      [
+                        {
+                          range: new monaco.Range(position.lineNumber, 1, insertEndLine, model.getLineMaxColumn(insertEndLine)),
+                          options: {
+                            isWholeLine: true,
+                            className: "highlight-full-line", // Custom CSS class for styling
+                          },
+                        },
+                      ]
+                    );
+
                     setIsAiResponseVisible(false); // Hide AI response after accepting
                   }
                 }}
@@ -185,6 +222,7 @@ const CodeEditor = ({ transactionRows , connectionRows}) => {
               >
                 Accept
               </button>
+
 
               <button
                 onClick={() => {
