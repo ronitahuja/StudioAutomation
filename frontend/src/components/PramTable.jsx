@@ -34,7 +34,7 @@ const ParamTable = ({rows,setRows}) => {
             <th className="border p-2">SENSITIVE</th>
             <th className="border p-2">VARIABLE NAME</th>
             <th className="border p-2">DESCRIPTION</th>
-            <th classNamr="border p-2">ACTIONS</th>
+            <th className="border p-2">ACTIONS</th>
           </tr>
         </thead>
         <tbody>
