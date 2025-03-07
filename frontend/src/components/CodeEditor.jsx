@@ -4,6 +4,8 @@ import { llm_query } from "../constants/llm-api";
 import models from "../constants/models";
 import DropDown from "./DropDown";
 import themes from "../constants/themes";
+import languages from "../constants/languages";
+
 
 
 const CodeEditor = ({ transactionRows, connectionRows }) => {
@@ -20,6 +22,7 @@ const CodeEditor = ({ transactionRows, connectionRows }) => {
   const [model, setModel] = useState("llama3.1:8b");
   const [output, setOutput] = useState("");
   const [theme, setTheme] = useState("");
+  
 
   const handleSubmit = async (event) => {
     event.preventDefault();
@@ -86,30 +89,57 @@ const CodeEditor = ({ transactionRows, connectionRows }) => {
     }
   }, [aiCode]);
 
-  const handleEditorDidMount = (editor) => {
+  const handleEditorDidMount = (editor,monaco) => {
     editorRef.current = editor;
+    // Ensure Python language is registered
+    monaco.languages.register({ id: "python" });
+
+    // Now, safely access `pythonDefaults`
+    monaco.languages.python?.pythonDefaults.setDiagnosticsOptions({
+      enabled: true,
+    });
+
+    monaco.languages.python?.pythonDefaults.setWorkerOptions({
+      languageServer: "pyright", // Enables Pyright for deeper IntelliSense
+    });
+    
   };
 
   return (
-    <div className="top-[80px] right-[25px] p-5 border rounded-lg shadow-lg bg-white w-5/5 h-full flex flex-col">
-      {/* Code Editor */}
-      <div className="p-6">
-        <DropDown onSelect={setModel} models={models} topic={"Model"} />
-      </div>
+    <div className="top-[80px] right-[25px] p-5 border rounded-lg shadow-lg bg-white w-5/5 gap-6 h-full flex flex-col">
+    {/* Model Selection */}
+<div className="p-2 border rounded-lg shadow-md bg-gray-100">
+  <DropDown onSelect={setModel} models={models} topic={"Model"} />
+</div>
 
-      <div className="p-6">
-        <DropDown onSelect={setTheme} models={themes} topic={"Theme"} />
-      </div>
+{/* Theme & Language Selection in Grid */}
+<div className="grid grid-cols-2 gap-4">
+  <div className="py-1 px-2 border rounded-lg shadow-md bg-gray-100 h-auto">
+    <DropDown onSelect={setTheme} models={themes} topic={"Theme"} />
+  </div>
+
+  <div className="py-1 px-2 border rounded-lg shadow-md bg-gray-100 h-auto">
+    <DropDown onSelect={setLanguage} models={languages} topic={"Language"} />
+  </div>
+</div>
+
+     
+
+      
 
       <div className="border rounded flex-grow overflow-hidden relative">
         <Editor
           height="100%"
           theme={theme}
-          language={language}
+          defaultLanguage={language}
           value={code}
           onChange={(value) => setCode(value || "")}
           onMount={handleEditorDidMount}
           options={{
+            quickSuggestions:true ,
+            suggestOnTriggerCharacters:true,
+            autoClosingBrackets:"always",
+            snippetSuggestions: "inline",
             minimap: { enabled: false },
             fontSize: 14,
             scrollBeyondLastLine: false,
