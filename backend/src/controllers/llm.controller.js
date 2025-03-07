@@ -10,7 +10,7 @@ class LLMController {
       const response = await this.llmService.queryLLM(queryObj);
       const evaluatedResponse= await this.llmService.checkResponse(queryObj, response);
 
-      // uncooment this if u want to enable response chaining
+      // uncomment this if u want to enable response chaining
 
       // return res.status(200).json({
       //   success: true,
@@ -18,7 +18,7 @@ class LLMController {
       //   error: {},
       //   data: evaluatedResponse,
       // });
-      
+
       return res.status(200).json({
         success: true,
         message: "successfully queried",
