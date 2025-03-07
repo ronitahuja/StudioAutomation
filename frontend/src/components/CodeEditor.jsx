@@ -164,71 +164,72 @@ const CodeEditor = ({ transactionRows, connectionRows }) => {
         )}
       </div>
 
-      {isAiResponseVisible && (
-        <div className="mt-4 p-3 border rounded-lg shadow-lg max-h-[300px] bg-white w-full overflow-auto relative">
-          <h2 className="text-sm font-bold mb-2">AI Response</h2>
-          <pre className="bg-white-800 text-blue-1000 p-2 rounded-lg overflow-auto relative">
-            {aiCode || (loading ? "Generating code..." : "No response yet.")}
-          </pre>
-          {aiCode && (
-            <div className="flex justify-end space-x-2 mt-2">
-              <button
-                onClick={() => {
-                  if (editorRef.current) {
-                    const editor = editorRef.current;
-                    const position = editor.getPosition();
+      {isAiResponseVisible && (loading || aiCode) && (
+  <div className="mt-4 p-3 border rounded-lg shadow-lg max-h-[300px] bg-white w-full overflow-auto relative">
+    <h2 className="text-sm font-bold mb-2">AI Response</h2>
+    <pre className="bg-white text-blue-1000 p-2 rounded-lg overflow-auto relative">
+      {loading ? "Generating code..." : aiCode || "No response yet."}
+    </pre>
+    {aiCode && (
+      <div className="flex justify-end space-x-2 mt-2">
+        <button
+          onClick={() => {
+            if (editorRef.current) {
+              const editor = editorRef.current;
+              const position = editor.getPosition();
 
-                    // Insert AI-generated code at cursor position
-                    editor.executeEdits(null, [
-                      {
-                        range: new monaco.Range(
-                          position.lineNumber,
-                          1,
-                          position.lineNumber,
-                          1
-                        ),
-                        text: aiCode + "\n",
-                        forceMoveMarkers: true,
-                      },
-                    ]);
+              // Insert AI-generated code at cursor position
+              editor.executeEdits(null, [
+                {
+                  range: new monaco.Range(
+                    position.lineNumber,
+                    1,
+                    position.lineNumber,
+                    1
+                  ),
+                  text: aiCode + "\n",
+                  forceMoveMarkers: true,
+                },
+              ]);
 
-                    // Move cursor to the next line
-                    editor.setPosition(
-                      new monaco.Position(
-                        position.lineNumber + aiCode.split("\n").length,
-                        1
-                      )
-                    );
+              // Move cursor to the next line
+              editor.setPosition(
+                new monaco.Position(
+                  position.lineNumber + aiCode.split("\n").length,
+                  1
+                )
+              );
 
-                    setIsAiResponseVisible(false); // Hide AI response after inserting
-                  }
-                }}
-                className="px-3 py-1 bg-green-600 text-white rounded text-sm"
-              >
-                Accept
-              </button>
-              <button
-                onClick={() => {
-                  setAiCode(""); // Clear AI response
-                  setIsAiResponseVisible(false);
-                }}
-                className="px-3 py-1 bg-red-600 text-white rounded text-sm"
-              >
-                Reject
-              </button>
-              <button
-                onClick={() => {
-                  navigator.clipboard.writeText(aiCode);
-                  alert("Code copied!");
-                }}
-                className="px-3 py-1 bg-blue-600 text-white text-sm rounded"
-              >
-                Copy
-              </button>
-            </div>
-          )}
-        </div>
-      )}
+              setIsAiResponseVisible(false); // Hide AI response after inserting
+            }
+          }}
+          className="px-3 py-1 bg-green-600 text-white rounded text-sm"
+        >
+          Accept
+        </button>
+        <button
+          onClick={() => {
+            setAiCode(""); // Clear AI response
+            setIsAiResponseVisible(false);
+          }}
+          className="px-3 py-1 bg-red-600 text-white rounded text-sm"
+        >
+          Reject
+        </button>
+        <button
+          onClick={() => {
+            navigator.clipboard.writeText(aiCode);
+            alert("Code copied!");
+          }}
+          className="px-3 py-1 bg-blue-600 text-white text-sm rounded"
+        >
+          Copy
+        </button>
+      </div>
+    )}
+  </div>
+)}
+
     </div>
   );
 };
