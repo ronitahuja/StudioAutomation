@@ -5,6 +5,7 @@ import models from "../constants/models";
 import DropDown from "./DropDown";
 import themes from "../constants/themes";
 
+
 const CodeEditor = ({ transactionRows, connectionRows }) => {
   const editorRef = useRef(null);
   const textareaRef = useRef(null); // Reference for the textarea
