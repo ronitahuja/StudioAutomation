@@ -59,7 +59,7 @@ const Form = () => {
 
     }, [formData.application]); // Runs whenever application changes
 
-    
+
 
     const handleChange = (e) => {
         setFormData({ ...formData, [e.target.name]: e.target.value });
@@ -88,7 +88,6 @@ const Form = () => {
                         />
                     </div>
 
-                   
 
                     {/* Select Application */}
                     <div>
