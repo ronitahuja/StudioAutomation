@@ -59,7 +59,6 @@ const Form = () => {
 
     }, [formData.application]); // Runs whenever application changes
 
-    const languages = ["Python", "R"];
 
     const handleChange = (e) => {
         setFormData({ ...formData, [e.target.name]: e.target.value });
@@ -88,23 +87,7 @@ const Form = () => {
                         />
                     </div>
 
-                    {/* Select Language */}
-                    <div>
-                        <label className="block text-lg font-medium text-gray-700">Select Language</label>
-                        <select
-                            name="language"
-                            value={formData.language}
-                            onChange={handleChange}
-                            className="w-full p-3 border rounded-lg mt-2 focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
-                        >
-                            <option value="">Select a language</option>
-                            {languages.map((lang, index) => (
-                                <option key={index} value={lang}>
-                                    {lang}
-                                </option>
-                            ))}
-                        </select>
-                    </div>
+                  
 
                     {/* Select Application */}
                     <div>

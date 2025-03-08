@@ -4,7 +4,7 @@ import { llm_query } from "../constants/llm-api";
 import models from "../constants/models";
 import DropDown from "./DropDown";
 import themes from "../constants/themes";
-
+import languages from "../constants/languages";
 
 const CodeEditor = ({ transactionRows, connectionRows }) => {
   const editorRef = useRef(null);
@@ -86,30 +86,58 @@ const CodeEditor = ({ transactionRows, connectionRows }) => {
     }
   }, [aiCode]);
 
-  const handleEditorDidMount = (editor) => {
+  // const handleEditorDidMount = (editor) => {
+  //   editorRef.current = editor;
+  // };
+  const handleEditorDidMount = (editor, monaco) => {
     editorRef.current = editor;
+    // Ensure Python language is registered
+    monaco.languages.register({ id: "python" });
+
+    // Now, safely access `pythonDefaults`
+    monaco.languages.python?.pythonDefaults.setDiagnosticsOptions({
+      enabled: true,
+    });
+
+    monaco.languages.python?.pythonDefaults.setWorkerOptions({
+      languageServer: "pyright", // Enables Pyright for deeper IntelliSense
+    });
   };
 
   return (
     <div className="top-[80px] right-[25px] p-5 border rounded-lg shadow-lg bg-white w-5/5 h-full flex flex-col">
       {/* Code Editor */}
-      <div className="p-6">
+      <div className="p-2 border rounded-lg shadow-md bg-gray-100">
         <DropDown onSelect={setModel} models={models} topic={"Model"} />
       </div>
 
-      <div className="p-6">
-        <DropDown onSelect={setTheme} models={themes} topic={"Theme"} />
+      <div className="grid grid-cols-2 gap-4">
+        <div className="py-1 px-2 border rounded-lg shadow-md bg-gray-100 h-auto">
+          <DropDown onSelect={setTheme} models={themes} topic={"Theme"} />
+        </div>
+
+        <div className="py-1 px-2 border rounded-lg shadow-md bg-gray-100 h-auto">
+          <DropDown
+            onSelect={setLanguage}
+            models={languages}
+            topic={"Language"}
+          />
+        </div>
       </div>
 
       <div className="border rounded flex-grow overflow-hidden relative">
         <Editor
           height="100%"
           theme={theme}
-          language={language}
+          defaultLanguage={language}
           value={code}
           onChange={(value) => setCode(value || "")}
           onMount={handleEditorDidMount}
           options={{
+            quickSuggestions: true,
+            suggestOnTriggerCharacters: true,
+            autoClosingBrackets: "always",
+            snippetSuggestions: "inline",
             minimap: { enabled: false },
             fontSize: 14,
             scrollBeyondLastLine: false,
@@ -165,11 +193,11 @@ const CodeEditor = ({ transactionRows, connectionRows }) => {
         )}
       </div>
 
-      {isAiResponseVisible && (
+      {isAiResponseVisible && (loading || aiCode) && (
         <div className="mt-4 p-3 border rounded-lg shadow-lg max-h-[300px] bg-white w-full overflow-auto relative">
           <h2 className="text-sm font-bold mb-2">AI Response</h2>
-          <pre className="bg-white-800 text-blue-1000 p-2 rounded-lg overflow-auto relative">
-            {aiCode || (loading ? "Generating code..." : "No response yet.")}
+          <pre className="bg-white text-blue-1000 p-2 rounded-lg overflow-auto relative">
+            {loading ? "Generating code..." : aiCode || "No response yet."}
           </pre>
           {aiCode && (
             <div className="flex justify-end space-x-2 mt-2">
