@@ -32,7 +32,9 @@ class LLMService {
         });
         const prompt = `
   You are a highly efficient AI code generator, specialized in generating SDK-compliant Python scripts. Your sole task is to generate structured, syntactically correct, and optimized Python code based on the retrieved SDK functions.
-
+  here is the application name : ${queryObj.applicationName}
+  here is the appAction name : ${queryObj.appActionName}  
+  here is the language : ${queryObj.language}
   ---
   ### **Strict Rules:**
   1. **Only Generate Code**: Do NOT provide explanations, alternative responses, or opinions.
@@ -70,8 +72,14 @@ class LLMService {
   ### **Final Instruction:**
 
   DO NOT generate explanations, opinions, or unrelated content.
+  dont include <think> </think> tags in the response.
+  No need to import the SDK functions, just use them directly in the code.
+  for eg: you dont need to write "import DBSResponse" because the functions that are coming in  ${parsedResult} are already imported.
+  also dont give any explanation or <think> </think> tags in the response.
+
 
 `;
+console.log("prompt",prompt);
 
         const response = await groq.chat.completions.create({
           messages: [{ role: "user", content: prompt }],
