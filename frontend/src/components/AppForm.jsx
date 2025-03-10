@@ -2,6 +2,7 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
 import ParamTable from "./PramTable";
+import ApplicationTable from "./ApplicationTable";
 
 function AppForm() {
     const [rows, setRows] = useState([]);
@@ -50,8 +51,11 @@ function AppForm() {
     };
 
     return (
-        <div className="min-h-screen bg-gray-50 p-6">
-            <div className="max-w-5xl mx-auto bg-white rounded-lg shadow-sm p-6">
+        <>
+
+        
+        <div className="bg-gray-50 p-6">
+            <div className="max-w-7xl mx-auto bg-white rounded-lg shadow-sm p-6">
                 <div className="space-y-6">
                     <h1 className="text-2xl text-purple-600 font-medium">Application</h1>
 
@@ -145,6 +149,8 @@ function AppForm() {
                 </div>
             </div>
         </div>
+        <ApplicationTable />
+        </>
     );
 }
 
