@@ -25,7 +25,7 @@ app.use("/api", apiRouter);
 
 logger.on("error", (error) => {
   console.error("Winston logger error:", error.message);
-  process.exit(1); // Exit app if logging is critical
+  process.exit(1); 
 });
 
 app.listen(PORT, async () => {
