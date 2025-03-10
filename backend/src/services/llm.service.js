@@ -79,7 +79,6 @@ class LLMService {
 
 
 `;
-console.log("prompt",prompt);
 
         const response = await groq.chat.completions.create({
           messages: [{ role: "user", content: prompt }],
@@ -90,9 +89,7 @@ console.log("prompt",prompt);
           stream: false,
           stop: null,
         });
-        const generatedCode =
-          response.choices[0]?.message?.content || "no output";
-        console.log(generatedCode);
+        const generatedCode = response.choices[0]?.message?.content || "no output";
         return generatedCode;
       }
     } catch (error) {

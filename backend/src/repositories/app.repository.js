@@ -3,13 +3,12 @@ const App = require("../models/app.model");
 class AppRepository{
     async createApp(appData){
         try{
-          
             const app = await App.create({
                 appName : appData.appName,
                 appCategory : appData.appCategory,  
-                authenticationType: appData.authType,
-                appDescription : appData.description,
-                connectionLevelParamFields: appData.connectionParams
+                authenticationType: appData.authenticationType,
+                appDescription : appData.appDescription,
+                connectionLevelParamFields: appData.connectionLevelParamFields
             })
             return app;
         }
@@ -22,6 +21,17 @@ class AppRepository{
         try{
             const allApps = await App.find({});
             return allApps;
+        }
+        catch(err){
+            console.log(err);
+            throw err;
+        }
+    }
+    async getApp(appName){
+        try{
+         
+            const app = await App.findOne({appName});
+            return app;
         }
         catch(err){
             console.log(err);
@@ -48,16 +58,16 @@ class AppRepository{
             throw err;
         }
     }
-    async getAppNames(){
-        try{
-            const appNames = await App.distinct('appName');
+    async getAppNames() {
+        try {
+            const appNames = await App.find({}, '_id appName'); // Fetches `_id` and `appName`
             return appNames;
-        }
-        catch(err){
-            console.log(err);
+        } catch (err) {
+            console.error("Error fetching application names:", err);
             throw err;
         }
     }
+    
     async getConnectionLevelParams(appName){
         try{
             const connectionLevelParams = await App.find(
@@ -66,6 +76,19 @@ class AppRepository{
             );
            
             return connectionLevelParams;
+        }
+        catch(err){
+            console.log(err);
+            throw err;
+        }
+    }
+    async updateApp(updatedAppData){
+        try{
+            const id = updatedAppData._id;
+            const updatedApp = await App.updateOne({
+                _id: updatedAppData._id,
+
+            })
         }
         catch(err){
             console.log(err);

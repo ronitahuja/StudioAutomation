@@ -10,6 +10,10 @@ class AppService{
         const allApps = await this.appRepository.getAllApps();
         return allApps;
     }
+    async getApp(appName){
+        const app = await this.appRepository.getApp(appName);
+        return app;
+    }
     async getAppCategory(){
         const appCategories =  await this.appRepository.getAppCategory();
         return appCategories;
@@ -25,6 +29,10 @@ class AppService{
     async getConnectionLevelParams(appName){
         const connectionLevelParams = await this.appRepository.getConnectionLevelParams(appName);
         return connectionLevelParams;
+    }
+    async updateApp(updatedAppData){
+        const updatedApp = await this.appRepository.updateApp(updatedAppData);
+        return updatedApp;
     }
 }
 module.exports = AppService;
