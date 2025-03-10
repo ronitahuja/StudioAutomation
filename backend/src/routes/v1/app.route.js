@@ -6,6 +6,7 @@ const AppRouter = express.Router();
 
 //routes
 AppRouter.get('/ping',AppController.pingAppController);
+AppRouter.get('/',AppController.getAllApps);
 AppRouter.post('/',AppController.createApp);
 AppRouter.get('/appCategories',AppController.getAppCategory)
 AppRouter.get('/authenticationType',AppController.getAuthenticationType)

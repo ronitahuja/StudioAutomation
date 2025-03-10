@@ -22,6 +22,20 @@ async function createApp(req,res,next){
         next(err);
     }
 }
+async function getAllApps(req,res,next){
+    try{
+        const allApps = await appService.getAllApps();
+        return res.status(StatusCodes.OK).json({
+            success:true,
+            message:"succesfully fetched all apps",
+            error:{},
+            data : allApps
+        })
+    }
+    catch(err){
+        next(err);
+    }
+}
 
 async function getAppCategory(req,res,next){
     try{
@@ -93,5 +107,6 @@ module.exports ={
     getAppCategory,
     getAuthenticationType,
     getAppNames,
-    getConnectionLevelParams
+    getConnectionLevelParams,
+    getAllApps
 }
