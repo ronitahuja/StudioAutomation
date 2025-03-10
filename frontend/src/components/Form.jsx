@@ -41,8 +41,8 @@ const Form = () => {
                     setConnectionLevelParams([]); // Reset when no application is selected
                     return;
                 }
+              
                 const response = await axios.get(`http://localhost:3000/api/v1/app/appNames/${formData.application}`);
-                console.log("API Response:", response.data);
                 if (Array.isArray(response.data.data) && response.data.data.length>0) {
                     setConnectionLevelParams(response.data.data[0]?.connectionLevelParamFields);                    
 
@@ -67,7 +67,6 @@ const Form = () => {
 
     const handleSubmit = (e) => {
         e.preventDefault();
-        console.log("Form Submitted:", formData);
     };
 
     return (
@@ -100,8 +99,8 @@ const Form = () => {
                         >
                             <option value="">Select an application</option>
                             {applications.map((app, index) => (
-                                <option key={index} value={app}>
-                                    {app}
+                                <option key={index} value={app.appName}>
+                                    {app.appName}
                                 </option>
                             ))}
                         </select>

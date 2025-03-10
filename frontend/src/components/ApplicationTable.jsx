@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import { Search, Settings2, Copy, Trash2, RotateCcw } from "lucide-react";
 import axios from "axios";
 
-const ApplicationTable = () => {
+const ApplicationTable = ({payLoad, setPayLoad}) => {
   const [searchTerm, setSearchTerm] = useState("");
   const [currentPage, setCurrentPage] = useState(1);
   const [applications, setApplications] = useState([]);
@@ -25,7 +25,7 @@ const ApplicationTable = () => {
   // Filter applications based on search term
   const filteredApplications = applications.filter(
     (app) =>
-      app.toLowerCase().includes(searchTerm.toLowerCase())
+      app.appName.toLowerCase().includes(searchTerm.toLowerCase())
   );
 
   // Pagination logic
@@ -35,6 +35,35 @@ const ApplicationTable = () => {
     (currentPage - 1) * itemsPerPage,
     currentPage * itemsPerPage
   );
+const handleEdit = (appName) => {
+  console.log("handleEdit called with:", appName);
+  const fetchApplication = async () => {
+    try {
+      const response= await axios.get(`http://localhost:3000/api/v1/app/${appName}`);
+      const appData = response.data.data;
+      if (appData) {
+        console.log("Fetched Application Data:", appData);
+  
+        // Prefill the form with fetched data
+        setPayLoad({
+          appName: appData.appName,
+          appCategory: appData.appCategory,
+          authenticationType: appData.authenticationType,
+          appDescription: appData.appDescription,
+          connectionParams: appData.connectionLevelParamFields, // Ensure this is an array of objects
+        });
+      }
+    } catch (error) {
+      console.error("Error fetching application:", error);
+    }
+  };
+  fetchApplication();
+};
+
+useEffect(() => {
+  // Any side effects can be handled here
+}, []);
+  
 
   return (
     <div className="  bg-gray-50 p-6">
@@ -77,11 +106,14 @@ const ApplicationTable = () => {
                   paginatedApps.map((app, index) => (
                     <tr key={index} className="hover:bg-gray-50">
                       <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
-                        {app}
+                        {app.appName}
                       </td>
                       <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
                         <div className="flex space-x-3">
-                          <Settings2 className="h-5 w-5 text-gray-400 cursor-pointer hover:text-gray-600" />
+                          <Settings2 className="h-5 w-5 text-gray-400 cursor-pointer hover:text-gray-600" onClick={() => {
+                            console.log("settings clicked for",app.appName);
+                            handleEdit(app.appName)}}
+                          />
                           <Copy className="h-5 w-5 text-gray-400 cursor-pointer hover:text-gray-600" />
                           <Trash2 className="h-5 w-5 text-gray-400 cursor-pointer hover:text-gray-600" />
                           <RotateCcw className="h-5 w-5 text-gray-400 cursor-pointer hover:text-gray-600" />

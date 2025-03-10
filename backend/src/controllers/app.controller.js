@@ -36,6 +36,21 @@ async function getAllApps(req,res,next){
         next(err);
     }
 }
+async function getApp(req,res,next){
+    try{
+       
+        const app = await appService.getApp(req.params.appName);
+        return res.status(StatusCodes.OK).json({
+            success:true,
+            message:"succesfully fetched app",
+            error:{},
+            data : app
+        })
+    }
+    catch(err){
+        next(err);
+    }
+}
 
 async function getAppCategory(req,res,next){
     try{
@@ -100,6 +115,33 @@ async function getConnectionLevelParams(req,res,next){
     }
 }
 
+async function updateApp(req,res,next){
+    try{
+        const updatedApp = await appService.updateApp(req.body);
+        return res.status(StatusCodes.OK).json({
+            success:true,
+            message:"succesfully updated app",
+            error:{},
+            data : updatedApp
+        })
+    }
+    catch(err){
+        next(err);
+    }
+}
+async function deleteApp(req,res,next){
+    try{
+        const deletedApp = await appService.deleteApp(req.params);
+        return res.status(StatusCodes.OK).json({
+            success:true,
+            message:"succesfully deleted app",
+            error:{},
+            data : deletedApp
+        })
+    }catch(err){
+        next(err);  
+    }
+}
 
 module.exports ={
     pingAppController,
@@ -108,5 +150,8 @@ module.exports ={
     getAuthenticationType,
     getAppNames,
     getConnectionLevelParams,
-    getAllApps
+    getAllApps,
+    getApp,
+    updateApp,
+    deleteApp
 }
