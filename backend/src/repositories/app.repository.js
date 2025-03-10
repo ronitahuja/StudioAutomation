@@ -18,6 +18,16 @@ class AppRepository{
             throw err;
         }
     }
+    async getAllApps(){
+        try{
+            const allApps = await App.find({});
+            return allApps;
+        }
+        catch(err){
+            console.log(err);
+            throw err;
+        }
+    }
     async getAppCategory(){
         try{
             const appCategories = ['payroll','travel','finance'];

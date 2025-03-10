@@ -6,6 +6,10 @@ class AppService{
         const app = await this.appRepository.createApp(appData);
         return app;
     }
+    async getAllApps(){
+        const allApps = await this.appRepository.getAllApps();
+        return allApps;
+    }
     async getAppCategory(){
         const appCategories =  await this.appRepository.getAppCategory();
         return appCategories;
