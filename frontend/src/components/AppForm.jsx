@@ -2,15 +2,17 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
 import ParamTable from "./PramTable";
+import ApplicationTable from "./ApplicationTable";
 
 function AppForm() {
     const [rows, setRows] = useState([]);
     const [appName, setAppName] = useState("");
     const [allCat, setAllCat] = useState([]); // Store categories from backend
     const [appCategory, setAppCategory] = useState(""); // Selected category
-    const [authType, setAuthenticationType] = useState(""); // Selected auth type
-    const [description, setDescription] = useState("");
+    const [authenticationType, setAuthenticationType] = useState(""); // Selected auth type
+    const [appDescription, setDescription] = useState("");
     const [authTypes, setAuthTypes] = useState([]); // Store auth types
+    const [payload,setPayLoad] = useState(null);
 
     // Fetch dropdown options from the backend
     useEffect(() => {
@@ -32,16 +34,17 @@ function AppForm() {
 
     // Handle Save Button Click
     const handleSave = async () => {
-        const payload = {
+        const newPayLoad = {
             appName,
             appCategory,
-            authType,
-            description,
-            connectionParams: rows, // Connection-level parameters from table
+            authenticationType,
+            appDescription,
+            connectionLevelParamFields: rows, // Connection-level parameters from table
         };
+        setPayLoad(newPayLoad);
 
         try {
-            await axios.post("http://localhost:3000/api/v1/app/", payload);
+            await axios.post("http://localhost:3000/api/v1/app/", newPayLoad);
             alert("Application saved successfully!");
         } catch (error) {
             console.error("Error saving application:", error);
@@ -50,8 +53,10 @@ function AppForm() {
     };
 
     return (
-        <div className="min-h-screen bg-gray-50 p-6">
-            <div className="max-w-5xl mx-auto bg-white rounded-lg shadow-sm p-6">
+        <>
+        
+        <div className="bg-gray-50 p-6">
+            <div className="max-w-7xl mx-auto bg-white rounded-lg shadow-sm p-6">
                 <div className="space-y-6">
                     <h1 className="text-2xl text-purple-600 font-medium">Application</h1>
 
@@ -90,7 +95,7 @@ function AppForm() {
                             Authentication Type<span className="text-red-500">*</span>
                         </label>
                         <select
-                            value={authType}
+                            value={authenticationType}
                             onChange={(e) => setAuthenticationType(e.target.value)}
                             className="w-full p-2 border rounded-md"
                         >
@@ -110,7 +115,7 @@ function AppForm() {
                         </label>
                             <div className="border rounded-md">
                                 <textarea
-                                    value={description}
+                                    value={appDescription}
                                     onChange={(e) =>{
                                         setDescription(e.target.value);
                                     }}
@@ -145,6 +150,8 @@ function AppForm() {
                 </div>
             </div>
         </div>
+        <ApplicationTable payload={payload} setPayLoad={setPayLoad}/>
+        </>
     );
 }
 
