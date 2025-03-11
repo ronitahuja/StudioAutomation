@@ -81,6 +81,23 @@ class LLMController {
       next(err);
     }
   }
+  async generateAppActionsScript(req, res, next) {
+    try {
+      const queryObj = req.body;
+      console.log("Query Object=>",queryObj);
+      const response = await this.llmService.generateAppActionsScript(queryObj);
+
+      return res.status(200).json({
+        success: true,
+        message: "successfully generated app, app Action and Script",
+        error: {},
+        data: response,
+      });
+
+    } catch (err) {
+      next(err);
+    }
+  }
 }
 
 module.exports = LLMController;
