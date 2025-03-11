@@ -27,7 +27,7 @@ class autoComplete{
                 });
             }
             const prompt=`
-            You are a highly efficient AI code generator, specialized in generating SDK-compliant Python scripts. Your sole task is to generate structured, syntactically correct, and optimized Python code based on the retrieved SDK functions ${parsedResult}.
+            You are a highly efficient AI code generator, specialized in generating SDK-compliant ${queryObj.language} scripts. Your sole task is to generate structured, syntactically correct, and optimized Python code based on the retrieved SDK functions ${parsedResult}.
             here is the application name : ${queryObj.applicationName}
             here is the appAction name : ${queryObj.appActionName}
             here is the language : ${queryObj.language}
