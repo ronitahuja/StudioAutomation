@@ -17,7 +17,7 @@ const CodeEditor = ({ transactionRows, connectionRows ,appActionName,application
   const [inputValue, setInputvalue] = useState("");
   const [aiCode, setAiCode] = useState("");
   const [isAiResponseVisible, setIsAiResponseVisible] = useState(true);
-  const [model, setModel] = useState("llama3.1:8b");
+  const [model, setModel] = useState("llama-3.3-70b-specdec");
   const [output, setOutput] = useState("");
   const [theme, setTheme] = useState("");
 
