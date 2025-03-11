@@ -7,7 +7,8 @@ def get_prompt(query):
         The provided website may contain the following information:
         - Authentication Type (e.g., 'No Auth', 'OAuth 2.0', 'Basic Auth')
         - App Description
-        - Connection Level Params (structured details about connection parameters)
+        - Connection Level Params (structured details about connection parameters) (Only if they are available) 
+            they are the parameters required to establish a connection with the application.
 
         The provided query contains the following:
         - Application Name
@@ -16,8 +17,7 @@ def get_prompt(query):
         **EXPECTED OUTPUT:**
         Return a **JSON** response with the following structure:
         ```json
-        {{
-            "data": {{
+            {{
                 "appName": "<applicationName>",
                 "appCategory": "<applicationCategory>",
                 "authenticationType": "<authenticationType>",
@@ -33,7 +33,6 @@ def get_prompt(query):
                     }}
                 ]
             }}
-        }}
         ```
         **INSTRUCTIONS:**
         1. Extract data **exactly** as presented on the website. If a field is missing, exclude it from the response.
