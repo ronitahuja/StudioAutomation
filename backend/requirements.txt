@@ -1,4 +1,5 @@
+pip install scrapegraphai
 
-faiss-cpu
-sentence-transformers
-numpy
+playwright install
+
+langchain-groq
