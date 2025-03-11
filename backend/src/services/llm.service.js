@@ -39,8 +39,11 @@ class LLMService {
 
             // Spawn Python process
             const python = spawn(
-                '/home/harsh.d/Desktop/StudioAutomation/scrape/bin/python3',
-                ['/home/harsh.d/Desktop/StudioAutomation/backend/src/services/appGenerationRequirementFetchingScript.py', data]
+              process.env.VENV_PATH,
+              [
+                process.env.PYTHON_SCRIPT_PATH,
+                data,
+              ]
             );
 
             let dataBuffer = '';  // Buffer for accumulating stdout data
