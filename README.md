@@ -18,6 +18,7 @@
 | `/api/v1/llm/query` | POST | Query Internal SDK Docs |
 | `/api/v1/functions` | POST | Insert All SDK Docs |
 | `/api/v1/functions/search` | POST | Vector Search For SDK Funcitions |
+| `/api/v1/autocomplete/query` | POST | Gives Suggestions For Auto Completion |
 
 ## Installation
 1. Clone the repository
