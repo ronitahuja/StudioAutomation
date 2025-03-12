@@ -6,7 +6,12 @@ import DropDown from "./DropDown";
 import themes from "../constants/themes";
 import languages from "../constants/languages";
 
-const CodeEditor = ({ transactionRows, connectionRows ,appActionName,applicationName}) => {
+const CodeEditor = ({
+  transactionRows,
+  connectionRows,
+  appActionName,
+  applicationName,
+}) => {
   const editorRef = useRef(null);
   const textareaRef = useRef(null); // Reference for the textarea
   const [code, setCode] = useState("");
@@ -40,8 +45,8 @@ const CodeEditor = ({ transactionRows, connectionRows ,appActionName,application
           transactionLevelParamFields: transactionRows,
           model: model,
           language: language,
-          appActionName : appActionName,
-          applicationName : applicationName,
+          appActionName: appActionName,
+          applicationName: applicationName,
         }),
       });
 

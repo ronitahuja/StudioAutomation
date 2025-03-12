@@ -77,6 +77,7 @@ const ApplicationTable = ({ payload, setPayLoad }) => {
                 .then(response => {
                     if (response.data.success) {
                         alert(`App "${appName}" deleted successfully.`);
+                        window.location.reload();
                     } else {
                         alert(response.data.message || 'Failed to delete the app.');
                         // Update state to reflect deletion without re-fetching
