@@ -1,28 +1,18 @@
-import Header from './components/Header'
-import Form from './components/Form'
-import {Routes,Route} from 'react-router-dom'
-import AppForm from './components/AppForm'
+import React from 'react';
+import { Routes, Route } from 'react-router-dom';
 
+import Header from './components/Header';
+import Form from './components/Form';
+import AppForm from './components/AppForm';
+import Analysis from './components/Analysis';
 
 function App() {
   return (
     <>
       <Header />
-      
+
       <Routes>
-        <Route
-          path="/"
-          element={
-            <div>
-              <a href="/app" style={{ display: "block", color: "blue" }}>
-                App
-              </a>
-              <a href="/appActions" style={{ display: "block", color: "blue" }}>
-                AppAction
-              </a>
-            </div>
-          }
-        />
+        <Route path="/" element={<Analysis />} />
         <Route path="/app" element={<AppForm />} />
         <Route path="/appActions" element={<Form />} />
       </Routes>
