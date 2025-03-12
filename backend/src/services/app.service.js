@@ -34,5 +34,9 @@ class AppService{
         const updatedApp = await this.appRepository.updateApp(updatedAppData);
         return updatedApp;
     }
+    async deleteApp(appName){
+        const deletedApp = await this.appRepository.deleteApp(appName);
+        return deletedApp;
+    }
 }
 module.exports = AppService;
