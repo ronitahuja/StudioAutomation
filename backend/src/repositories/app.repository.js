@@ -82,18 +82,27 @@ class AppRepository{
             throw err;
         }
     }
-    async updateApp(updatedAppData){
-        try{
-            const id = updatedAppData._id;
-            const updatedApp = await App.updateOne({
-                _id: updatedAppData._id,
-
-            })
-        }
-        catch(err){
-            console.log(err);
+    async updateApp(updatedAppData) {
+        try {
+            const { appName, ...updateFields } = updatedAppData;
+    
+            const updatedApp = await App.findOneAndUpdate(
+                { appName },            // Filter to find the document by appName
+                { $set: updateFields }, // Update fields with new values
+                { new: true }           // Return the updated document
+            );
+    
+            if (!updatedApp) {
+                throw new Error(`App with name "${appName}" not found`);
+            }
+    
+            return updatedApp;
+        } catch (err) {
+            console.error('Error updating app:', err.message);
             throw err;
         }
     }
+    
+    
 }
 module.exports = AppRepository;
