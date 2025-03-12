@@ -131,7 +131,8 @@ async function updateApp(req,res,next){
 }
 async function deleteApp(req,res,next){
     try{
-        const deletedApp = await appService.deleteApp(req.params);
+        const {appName}= req.params;
+        const deletedApp = await appService.deleteApp(appName);
         return res.status(StatusCodes.OK).json({
             success:true,
             message:"succesfully deleted app",

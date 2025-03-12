@@ -102,6 +102,21 @@ class AppRepository{
             throw err;
         }
     }
+    async deleteApp(appName) {
+        try {
+            const deletedApp = await App.findOneAndDelete({ appName });
+    
+            if (!deletedApp) {
+                return { success: false, message: `App with name "${appName}" not found.` };
+            }
+    
+            return { success: true, message: `App "${appName}" deleted successfully.`, deletedApp };
+        } catch (err) {
+            console.error(`Error deleting app: ${err.message}`);
+            throw new Error('Failed to delete the application. Please try again later.');
+        }
+    }
+    
     
     
 }
