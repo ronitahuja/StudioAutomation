@@ -3,5 +3,5 @@ module.exports={
     LlLMervice : require('./llm.service'),
     AppActionService : require('./appAction.service'),
     AppService : require('./app.service'),
-    
+    AnalysisService:require('./analysis.service')
 }

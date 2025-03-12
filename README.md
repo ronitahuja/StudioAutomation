@@ -19,6 +19,9 @@
 | `/api/v1/functions` | POST | Insert All SDK Docs |
 | `/api/v1/functions/search` | POST | Vector Search For SDK Funcitions |
 | `/api/v1/autocomplete/query` | POST | Gives Suggestions For Auto Completion |
+| `/api/v1/analysis/update` | POST | Updates the Model Rating ...If Absent Then it Adds it |
+| `/api/v1/analysis/getallanalysis` | GET | Gets All Models Along With Name And Rating |
+| `/api/v1/analysis/getanalysis` | POST | Sets Details Of Specific Model |
 
 ## Installation
 1. Clone the repository
