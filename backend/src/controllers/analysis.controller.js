@@ -5,8 +5,9 @@ const analysisService=new AnalysisService(new AnalysisRepository());
 
 async function updateAnalysis(req,res,next){
     try{
-        let {modelName}=req.body;
-        const data= await analysisService.updateAnalysis(modelName)
+      console.log(req.body);
+        let {modelName,like}=req.body
+        const data= await analysisService.updateAnalysis(modelName,like);
         return res.status(200).json({
                 success:true,
                 error:{},
