@@ -12,7 +12,7 @@ async function pingAppActionController(req, res) {
 
 async function createAppActions(req, res, next) {
   try {
-    const newAppaction = await appActionService.createAppActions(req.body);
+    const newAppaction = await appActionService.createAppAction(req.body);
     return res.status(StatusCodes.CREATED).json({
       success: true,
       message: "App Action Created Successfully",

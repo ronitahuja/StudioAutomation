@@ -32,7 +32,7 @@ const AppActionSchema = new mongoose.Schema({
   appActionName: {
     type: String,
     required: true,
-    unique: true,
+    // unique: true,
   },
   language: {
     type: String,
@@ -40,7 +40,6 @@ const AppActionSchema = new mongoose.Schema({
   },
   applicationName: {
     type: String,
-    enum: ["App1", "App2", "App3"],
     required: true,
   },
   transcationLevelParamFields: [transcationLevelParamFieldsSchema], // Embed the schema here
