@@ -7,7 +7,7 @@ const Form = () => {
     const [rows, setRows] = useState([]);
     const [formData, setFormData] = useState({
         appActionName: "",
-        language: "",
+        language: "python",
         applicationName: "",
         details: "",
         code: ""
@@ -154,25 +154,6 @@ const Form = () => {
                             placeholder="Enter action name"
                         />
                     </div>
-
-                    {/* Language Selection
-                    <div>
-                        <label className="block text-lg font-medium text-gray-700">Language</label>
-                        <select
-                            name="language"
-                            value={formData.language}
-                            onChange={handleChange}
-                            className="w-full p-3 border rounded-lg mt-2 focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
-                        >
-                            <option value="">Select a language</option>
-                            <option value="JavaScript">JavaScript</option>
-                            <option value="Python">Python</option>
-                            <option value="Java">Java</option>
-                            <option value="C#">C#</option>
-                        </select>
-                    </div> */}
-
-                    {/* Select Application */}
                     <div>
                         <label className="block text-lg font-medium text-gray-700">Application Name</label>
                         <select

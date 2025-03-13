@@ -12,7 +12,8 @@ const ParamTable = ({rows,setRows}) => {
     setRows(newRows);
   };
 
-  const addRow = () => {
+  const addRow = (e) => {
+    e.preventDefault();
     setRows([...rows, { paramName: "", paramType: "Text", mandatory: false, sensitive: false, variableName: "", description: "" }]);
   };
 
@@ -90,7 +91,7 @@ const ParamTable = ({rows,setRows}) => {
                 />
               </td>
               <td className="border p-2 text-center">
-                <button onClick={()=>handleDelete(index)}
+                <button type="button" onClick={()=>handleDelete(index)}
                   
                   ><AiOutlineDelete /></button>
               </td>
@@ -98,7 +99,7 @@ const ParamTable = ({rows,setRows}) => {
           ))}
         </tbody>
       </table>
-      <button onClick={addRow} className="mt-4 px-4 py-2 bg-blue-500 text-white rounded">Add Row</button>
+      <button onClick={addRow} type="button" className="mt-4 px-4 py-2 bg-blue-500 text-white rounded">Add Row</button>
     </div>
   );
 };
