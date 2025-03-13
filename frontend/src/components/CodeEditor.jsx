@@ -5,6 +5,7 @@ import models from "../constants/models";
 import DropDown from "./DropDown";
 import themes from "../constants/themes";
 import languages from "../constants/languages";
+import LikeDislike from "./LikeDislike";
 
 const CodeEditor = ({
   transactionRows,
@@ -25,6 +26,7 @@ const CodeEditor = ({
   const [model, setModel] = useState("llama-3.3-70b-specdec");
   const [output, setOutput] = useState("");
   const [theme, setTheme] = useState("");
+  
 
   const handleSubmit = async (event) => {
     event.preventDefault();
@@ -266,6 +268,7 @@ const CodeEditor = ({
           )}
         </div>
       )}
+      <LikeDislike modelName={model}/>
     </div>
   );
 };

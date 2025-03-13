@@ -2,7 +2,7 @@ class AnalysisService {
   constructor(analysisRepository) {
     this.analysisRepository = analysisRepository;
   }
-  async updateAnalysis(modelName) {
+  async updateAnalysis(modelName,like) {
     try {
       const data = await this.analysisRepository.getAnalysis(modelName);
 
@@ -11,7 +11,9 @@ class AnalysisService {
           modelScore: 1,
         });
       } else {
-        data.modelScore += 1;
+        if(like)data.modelScore += 1;
+        else data.modelScore -= 1;
+        console.log(data);
         await this.analysisRepository.updateAnalysis(data.modelName, {modelScore:data.modelScore});
       }
     } catch (err) {
