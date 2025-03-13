@@ -12,8 +12,11 @@ const CodeEditor = ({
   connectionRows,
   appActionName,
   applicationName,
+  onCodeChange, // New prop to send code back to parent
+  onLanguageChange, // New prop to send language back to parent
 }) => {
   const editorRef = useRef(null);
+  const monacoRef = useRef(null); // Reference to Monaco instance
   const textareaRef = useRef(null); // Reference for the textarea
   const [code, setCode] = useState("");
   const [language, setLanguage] = useState("python");
@@ -96,11 +99,10 @@ const CodeEditor = ({
     }
   }, [aiCode]);
 
-  // const handleEditorDidMount = (editor) => {
-  //   editorRef.current = editor;
-  // };
   const handleEditorDidMount = (editor, monaco) => {
     editorRef.current = editor;
+    monacoRef.current = monaco; // Store Monaco instance for later use
+    
     // Ensure Python language is registered
     monaco.languages.register({ id: "python" });
 
@@ -112,6 +114,29 @@ const CodeEditor = ({
     monaco.languages.python?.pythonDefaults.setWorkerOptions({
       languageServer: "pyright", // Enables Pyright for deeper IntelliSense
     });
+    
+    // Generate the initial template
+    // generateTemplate();
+  };
+
+  // Handle code changes and propagate to parent component
+  const handleEditorChange = (value) => {
+    setCode(value || "");
+    
+    // Pass the updated code to parent component
+    if (onCodeChange) {
+      onCodeChange(value || "");
+    }
+    
+  };
+
+  // Handle language change
+  const handleLanguageChange = (newLanguage) => {
+    //pass the updated language to parent component
+    if(onLanguageChange){
+        onLanguageChange(newLanguage);
+    }
+  
   };
 
   return (
@@ -128,7 +153,7 @@ const CodeEditor = ({
 
         <div className="py-1 px-2 border rounded-lg shadow-md bg-gray-100 h-auto">
           <DropDown
-            onSelect={setLanguage}
+            onSelect={handleLanguageChange}
             models={languages}
             topic={"Language"}
           />
@@ -140,8 +165,9 @@ const CodeEditor = ({
           height="100%"
           theme={theme}
           defaultLanguage={language}
+          language={language}
           value={code}
-          onChange={(value) => setCode(value || "")}
+          onChange={handleEditorChange}
           onMount={handleEditorDidMount}
           options={{
             quickSuggestions: true,
@@ -213,8 +239,9 @@ const CodeEditor = ({
             <div className="flex justify-end space-x-2 mt-2">
               <button
                 onClick={() => {
-                  if (editorRef.current) {
+                  if (editorRef.current && monacoRef.current) {
                     const editor = editorRef.current;
+                    const monaco = monacoRef.current;
                     const position = editor.getPosition();
 
                     // Insert AI-generated code at cursor position
@@ -238,6 +265,13 @@ const CodeEditor = ({
                         1
                       )
                     );
+                    
+                    // Send updated code to parent component
+                    const updatedCode = editor.getValue();
+                    setCode(updatedCode);
+                    if (onCodeChange) {
+                      onCodeChange(updatedCode);
+                    }
 
                     setIsAiResponseVisible(false); // Hide AI response after inserting
                   }

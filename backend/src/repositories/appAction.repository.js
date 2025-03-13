@@ -1,9 +1,9 @@
-const { AppAction } = require("../models");
+const { AppActionModel } = require("../models");
 
 class AppActionRepository {
   async createAppAction(appActionData) {
     try {
-      const appAction = await AppAction.create({
+      const appAction = await AppActionModel.create({
         appActionName: appActionData.appActionName,
         language: appActionData.language,
         applicationName: appActionData.applicationName,
