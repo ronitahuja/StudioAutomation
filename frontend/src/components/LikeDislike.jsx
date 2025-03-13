@@ -26,7 +26,7 @@ export default function LikeDislike({modelName}) {
   };
 
   return (
-    <div className="flex gap-4">
+    <div className="flex gap-4 mt-4">
       <button
         onClick={handleLike}
         className={`px-4 py-2 rounded-md ${
