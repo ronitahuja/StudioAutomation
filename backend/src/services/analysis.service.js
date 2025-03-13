@@ -12,7 +12,7 @@ class AnalysisService {
         });
       } else {
         data.modelScore += 1;
-        await this.analysisRepository.updateAnalysis(data);
+        await this.analysisRepository.updateAnalysis(data.modelName, {modelScore:data.modelScore});
       }
     } catch (err) {
       console.error("Error in analysis service:", err);
