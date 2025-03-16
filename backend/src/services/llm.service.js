@@ -4,7 +4,7 @@ const { spawn } = require('child_process');
 dotenv.config();
 
 const groq = new Groq({
-    apiKey: process.env.DARWIN_GROQ_API_KEY,
+  apiKey: process.env.MY_GROQ_API_KEY,
 });
 
 class LLMService {
@@ -14,6 +14,7 @@ class LLMService {
     async queryLLM(systemPrompt) {
         try {
             const prompt = systemPrompt;
+            console.log("Prompt=>", prompt);
             const response = await groq.chat.completions.create({
                 messages: [{ role: "user", content: prompt }],
                 model: this.model,

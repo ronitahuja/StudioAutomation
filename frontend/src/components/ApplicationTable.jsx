@@ -1,8 +1,9 @@
 import React, { useState, useEffect } from "react";
 import { Search, Settings2, Copy, Trash2, RotateCcw } from "lucide-react";
 import axios from "axios";
+import PropTypes from "prop-types";
 
-const ApplicationTable = ({ payload, setPayLoad }) => {
+const ApplicationTable = ({setPayLoad }) => {
     const [searchTerm, setSearchTerm] = useState("");
     const [currentPage, setCurrentPage] = useState(1);
     const [applications, setApplications] = useState([]);
@@ -190,6 +191,10 @@ const ApplicationTable = ({ payload, setPayLoad }) => {
             </div>
         </div>
     );
+};
+
+ApplicationTable.propTypes = {
+    setPayLoad: PropTypes.func.isRequired,
 };
 
 export default ApplicationTable;

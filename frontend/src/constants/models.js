@@ -3,7 +3,6 @@ import {
   huggingface,
   google,
   meta,
-  llama,
   qwen,
   deepseek,
 } from "../assets";

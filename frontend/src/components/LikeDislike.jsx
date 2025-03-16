@@ -1,7 +1,10 @@
 import { useState } from "react";
 import axios from "axios";
 
+import PropTypes from "prop-types";
+
 export default function LikeDislike({modelName}) {
+  modelName=modelName.name;
   const [like, setLike] = useState(false);
   const [dislike, setDislike] = useState(false);
 
@@ -46,3 +49,7 @@ export default function LikeDislike({modelName}) {
     </div>
   );
 }
+
+LikeDislike.propTypes = {
+  modelName: PropTypes.object.isRequired,
+};

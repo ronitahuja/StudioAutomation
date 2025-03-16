@@ -1075,6 +1075,8 @@
 
 import React, { useState, useEffect, useRef } from "react";
 import Editor from "@monaco-editor/react";
+import PropTypes from "prop-types";
+
 import { llm_query } from "../constants/llm-api";
 import models from "../constants/models";
 import DropDown from "./DropDown";
@@ -1215,8 +1217,6 @@ useEffect(() => {
   };
 
   useEffect(() => {
-    console.log(localStorage.getItem("language"));
-    setLanguage(localStorage.getItem("language") || "python");
     const handleKeyDown = async (event) => {
       if (event.ctrlKey && event.key.toLowerCase() === "k") {
         event.preventDefault();
@@ -1466,5 +1466,16 @@ useEffect(() => {
     </div>
   );
 };
+
+
+CodeEditor.propTypes = {
+  transactionRows: PropTypes.array.isRequired,
+  connectionRows: PropTypes.array.isRequired,
+  appActionName: PropTypes.string.isRequired,
+  applicationName: PropTypes.string.isRequired,
+  onCodeChange: PropTypes.func,
+  onLanguageChange: PropTypes.func,
+};
+
 
 export default CodeEditor;
