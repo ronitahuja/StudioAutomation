@@ -1,10 +1,10 @@
-import React from 'react';
-import { Routes, Route } from 'react-router-dom';
+import React from "react";
+import { Routes, Route } from "react-router-dom";
 
-import Header from './components/Header';
-import Form from './components/Form';
-import AppForm from './components/AppForm';
-import Analysis from './components/Analysis';
+import Header from "./components/Header";
+import Form from "./components/Form";
+import AppForm from "./components/AppForm";
+import Analysis from "./components/Analysis";
 
 function App() {
   return (

@@ -3,28 +3,26 @@ import axios from "axios";
 
 import PropTypes from "prop-types";
 
-export default function LikeDislike({modelName}) {
-  modelName=modelName.name;
+export default function LikeDislike({ modelName }) {
+  modelName = modelName.name;
   const [like, setLike] = useState(false);
   const [dislike, setDislike] = useState(false);
 
   const handleLike = () => {
     setLike(!like);
-    axios.post(
-      "http://localhost:3000/api/v1/analysis/update",
-      { "modelName": modelName,
-        "like": true
-      }
-    );
+    axios.post("http://localhost:3000/api/v1/analysis/update", {
+      modelName: modelName,
+      like: true,
+    });
     if (!like) setDislike(false);
   };
 
   const handleDislike = () => {
     setDislike(!dislike);
-     axios.post(
-       "http://localhost:3000/api/v1/analysis/update",
-       { modelName: modelName, like: false}
-     );
+    axios.post("http://localhost:3000/api/v1/analysis/update", {
+      modelName: modelName,
+      like: false,
+    });
     if (!dislike) setLike(false);
   };
 
