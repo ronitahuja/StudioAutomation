@@ -51,7 +51,6 @@ function App() {
       });
   }, []);
 
-
   return (
     <div className="min-h-screen bg-white from-gray-900 to-gray-800 text-white p-8">
       <div className="max-w-7xl mx-auto">

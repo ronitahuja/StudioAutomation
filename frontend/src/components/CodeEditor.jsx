@@ -29,7 +29,6 @@
 //   const [model, setModel] = useState("llama-3.3-70b-specdec");
 //   const [theme, setTheme] = useState("");
 
-
 // useEffect(() => {
 //   console.log("Saving code to localStorage:", code);
 //   if (code !== "") localStorage.setItem("code", code);
@@ -49,8 +48,6 @@
 //   console.log("Saving theme to localStorage:", theme);
 //   if (theme !== "") localStorage.setItem("theme", theme);
 // }, [theme]);
-
-  
 
 //   const handleSubmit = async (event) => {
 //     event.preventDefault();
@@ -100,7 +97,6 @@
 //     if (savedModel !== null) setModel(savedModel);
 //     if (savedTheme !== null) setTheme(savedTheme);
 
-
 //     const handleKeyDown = async (event) => {
 //       if (event.ctrlKey && event.key.toLowerCase() === "k") {
 //         event.preventDefault();
@@ -136,7 +132,7 @@
 //   const handleEditorDidMount = (editor, monaco) => {
 //     editorRef.current = editor;
 //     monacoRef.current = monaco; // Store Monaco instance for later use
-    
+
 //     // Ensure Python language is registered
 //     monaco.languages.register({ id: "python" });
 
@@ -148,7 +144,7 @@
 //     monaco.languages.python?.pythonDefaults.setWorkerOptions({
 //       languageServer: "pyright", // Enables Pyright for deeper IntelliSense
 //     });
-    
+
 //     // Generate the initial template
 //     // generateTemplate();
 //   };
@@ -156,12 +152,12 @@
 //   // Handle code changes and propagate to parent component
 //   const handleEditorChange = (value) => {
 //     setCode(value || "");
-    
+
 //     // Pass the updated code to parent component
 //     if (onCodeChange) {
 //       onCodeChange(value || "");
 //     }
-    
+
 //   };
 
 //   // Handle language change
@@ -170,7 +166,7 @@
 //     if(onLanguageChange){
 //         onLanguageChange(newLanguage);
 //     }
-  
+
 //   };
 
 //   return (
@@ -299,7 +295,7 @@
 //                         1
 //                       )
 //                     );
-                    
+
 //                     // Send updated code to parent component
 //                     const updatedCode = editor.getValue();
 //                     setCode(updatedCode);
@@ -342,28 +338,6 @@
 // };
 
 // export default CodeEditor;
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 // import React, { useState, useEffect, useRef } from "react";
 // import Editor from "@monaco-editor/react";
@@ -716,8 +690,6 @@
 
 // export default CodeEditor;
 
-
-
 // import React, { useState, useEffect, useRef } from "react";
 // import Editor from "@monaco-editor/react";
 // import { llm_query } from "../constants/llm-api";
@@ -752,13 +724,13 @@
 //     // Get the stored model value
 //     const storedModel = localStorage.getItem("model");
 //     console.log("stored model", storedModel);
-    
+
 //     // Find the actual model object from models array
 //     if (storedModel) {
 //       const foundModel = models.find(m => m.name === storedModel);
 //       return foundModel || models.find(m => m.name === "llama-3.3-70b-specdec") || models[0];
 //     }
-    
+
 //     return models.find(m => m.name === "llama-3.3-70b-specdec") || models[0];
 //   });
 //   const [theme, setTheme] = useState(localStorage.getItem("theme") || "");
@@ -1072,7 +1044,6 @@
 
 // export default CodeEditor;
 
-
 import React, { useState, useEffect, useRef } from "react";
 import Editor from "@monaco-editor/react";
 import PropTypes from "prop-types";
@@ -1100,12 +1071,12 @@ const CodeEditor = ({
     // Get the stored language value
     const storedLanguage = localStorage.getItem("language");
     console.log("stored language", storedLanguage);
-    
+
     // If there's a stored value, use it directly
     if (storedLanguage) {
       return storedLanguage;
     }
-    
+
     // Default to "python" if no stored value
     return "python";
   });
@@ -1119,46 +1090,49 @@ const CodeEditor = ({
     // Get the stored model value
     const storedModel = localStorage.getItem("model");
     console.log("stored model", storedModel);
-    
+
     // Find the actual model object from models array
     if (storedModel) {
-      const foundModel = models.find(m => m.name === storedModel);
-      return foundModel || models.find(m => m.name === "llama-3.3-70b-specdec") || models[0];
+      const foundModel = models.find((m) => m.name === storedModel);
+      return (
+        foundModel ||
+        models.find((m) => m.name === "llama-3.3-70b-specdec") ||
+        models[0]
+      );
     }
-    
-    return models.find(m => m.name === "llama-3.3-70b-specdec") || models[0];
+
+    return models.find((m) => m.name === "llama-3.3-70b-specdec") || models[0];
   });
   const [theme, setTheme] = useState(() => {
     // Get the stored theme value
     const storedTheme = localStorage.getItem("theme");
     console.log("stored theme", storedTheme);
-    
+
     // Find the actual theme object from themes array
     if (storedTheme) {
-      const foundTheme = themes.find(t => t.name === storedTheme);
+      const foundTheme = themes.find((t) => t.name === storedTheme);
       if (foundTheme) {
         return foundTheme;
       }
     }
-    
+
     // Default to the first theme or empty string
     return themes[0] || "";
   });
- // Then update the language setting effect to store as string
-useEffect(() => {
+  // Then update the language setting effect to store as string
+  useEffect(() => {
     if (language) {
       // Store the language name or the language itself if it's a string
-      const languageValue = typeof language === 'object' ? language.name : language;
+      const languageValue =
+        typeof language === "object" ? language.name : language;
       localStorage.setItem("language", languageValue);
     }
   }, [language]);
-  
 
   // Save state to localStorage
   useEffect(() => {
     if (code !== "") localStorage.setItem("code", code);
   }, [code]);
-
 
   useEffect(() => {
     if (model?.name) {
@@ -1182,24 +1156,24 @@ useEffect(() => {
     setIsAiResponseVisible(true);
 
     try {
-        const modelValue = typeof model === 'object' ? model.name : model;
-        console.log("query=>",inputValue)
-        console.log("connection=>",connectionRows)
-        console.log("transac=>",transactionRows)
-        console.log("model=>",model)
-        console.log("language=>",language)
-        console.log("appAction=>",appActionName)    
-        console.log("application=>",applicationName)
+      const modelValue = typeof model === "object" ? model.name : model;
+      console.log("query=>", inputValue);
+      console.log("connection=>", connectionRows);
+      console.log("transac=>", transactionRows);
+      console.log("model=>", model);
+      console.log("language=>", language);
+      console.log("appAction=>", appActionName);
+      console.log("application=>", applicationName);
       const response = await fetch(llm_query, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        
+
         body: JSON.stringify({
           query: inputValue,
           connectionLevelParamFields: connectionRows,
           transactionLevelParamFields: transactionRows,
           model: modelValue,
-          language: typeof language === 'object' ? language.name : language, // Same for language,
+          language: typeof language === "object" ? language.name : language, // Same for language,
           appActionName: appActionName,
           applicationName: applicationName,
         }),
@@ -1467,7 +1441,6 @@ useEffect(() => {
   );
 };
 
-
 CodeEditor.propTypes = {
   transactionRows: PropTypes.array.isRequired,
   connectionRows: PropTypes.array.isRequired,
@@ -1476,6 +1449,5 @@ CodeEditor.propTypes = {
   onCodeChange: PropTypes.func,
   onLanguageChange: PropTypes.func,
 };
-
 
 export default CodeEditor;
