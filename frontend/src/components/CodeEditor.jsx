@@ -453,8 +453,6 @@ const CodeEditor = ({
   };
 
   useEffect(() => {
-    console.log(localStorage.getItem("language"));
-    setLanguage(localStorage.getItem("language") || "python");
     const handleKeyDown = async (event) => {
       if (event.ctrlKey && event.key.toLowerCase() === "k") {
         event.preventDefault();
