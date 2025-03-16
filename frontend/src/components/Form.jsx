@@ -100,7 +100,7 @@ const Form = () => {
             };
             console.log("App Action Data:", appActionData);
             // Send data to backend
-            const response = await axios.post(
+             await axios.post(
                 "http://localhost:3000/api/v1/appActions/createAppActions", 
                 appActionData
             );

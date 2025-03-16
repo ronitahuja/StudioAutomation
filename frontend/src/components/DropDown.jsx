@@ -1,4 +1,5 @@
 import { useState ,useEffect} from "react";
+import PropTypes from "prop-types";
 
 const DropDown = ({ onSelect, models, topic,selected}) => {
     const [selectedModel, setSelectedModel] = useState(models[0]);
@@ -24,6 +25,7 @@ const DropDown = ({ onSelect, models, topic,selected}) => {
           }
         } catch (e) {
           // If parsing fails, try to find the model directly by name
+          console.log(e);
           const foundModel = models.find(m => m.name === savedValue);
           if (foundModel) {
             setSelectedModel(foundModel);
@@ -89,6 +91,13 @@ const DropDown = ({ onSelect, models, topic,selected}) => {
             )}
         </div>
     );
+};
+
+DropDown.propTypes = {
+    onSelect: PropTypes.func.isRequired,
+    models: PropTypes.array.isRequired,
+    topic: PropTypes.string.isRequired,
+    selected: PropTypes.object,
 };
 
 export default DropDown;

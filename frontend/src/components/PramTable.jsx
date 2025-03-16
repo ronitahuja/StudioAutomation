@@ -1,6 +1,8 @@
 import React, { useState } from "react";
 import { AiOutlineDelete } from "react-icons/ai";
 
+import PropTypes from "prop-types";
+
 const ParamTable = ({ rows, setRows }) => {
 
 
@@ -216,6 +218,11 @@ const ParamTable = ({ rows, setRows }) => {
             </button>
         </div>
     );
+};
+
+ParamTable.propTypes = {
+    rows: PropTypes.array.isRequired,
+    setRows: PropTypes.func.isRequired
 };
 
 export default ParamTable;
