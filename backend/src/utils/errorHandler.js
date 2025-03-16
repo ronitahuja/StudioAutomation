@@ -1,4 +1,6 @@
-function errorHandler(err, req, res, next) {
+const BaseError = require('../errors/base.error')
+
+function errorHandler(err, req, res) {
   try {
     req.logger.error(`Something went wrong: ${err.message}`, {
       stack: err.stack,

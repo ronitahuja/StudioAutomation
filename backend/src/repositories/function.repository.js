@@ -18,7 +18,7 @@ class FunctionRepository {
           $vectorSearch: {
             queryVector: queryEmbedding,
             path: "embedding",
-            numCandidates: 50,
+            numCandidates: 15,
             limit: topK,
             index: "vector_index",
             similarity: "cosine",
@@ -48,16 +48,16 @@ class FunctionRepository {
         },
         {
           $addFields: {
-            similarityScore: { $meta: "vectorSearchScore" }, // Get the similarity score
+            similarityScore: { $meta: "vectorSearchScore" }, 
           },
         },
         {
           $match: {
-            similarityScore: { $gte: threshold }, // Filter out low scores
+            similarityScore: { $gte: threshold }, 
           },
         },
         {
-          $sort: { similarityScore: -1 }, // Ensure the best matches appear first
+          $sort: { similarityScore: -1 },
         },
       ]);
       return results;

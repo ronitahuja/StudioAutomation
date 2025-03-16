@@ -40,7 +40,7 @@ class AppRepository{
     }
     async getAppCategory(){
         try{
-            const appCategories = ['payroll','travel','finance'];
+            const appCategories = ['payroll','travel','finance','CRM','healthcare','education','retail'];   
             return appCategories;
         }
         catch(err){

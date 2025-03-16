@@ -21,7 +21,7 @@ app.use(bodyParser.text());
 
 app.use("/api", apiRouter);
 
-// app.use(errorHandler);
+app.use(errorHandler);
 
 logger.on("error", (error) => {
   console.error("Winston logger error:", error.message);

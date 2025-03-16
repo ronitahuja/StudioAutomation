@@ -7,7 +7,7 @@ const AppSchema = new mongoose.Schema({
     },
     appCategory : {
         type: String,
-        enum:['payroll','travel','finance'],
+        enum:['payroll','travel','finance','CRM','healthcare','education','retail'],
         required : true
     },
     authenticationType : {

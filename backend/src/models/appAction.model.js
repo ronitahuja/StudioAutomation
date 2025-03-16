@@ -7,7 +7,7 @@ const transcationLevelParamFieldsSchema = new mongoose.Schema({
   },
   paramType: {
     type: String,
-    enum: ["Text", "Number"], // Added 'type' for the field
+    enum: ["Text", "Number","Boolean"], // Added 'type' for the field
     required: true,
   },
   mandatory: {
