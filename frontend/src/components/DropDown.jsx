@@ -6,7 +6,7 @@ const DropDown = ({ onSelect, models, topic}) => {
 
   const handleSelect = (model) => {
     setSelectedModel(model);
-    onSelect(model.name);
+    onSelect(model);
     setIsOpen(false);
   };
 

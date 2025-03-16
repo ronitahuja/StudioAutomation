@@ -1,3 +1,370 @@
+// import React, { useState, useEffect, useRef, use } from "react";
+// import Editor from "@monaco-editor/react";
+// import { llm_query } from "../constants/llm-api";
+// import models from "../constants/models";
+// import DropDown from "./DropDown";
+// import themes from "../constants/themes";
+// import languages from "../constants/languages";
+// import LikeDislike from "./LikeDislike";
+
+// const CodeEditor = ({
+//   transactionRows,
+//   connectionRows,
+//   appActionName,
+//   applicationName,
+//   onCodeChange, // New prop to send code back to parent
+//   onLanguageChange, // New prop to send language back to parent
+// }) => {
+//   const editorRef = useRef(null);
+//   const monacoRef = useRef(null); // Reference to Monaco instance
+//   const textareaRef = useRef(null); // Reference for the textarea
+//   const [code, setCode] = useState("");
+//   const [language, setLanguage] = useState("python");
+//   const [isModalOpen, setIsModalOpen] = useState(false);
+//   const [loading, setLoading] = useState(false);
+//   const [position, setPosition] = useState(null);
+//   const [inputValue, setInputvalue] = useState("");
+//   const [aiCode, setAiCode] = useState("");
+//   const [isAiResponseVisible, setIsAiResponseVisible] = useState(true);
+//   const [model, setModel] = useState("llama-3.3-70b-specdec");
+//   const [theme, setTheme] = useState("");
+
+
+// useEffect(() => {
+//   console.log("Saving code to localStorage:", code);
+//   if (code !== "") localStorage.setItem("code", code);
+// }, [code]);
+
+// useEffect(() => {
+//   console.log("Saving language to localStorage:", language);
+//   if (language !== "") localStorage.setItem("language", language);
+// }, [language]);
+
+// useEffect(() => {
+//   console.log("Saving model to localStorage:", model);
+//   if (model !== "") localStorage.setItem("model", model);
+// }, [model]);
+
+// useEffect(() => {
+//   console.log("Saving theme to localStorage:", theme);
+//   if (theme !== "") localStorage.setItem("theme", theme);
+// }, [theme]);
+
+  
+
+//   const handleSubmit = async (event) => {
+//     event.preventDefault();
+
+//     if (!inputValue.trim()) return;
+
+//     setLoading(true);
+//     setAiCode("");
+//     setIsAiResponseVisible(true);
+
+//     try {
+//       const response = await fetch(llm_query, {
+//         method: "POST",
+//         headers: { "Content-Type": "application/json" },
+//         body: JSON.stringify({
+//           query: inputValue,
+//           connectionLevelParamFields: connectionRows,
+//           transactionLevelParamFields: transactionRows,
+//           model: model,
+//           language: language,
+//           appActionName: appActionName,
+//           applicationName: applicationName,
+//         }),
+//       });
+
+//       if (!response.ok) throw new Error(`Server error: ${response.status}`);
+//       const data = await response.json();
+//       setAiCode(data.data || "No response received");
+//     } catch (err) {
+//       console.error("Error sending request:", err);
+//     } finally {
+//       setLoading(false);
+//       setInputvalue("");
+//     }
+//   };
+
+//   useEffect(() => {
+//     const savedCode = localStorage.getItem("code");
+//     const savedLanguage = localStorage.getItem("language");
+//     const savedModel = localStorage.getItem("model");
+//     const savedTheme = localStorage.getItem("theme");
+
+//     console.log(savedCode, savedLanguage, savedModel, savedTheme);
+
+//     if (savedCode !== null) setCode(savedCode);
+//     if (savedLanguage !== null) setLanguage(savedLanguage);
+//     if (savedModel !== null) setModel(savedModel);
+//     if (savedTheme !== null) setTheme(savedTheme);
+
+
+//     const handleKeyDown = async (event) => {
+//       if (event.ctrlKey && event.key.toLowerCase() === "k") {
+//         event.preventDefault();
+//         if (editorRef.current) {
+//           const editor = editorRef.current;
+//           const selection = editor.getSelection();
+//           const pos = editor.getScrolledVisiblePosition(selection);
+//           setPosition(pos);
+//           setIsModalOpen(true);
+//         }
+//       }
+//     };
+
+//     document.addEventListener("keydown", handleKeyDown, true);
+//     return () => {
+//       document.removeEventListener("keydown", handleKeyDown, true);
+//     };
+//   }, []);
+
+//   // Focus the textarea when the modal opens
+//   useEffect(() => {
+//     if (isModalOpen && textareaRef.current) {
+//       textareaRef.current.focus();
+//     }
+//   }, [isModalOpen]);
+
+//   useEffect(() => {
+//     if (aiCode) {
+//       setIsModalOpen(false);
+//     }
+//   }, [aiCode]);
+
+//   const handleEditorDidMount = (editor, monaco) => {
+//     editorRef.current = editor;
+//     monacoRef.current = monaco; // Store Monaco instance for later use
+    
+//     // Ensure Python language is registered
+//     monaco.languages.register({ id: "python" });
+
+//     // Now, safely access `pythonDefaults`
+//     monaco.languages.python?.pythonDefaults.setDiagnosticsOptions({
+//       enabled: true,
+//     });
+
+//     monaco.languages.python?.pythonDefaults.setWorkerOptions({
+//       languageServer: "pyright", // Enables Pyright for deeper IntelliSense
+//     });
+    
+//     // Generate the initial template
+//     // generateTemplate();
+//   };
+
+//   // Handle code changes and propagate to parent component
+//   const handleEditorChange = (value) => {
+//     setCode(value || "");
+    
+//     // Pass the updated code to parent component
+//     if (onCodeChange) {
+//       onCodeChange(value || "");
+//     }
+    
+//   };
+
+//   // Handle language change
+//   const handleLanguageChange = (newLanguage) => {
+//     //pass the updated language to parent component
+//     if(onLanguageChange){
+//         onLanguageChange(newLanguage);
+//     }
+  
+//   };
+
+//   return (
+//     <div className="top-[80px] right-[25px] p-5 border rounded-lg shadow-lg bg-white w-5/5 h-full flex flex-col">
+//       {/* Code Editor */}
+//       <div className="p-2 border rounded-lg shadow-md bg-gray-100">
+//         <DropDown onSelect={setModel} models={models} topic={"Model"} />
+//       </div>
+
+//       <div className="grid grid-cols-2 gap-4">
+//         <div className="py-1 px-2 border rounded-lg shadow-md bg-gray-100 h-auto">
+//           <DropDown onSelect={setTheme} models={themes} topic={"Theme"} />
+//         </div>
+
+//         <div className="py-1 px-2 border rounded-lg shadow-md bg-gray-100 h-auto">
+//           <DropDown
+//             onSelect={handleLanguageChange}
+//             models={languages}
+//             topic={"Language"}
+//           />
+//         </div>
+//       </div>
+
+//       <div className="border rounded flex-grow overflow-hidden relative">
+//         <Editor
+//           height="100%"
+//           theme={theme}
+//           defaultLanguage={language}
+//           language={language}
+//           value={code}
+//           onChange={handleEditorChange}
+//           onMount={handleEditorDidMount}
+//           options={{
+//             quickSuggestions: true,
+//             suggestOnTriggerCharacters: true,
+//             autoClosingBrackets: "always",
+//             snippetSuggestions: "inline",
+//             minimap: { enabled: false },
+//             fontSize: 14,
+//             scrollBeyondLastLine: false,
+//             automaticLayout: true,
+//             lineNumbers: "on",
+//             tabSize: 2,
+//             wordWrap: "on",
+//             padding: { top: 10, bottom: 10 },
+//             placeholder:
+//               "Press Ctrl + k to ask DarwinAI to do something. Start typing to dismiss.",
+//           }}
+//           className="border rounded-2xl shadow-lg p-2 bg-white w-full h-full max-w-full max-h-full"
+//         />
+
+//         {/* In-Editor Modal */}
+//         {isModalOpen && position && (
+//           <div
+//             className="absolute bg-white p-3 rounded-lg shadow-lg border w-96"
+//             style={{ top: position.top + 20, left: position.left }}
+//           >
+//             <h2 className="text-sm font-bold mb-2">Write a Query</h2>
+//             <form onSubmit={handleSubmit}>
+//               <textarea
+//                 ref={textareaRef} // Attach the ref to the textarea
+//                 value={inputValue}
+//                 onChange={(e) => setInputvalue(e.target.value)}
+//                 className="w-full p-2 border rounded mb-2"
+//                 placeholder="Type your question..."
+//                 onKeyDown={(e) => {
+//                   if (e.key === "Enter" && !e.shiftKey) {
+//                     e.preventDefault();
+//                     handleSubmit(e);
+//                   }
+//                 }}
+//               />
+//               <div className="flex justify-end space-x-2">
+//                 <button
+//                   onClick={() => setIsModalOpen(false)}
+//                   className="px-3 py-1 bg-gray-300 rounded text-sm"
+//                 >
+//                   Close
+//                 </button>
+//                 <button
+//                   className="px-3 py-1 bg-blue-600 text-white rounded text-sm"
+//                   type="submit"
+//                   disabled={loading}
+//                 >
+//                   {loading ? "Loading..." : "Generate"}
+//                 </button>
+//               </div>
+//             </form>
+//           </div>
+//         )}
+//       </div>
+
+//       {isAiResponseVisible && (loading || aiCode) && (
+//         <div className="mt-4 p-3 border rounded-lg shadow-lg max-h-[300px] bg-white w-full overflow-auto relative">
+//           <h2 className="text-sm font-bold mb-2">AI Response</h2>
+//           <pre className="bg-white text-blue-1000 p-2 rounded-lg overflow-auto relative">
+//             {loading ? "Generating code..." : aiCode || "No response yet."}
+//           </pre>
+//           {aiCode && (
+//             <div className="flex justify-end space-x-2 mt-2">
+//               <button
+//                 onClick={() => {
+//                   if (editorRef.current && monacoRef.current) {
+//                     const editor = editorRef.current;
+//                     const monaco = monacoRef.current;
+//                     const position = editor.getPosition();
+
+//                     // Insert AI-generated code at cursor position
+//                     editor.executeEdits(null, [
+//                       {
+//                         range: new monaco.Range(
+//                           position.lineNumber,
+//                           1,
+//                           position.lineNumber,
+//                           1
+//                         ),
+//                         text: aiCode + "\n",
+//                         forceMoveMarkers: true,
+//                       },
+//                     ]);
+
+//                     // Move cursor to the next line
+//                     editor.setPosition(
+//                       new monaco.Position(
+//                         position.lineNumber + aiCode.split("\n").length,
+//                         1
+//                       )
+//                     );
+                    
+//                     // Send updated code to parent component
+//                     const updatedCode = editor.getValue();
+//                     setCode(updatedCode);
+//                     if (onCodeChange) {
+//                       onCodeChange(updatedCode);
+//                     }
+
+//                     setIsAiResponseVisible(false); // Hide AI response after inserting
+//                   }
+//                 }}
+//                 className="px-3 py-1 bg-green-600 text-white rounded text-sm"
+//               >
+//                 Accept
+//               </button>
+//               <button
+//                 onClick={() => {
+//                   setAiCode(""); // Clear AI response
+//                   setIsAiResponseVisible(false);
+//                 }}
+//                 className="px-3 py-1 bg-red-600 text-white rounded text-sm"
+//               >
+//                 Reject
+//               </button>
+//               <button
+//                 onClick={() => {
+//                   navigator.clipboard.writeText(aiCode);
+//                   alert("Code copied!");
+//                 }}
+//                 className="px-3 py-1 bg-blue-600 text-white text-sm rounded"
+//               >
+//                 Copy
+//               </button>
+//             </div>
+//           )}
+//         </div>
+//       )}
+//       <LikeDislike modelName={model}/>
+//     </div>
+//   );
+// };
+
+// export default CodeEditor;
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 import React, { useState, useEffect, useRef } from "react";
 import Editor from "@monaco-editor/react";
 import { llm_query } from "../constants/llm-api";
@@ -18,18 +385,37 @@ const CodeEditor = ({
   const editorRef = useRef(null);
   const monacoRef = useRef(null); // Reference to Monaco instance
   const textareaRef = useRef(null); // Reference for the textarea
-  const [code, setCode] = useState("");
-  const [language, setLanguage] = useState("python");
+  const [code, setCode] = useState(localStorage.getItem("code") || "");
+  const [language, setLanguage] = useState(
+    localStorage.getItem("language") || "python"
+  );
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [loading, setLoading] = useState(false);
   const [position, setPosition] = useState(null);
   const [inputValue, setInputvalue] = useState("");
   const [aiCode, setAiCode] = useState("");
   const [isAiResponseVisible, setIsAiResponseVisible] = useState(true);
-  const [model, setModel] = useState("llama-3.3-70b-specdec");
-  const [output, setOutput] = useState("");
-  const [theme, setTheme] = useState("");
-  
+  const [model, setModel] = useState(
+    localStorage.getItem("model") || "llama-3.3-70b-specdec"
+  );
+  const [theme, setTheme] = useState(localStorage.getItem("theme") || "");
+
+  // Save state to localStorage
+  useEffect(() => {
+    if (code !== "") localStorage.setItem("code", code);
+  }, [code]);
+
+  useEffect(() => {
+    if (language !== "") localStorage.setItem("language", language);
+  }, [language]);
+
+  useEffect(() => {
+    if (model !== "") localStorage.setItem("model", model);
+  }, [model]);
+
+  useEffect(() => {
+    if (theme !== "") localStorage.setItem("theme", theme);
+  }, [theme]);
 
   const handleSubmit = async (event) => {
     event.preventDefault();
@@ -67,6 +453,8 @@ const CodeEditor = ({
   };
 
   useEffect(() => {
+    console.log(localStorage.getItem("language"));
+    setLanguage(localStorage.getItem("language") || "python");
     const handleKeyDown = async (event) => {
       if (event.ctrlKey && event.key.toLowerCase() === "k") {
         event.preventDefault();
@@ -102,7 +490,7 @@ const CodeEditor = ({
   const handleEditorDidMount = (editor, monaco) => {
     editorRef.current = editor;
     monacoRef.current = monaco; // Store Monaco instance for later use
-    
+
     // Ensure Python language is registered
     monaco.languages.register({ id: "python" });
 
@@ -114,41 +502,50 @@ const CodeEditor = ({
     monaco.languages.python?.pythonDefaults.setWorkerOptions({
       languageServer: "pyright", // Enables Pyright for deeper IntelliSense
     });
-    
-    // Generate the initial template
-    // generateTemplate();
   };
 
   // Handle code changes and propagate to parent component
   const handleEditorChange = (value) => {
+    console.log("Editor content changed:", value);
     setCode(value || "");
-    
+
     // Pass the updated code to parent component
     if (onCodeChange) {
       onCodeChange(value || "");
     }
-    
   };
 
   // Handle language change
   const handleLanguageChange = (newLanguage) => {
-    //pass the updated language to parent component
-    if(onLanguageChange){
-        onLanguageChange(newLanguage);
+    console.log("Language changed to:", newLanguage);
+    setLanguage(newLanguage); // Update local state
+
+    // Pass the updated language to parent component
+    if (onLanguageChange) {
+      onLanguageChange(newLanguage);
     }
-  
   };
 
   return (
     <div className="top-[80px] right-[25px] p-5 border rounded-lg shadow-lg bg-white w-5/5 h-full flex flex-col">
       {/* Code Editor */}
       <div className="p-2 border rounded-lg shadow-md bg-gray-100">
-        <DropDown onSelect={setModel} models={models} topic={"Model"} />
+        <DropDown
+          onSelect={setModel}
+          models={models}
+          topic={"Model"}
+          selected={model}
+        />
       </div>
 
       <div className="grid grid-cols-2 gap-4">
         <div className="py-1 px-2 border rounded-lg shadow-md bg-gray-100 h-auto">
-          <DropDown onSelect={setTheme} models={themes} topic={"Theme"} />
+          <DropDown
+            onSelect={setTheme}
+            models={themes}
+            topic={"Theme"}
+            selected={theme}
+          />
         </div>
 
         <div className="py-1 px-2 border rounded-lg shadow-md bg-gray-100 h-auto">
@@ -156,6 +553,7 @@ const CodeEditor = ({
             onSelect={handleLanguageChange}
             models={languages}
             topic={"Language"}
+            selected={language}
           />
         </div>
       </div>
@@ -265,7 +663,7 @@ const CodeEditor = ({
                         1
                       )
                     );
-                    
+
                     // Send updated code to parent component
                     const updatedCode = editor.getValue();
                     setCode(updatedCode);
@@ -302,7 +700,7 @@ const CodeEditor = ({
           )}
         </div>
       )}
-      <LikeDislike modelName={model}/>
+      <LikeDislike modelName={model} />
     </div>
   );
 };
