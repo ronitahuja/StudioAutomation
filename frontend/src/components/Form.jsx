@@ -91,8 +91,8 @@ const Form = () => {
       if (
         !formData.appActionName ||
         !formData.applicationName ||
-        !formData.language ||
-        !formData.code
+        !localStorage.getItem("language") ||
+        !localStorage.getItem("code")
       ) {
         setSaveMessage({
           type: "error",
@@ -106,10 +106,10 @@ const Form = () => {
       // Prepare data for submission
       const appActionData = {
         appActionName: formData.appActionName,
-        language: formData.language.name,
+        language: localStorage.getItem("language"),
         applicationName: formData.applicationName,
         transcationLevelParamFields: rows, // From ParamTable
-        code: formData.code, // From MonacoEditor
+        code: localStorage.getItem("code"),
         details: formData.details || "",
       };
       console.log("App Action Data:", appActionData);

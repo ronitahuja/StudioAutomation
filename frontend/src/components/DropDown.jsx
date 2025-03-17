@@ -1,49 +1,54 @@
 import { useState, useEffect } from "react";
-import PropTypes from "prop-types";
+import PropTypes, { object } from "prop-types";
+
 
 const DropDown = ({ onSelect, models, topic, selected }) => {
-  const [selectedModel, setSelectedModel] = useState(models[0]);
-  const [isOpen, setIsOpen] = useState(false);
 
-  // Initialize with the selected prop or try to find the saved value
-  useEffect(() => {
-    if (selected) {
-      setSelectedModel(selected);
-    } else if (topic) {
-      const savedValue = localStorage.getItem(topic.toLowerCase());
-      if (savedValue) {
-        try {
-          // For backward compatibility, try to parse JSON first
+    const [selectedModel, setSelectedModel] = useState(models[0]);
+    const [isOpen, setIsOpen] = useState(false);
+    
+    // Initialize with the selected prop or try to find the saved value
+    useEffect(() => {
+        if (selected) {
+            setSelectedModel(selected);
+        } else if (topic) {
+            const savedValue = localStorage.getItem(topic.toLowerCase());
+            if (savedValue) {
+                try {
+                    // For backward compatibility, try to parse JSON first
           const parsedValue = JSON.parse(savedValue);
           const modelName =
-            typeof parsedValue === "string" ? parsedValue : parsedValue.name;
+          typeof parsedValue === "string" ? parsedValue : parsedValue.name;
 
           // Find the model by name
           const foundModel = models.find((m) => m.name === modelName);
           if (foundModel) {
-            setSelectedModel(foundModel);
-            onSelect(foundModel);
-          }
+              setSelectedModel(foundModel);
+              onSelect(foundModel);
+            }
         } catch (e) {
-          // If parsing fails, try to find the model directly by name
+            // If parsing fails, try to find the model directly by name
           console.log(e);
           const foundModel = models.find((m) => m.name === savedValue);
           if (foundModel) {
-            setSelectedModel(foundModel);
-            onSelect(foundModel);
-          }
+              setSelectedModel(foundModel);
+              onSelect(foundModel);
+            }
         }
-      }
     }
-  }, [selected, topic, models, onSelect]);
+}
+}, [selected, topic, models, onSelect]);
+
+    if(topic=='Language'){
+
+        console.log("model0----",selectedModel,topic,models[0].name)
+    }
+
 
   const handleSelect = (model) => {
     setSelectedModel(model);
     onSelect(model);
-    console.log("Printing topic:", topic);
-    console.log("Printing model:", model);
-    console.log("Printing model name:", model.name);
-
+  
     if (topic && typeof topic === "string" && model && model.name) {
       localStorage.setItem(topic.toLowerCase(), model.name);
     } else {
@@ -52,9 +57,14 @@ const DropDown = ({ onSelect, models, topic, selected }) => {
 
     setIsOpen(false);
   };
+
+
   return (
     <div className="p-4 border rounded-md shadow-md bg-white relative">
       <h3 className="text-lg font-semibold mb-2">Choose {topic}:</h3>
+
+    
+    
       <div
         className="p-2 border rounded-md w-full cursor-pointer"
         onClick={() => setIsOpen(!isOpen)}
@@ -67,25 +77,31 @@ const DropDown = ({ onSelect, models, topic, selected }) => {
               className="w-6 h-6 mr-2"
             />
           )}
-          <span>{selectedModel.name}</span>
+
+<span className="w-full h-full p-2 text-black">
+                {
+                    typeof selectedModel=='object'?selectedModel?.name:models[0]?.name
+                }
+         </span>
         </div>
       </div>
       {isOpen && (
         <div className="absolute mt-2 w-full border rounded-md shadow-md bg-white z-10">
           {models.map((model) => (
+      
             <div
-              key={model.name}
+              key={model?.name}
               className="p-2 hover:bg-gray-100 cursor-pointer flex items-center"
               onClick={() => handleSelect(model)}
             >
               {model.image && (
                 <img
-                  src={model.image}
-                  alt={model.name}
+                  src={model?.image}
+                  alt={model?.name}
                   className="w-6 h-6 mr-2"
                 />
               )}
-              <span>{model.name}</span>
+              <span>{model?.name}</span>
             </div>
           ))}
         </div>
