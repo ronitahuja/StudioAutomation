@@ -11,7 +11,7 @@ from constants.prompt_config import get_prompt
 load_dotenv()
 
 # Check if API key is set
-api_key = os.getenv("DARWIN_GROQ_API_KEY")
+api_key = os.getenv("MY_GROQ_API_KEY")
 if not api_key:
     print(json.dumps({"status": "error", "message": "Missing DARWIN_GROQ_API_KEY"}))
     sys.exit(1)

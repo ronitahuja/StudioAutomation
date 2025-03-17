@@ -106,7 +106,7 @@ const Form = () => {
       // Prepare data for submission
       const appActionData = {
         appActionName: formData.appActionName,
-        language: formData.language,
+        language: formData.language.name,
         applicationName: formData.applicationName,
         transcationLevelParamFields: rows, // From ParamTable
         code: formData.code, // From MonacoEditor
@@ -123,6 +123,8 @@ const Form = () => {
         type: "success",
         message: "App action saved successfully!",
       });
+      localStorage.clear();
+      window.location.reload();
 
       // Optional: Reset form or redirect
       // resetForm();

@@ -16,6 +16,7 @@
 | `/api/v1/app/` | GET | Get All App  |
 | `/api/v1/llm/generate` | POST | Generate Script for Application (Working)  |
 | `/api/v1/llm/query` | POST | Query Internal SDK Docs |
+| `/api/v1/llm/generate` | POST | WebScrapping for generating script for Application and AppActions |
 | `/api/v1/functions` | POST | Insert All SDK Docs |
 | `/api/v1/functions/search` | POST | Vector Search For SDK Funcitions |
 | `/api/v1/autocomplete/query` | POST | Gives Suggestions For Auto Completion |
