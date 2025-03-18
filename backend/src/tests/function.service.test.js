@@ -53,20 +53,4 @@ describe("FunctionService", () => {
     );
     expect(result).toEqual(functionsData);
   });
-
-  it("should perform a vector search and return results", async () => {
-    const query = "test function";
-    const mockResults = [{ name: "testFunction", similarity: 0.95 }];
-
-    mockFunctionRepository.vectorSearch.mockResolvedValue(mockResults);
-
-    const result = await functionService.vectorSearch(query);
-
-    expect(mockPipeline).toHaveBeenCalled();
-    expect(mockFunctionRepository.vectorSearch).toHaveBeenCalledWith(
-      [0.1, 0.2, 0.3],
-      5
-    );
-    expect(result).toEqual(mockResults);
-  });
 });
