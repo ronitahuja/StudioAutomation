@@ -8,3 +8,11 @@ class BaseError extends Error {
 }
 
 module.exports = BaseError;
+
+
+/**
+ * name : Validation Error
+ * statusCode : 400
+ * description : Validation error occurred.
+ * details : { errors: { email: 'Email is required.' } }
+ */

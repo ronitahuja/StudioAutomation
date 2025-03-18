@@ -1,8 +1,19 @@
 const App = require("../models/app.model");
+const NotFound = require("../errors/notFound.error");
+const BadRequest = require("../errors/badRequest.error");
 
 class AppRepository{
     async createApp(appData){
         try{
+            if(!appData.appName){
+                throw new BadRequest("App Name","'App Name' field is required");
+            }
+            if(!appData.appCategory){
+                throw new BadRequest("App Category","'App Category' field is required");
+            }
+            if(!appData.appDescription){
+                throw new BadRequest("App Description","'App Description' field is required");  
+            }
             const app = await App.create({
                 appName : appData.appName,
                 appCategory : appData.appCategory,  
@@ -29,6 +40,9 @@ class AppRepository{
     }
     async getApp(appName){
         try{
+            if(!appName){
+                throw new BadRequest("App Name","'App Name' field is required");
+            }
          
             const app = await App.findOne({appName});
             return app;
@@ -70,6 +84,9 @@ class AppRepository{
     
     async getConnectionLevelParams(appName){
         try{
+            if(!appName){
+                throw new BadRequest("App Name","'App Name' field is required");
+            }
             const connectionLevelParams = await App.find(
                 { appName }, 
                 { connectionLevelParamFields: 1, _id: 0 } 
@@ -93,7 +110,7 @@ class AppRepository{
             );
     
             if (!updatedApp) {
-                throw new Error(`App with name "${appName}" not found`);
+                throw new NotFound('App',appName);
             }
     
             return updatedApp;
@@ -107,10 +124,9 @@ class AppRepository{
             const deletedApp = await App.findOneAndDelete({ appName });
     
             if (!deletedApp) {
-                return { success: false, message: `App with name "${appName}" not found.` };
-            }
-    
-            return { success: true, message: `App "${appName}" deleted successfully.`, deletedApp };
+                throw new NotFound('App', appName);
+            }    
+            return deletedApp;
         } catch (err) {
             console.error(`Error deleting app: ${err.message}`);
             throw new Error('Failed to delete the application. Please try again later.');

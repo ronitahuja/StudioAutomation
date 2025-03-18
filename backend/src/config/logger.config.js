@@ -5,7 +5,7 @@ const BaseError = require("../errors/base.error");
 
 const setUpLogger = () => {
   const transports = [
-    new winston.transports.Console({
+    new winston.transports.Console({   //logs to console
       format: winston.format.combine(
         winston.format.colorize(),
         winston.format.timestamp({ format: "YYYY-MM-DD HH:mm:ss" }),
@@ -44,7 +44,7 @@ const setUpLogger = () => {
     console.error("Logger setup error:", error.message);
   }
 
-  return winston.createLogger({
+  return winston.createLogger({   //creates winston logger instance
     format: winston.format.combine(
       winston.format.timestamp({ format: "YYYY-MM-DD HH:mm:ss" }),
       winston.format.printf(
