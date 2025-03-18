@@ -1,6 +1,8 @@
-import React, { useState, useEffect, useRef } from "react";
+import React, { useState, useEffect, useRef, useCallback } from "react";
 import Editor from "@monaco-editor/react";
 import PropTypes from "prop-types";
+import debounce from "lodash.debounce";
+import { Brain } from "lucide-react";
 
 import { llm_query } from "../constants/llm-api";
 import models from "../constants/models";
@@ -8,6 +10,7 @@ import DropDown from "./DropDown";
 import themes from "../constants/themes";
 import languages from "../constants/languages";
 import LikeDislike from "./LikeDislike";
+import axios from "axios";
 
 const CodeEditor = ({
   transactionRows,
@@ -20,6 +23,7 @@ const CodeEditor = ({
   const editorRef = useRef(null);
   const monacoRef = useRef(null); // Reference to Monaco instance
   const textareaRef = useRef(null); // Reference for the textarea
+  const currentSuggestionRef = useRef(null);
   const [code, setCode] = useState(localStorage.getItem("code") || "");
 
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -28,10 +32,13 @@ const CodeEditor = ({
   const [inputValue, setInputvalue] = useState("");
   const [aiCode, setAiCode] = useState("");
   const [isAiResponseVisible, setIsAiResponseVisible] = useState(true);
+  const [currentSuggestion, setCurrentSuggestion] = useState(null);
+  const [decorationIds, setDecorationIds] = useState([]);
+  const [isLoading, setIsLoading] = useState(false);
+
   const [model, setModel] = useState(() => {
     // Get the stored model value
     const storedModel = localStorage.getItem("model");
-    console.log("stored model", storedModel);
 
     // Find the actual model object from models array
     if (storedModel) {
@@ -48,7 +55,6 @@ const CodeEditor = ({
   const [theme, setTheme] = useState(() => {
     // Get the stored theme value
     const storedTheme = localStorage.getItem("theme");
-    console.log("stored theme", storedTheme);
 
     // Find the actual theme object from themes array
     if (storedTheme) {
@@ -64,7 +70,6 @@ const CodeEditor = ({
   const [language, setLanguage] = useState(() => {
     // Get the stored language value
     const storedLanguage = localStorage.getItem("language");
-    console.log("stored language", storedLanguage);
 
     // Find the actual language object from languages array
     if (storedLanguage) {
@@ -77,8 +82,99 @@ const CodeEditor = ({
     // Default to the first language or empty string
     return languages[0] || "";
   });
- 
 
+  const getAISuggestions = async (code, position) => {
+    await new Promise((resolve) => setTimeout(resolve, 500));
+    console.log("getAISuggestions=>", code, position);
+    const response = await axios.post(
+      "http://localhost:3000/api/v1/autocomplete/query",
+      {
+        currentCode: code,
+        applicationName: applicationName,
+        language: language,
+        appActionName: appActionName,
+      }
+    );
+    return response.data.code;
+  };
+
+  const acceptSuggestion = () => {
+    if (!editorRef.current || !currentSuggestionRef.current) return;
+
+    const position = editorRef.current.getPosition();
+    console.log("position=>", position);
+    if (!position) return;
+
+    const model = editorRef.current.getModel();
+    if (!model) return;
+
+    editorRef.current.executeEdits("ai-suggestion", [
+      {
+        range: {
+          startLineNumber: position.lineNumber,
+          startColumn: position.column,
+          endLineNumber: position.lineNumber,
+          endColumn: position.column,
+        },
+        text: currentSuggestionRef.current,
+        forceMoveMarkers: true,
+      },
+    ]);
+    clearDecorations();
+    setCurrentSuggestion(null);
+  };
+
+  const clearDecorations = () => {
+    if (!editorRef.current) return;
+    const oldDecorations = decorationIds;
+    setDecorationIds(editorRef.current.deltaDecorations(oldDecorations, []));
+  };
+
+  const debouncedSuggestions = useCallback(
+    debounce(async (code, position) => {
+      try {
+        setIsLoading(true);
+        const suggestion = await getAISuggestions(code, position);
+        console.log("suggestion=>", suggestion);
+        setCurrentSuggestion(suggestion);
+        currentSuggestionRef.current = suggestion;
+
+        if (!editorRef.current || !monacoRef.current) return;
+
+        const model = editorRef.current.getModel();
+        if (!model) return;
+
+        clearDecorations();
+
+        const newDecorations = editorRef.current.deltaDecorations(
+          [],
+          [
+            {
+              range: {
+                startLineNumber: position.lineNumber + 1,
+                startColumn: 1,
+                endLineNumber: position.lineNumber + 1,
+                endColumn: 1,
+              },
+              options: {
+                after: {
+                  content: `${suggestion}`,
+                  inlineClassName: "ai-suggestion",
+                },
+              },
+            },
+          ]
+        );
+
+        setDecorationIds(newDecorations);
+      } finally {
+        setIsLoading(false);
+      }
+    }, 1000),
+    []
+  );
+
+  
   // Save state to localStorage
   useEffect(() => {
     if (code !== "") localStorage.setItem("code", code);
@@ -95,11 +191,11 @@ const CodeEditor = ({
       localStorage.setItem("theme", theme.name);
     }
   }, [theme]);
-  useEffect(()=>{
+  useEffect(() => {
     if (language?.name) {
       localStorage.setItem("language", language.name);
     }
-  },[language])
+  }, [language]);
   const handleSubmit = async (event) => {
     event.preventDefault();
 
@@ -111,13 +207,6 @@ const CodeEditor = ({
 
     try {
       const modelValue = typeof model === "object" ? model.name : model;
-      console.log("query=>", inputValue);
-      console.log("connection=>", connectionRows);
-      console.log("transac=>", transactionRows);
-      console.log("model=>", model);
-      console.log("language=>", language);
-      console.log("appAction=>", appActionName);
-      console.log("application=>", applicationName);
       const response = await fetch(llm_query, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
@@ -181,22 +270,36 @@ const CodeEditor = ({
     editorRef.current = editor;
     monacoRef.current = monaco; // Store Monaco instance for later use
 
-    // Ensure Python language is registered
-    monaco.languages.register({ id: "python" });
+    const style = document.createElement("style");
+    style.textContent = `
+      .ai-suggestion {
+        opacity: 0.4;
+        font-style: italic;
+        color: #666;
+      }
+    `;
+    document.head.appendChild(style);
 
-    // Now, safely access `pythonDefaults`
-    monaco.languages.python?.pythonDefaults.setDiagnosticsOptions({
-      enabled: true,
-    });
-
-    monaco.languages.python?.pythonDefaults.setWorkerOptions({
-      languageServer: "pyright", // Enables Pyright for deeper IntelliSense
+    editor.addCommand(monaco.KeyCode.Tab, () => {
+      console.log("Tab pressed");
+      console.log("currentSuggestionRef=>", currentSuggestionRef.current);
+      if (currentSuggestionRef.current) {
+        console.log("Accepting suggestion:", currentSuggestionRef.current);
+        acceptSuggestion();
+        return null;
+      }
+      return false;
     });
   };
 
   // Handle code changes and propagate to parent component
   const handleEditorChange = (value) => {
-    console.log("Editor content changed:", value);
+    if (!value || !editorRef.current) return;
+
+    const position = editorRef.current.getPosition();
+    if (!position) return;
+    debouncedSuggestions(value, position);
+
     setCode(value || "");
 
     // Pass the updated code to parent component
@@ -207,7 +310,6 @@ const CodeEditor = ({
 
   // Handle language change
   const handleLanguageChange = (newLanguage) => {
-    console.log("Language changed to:", newLanguage);
     setLanguage(newLanguage); // Update local state
 
     // Pass the updated language to parent component
@@ -219,6 +321,19 @@ const CodeEditor = ({
   return (
     <div className="top-[80px] right-[25px] p-5 border rounded-lg shadow-lg bg-white w-5/5 h-full flex flex-col">
       {/* Code Editor */}
+      <div className="absolute top-2 right-2 z-10 flex items-center gap-2 bg-white/80 backdrop-blur-sm px-3 py-1.5 rounded-full">
+        {isLoading && (
+          <>
+            <Brain className="w-4 h-4 animate-pulse text-blue-500" />
+            <span className="text-sm text-gray-600">AI is thinking...</span>
+          </>
+        )}
+        {currentSuggestion && !isLoading && (
+          <span className="text-sm text-gray-600">
+            Press Tab to accept suggestion
+          </span>
+        )}
+      </div>
       <div className="p-2 border rounded-lg shadow-md bg-gray-100">
         <DropDown
           onSelect={setModel}
@@ -259,7 +374,7 @@ const CodeEditor = ({
           onMount={handleEditorDidMount}
           options={{
             quickSuggestions: true,
-            suggestOnTriggerCharacters: true,
+            acceptSuggestionOnEnter: "on",
             autoClosingBrackets: "always",
             snippetSuggestions: "inline",
             minimap: { enabled: false },

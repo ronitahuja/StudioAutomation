@@ -39,12 +39,6 @@ const DropDown = ({ onSelect, models, topic, selected }) => {
 }
 }, [selected, topic, models, onSelect]);
 
-    if(topic=='Language'){
-
-        console.log("model0----",selectedModel,topic,models[0].name)
-    }
-
-
   const handleSelect = (model) => {
     setSelectedModel(model);
     onSelect(model);
