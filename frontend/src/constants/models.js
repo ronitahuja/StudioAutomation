@@ -2,18 +2,6 @@ import { mistral, huggingface, google, meta, qwen, deepseek } from "../assets";
 
 const models = [
   {
-    name: "distil-whisper-large-v3-en",
-    image: huggingface,
-  },
-  {
-    name: "whisper-large-v3",
-    image: huggingface,
-  },
-  {
-    name: "whisper-large-v3-turbo",
-    image: huggingface,
-  },
-  {
     name: "gemma2-9b-it",
     image: google,
   },
