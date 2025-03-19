@@ -294,6 +294,7 @@ const CodeEditor = ({
 
   // Handle code changes and propagate to parent component
   const handleEditorChange = (value) => {
+    if(value.trim()==="")localStorage.setItem("code", "");
     if (!value || !editorRef.current) return;
 
     const position = editorRef.current.getPosition();
