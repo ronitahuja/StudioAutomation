@@ -14,12 +14,12 @@ const v1Router = express.Router();
 
 
 // If any request comes and route continues with /functions, we map it to functionRouter
-v1Router.use('/functions',verifyToken, functionRouter);
-v1Router.use('/llm',verifyToken,llmRouter);
-v1Router.use('/appActions',verifyToken, AppActionRouter);
-v1Router.use('/app',verifyToken,AppRouter);
-v1Router.use('/autocomplete',verifyToken,AutoCompleteRouter);
-v1Router.use('/analysis',verifyToken,AnalysisRouter);
+v1Router.use('/functions', functionRouter);
+v1Router.use('/llm',llmRouter);
+v1Router.use('/appActions', AppActionRouter);
+v1Router.use('/app',AppRouter);
+v1Router.use('/autocomplete',AutoCompleteRouter);
+v1Router.use('/analysis',AnalysisRouter);
 v1Router.use('/auth', AuthRouter);
 
 

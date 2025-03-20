@@ -37,6 +37,10 @@ class LLMController {
         3. **Do NOT Hallucinate Functions**: Only use the following SDK functions:
           ${parsedResult}
         4. You should use the function retrieved to generate the script. you should not create your own functions.
+        5. Do not use   \`\`\`code\`\`\` syntax. just give the code without embedding it in between \`\`\`.
+        6. Just give the code that completes the current code. Dont repeat the current code.
+        7. Do not provide any additional information or context.
+        8. Do not provide any additional comments.
         ---
         ### **User Query:**
         "${queryObj.query}"
@@ -44,15 +48,15 @@ class LLMController {
       ---
       ### **Parameter Constraints:**
       - **Connection-Level Parameters**: ${JSON.stringify(
-                    queryObj.connectionLevelParamFields,
-                    null,
-                    2
-                )}
+        queryObj.connectionLevelParamFields,
+        null,
+        2
+      )}
     - **Transaction-Level Parameters**: ${JSON.stringify(
-                    queryObj.transactionLevelParamFields,
-                    null,
-                    2
-                )}
+      queryObj.transactionLevelParamFields,
+      null,
+      2
+    )}
     ---
     ### **Important Validation Rules:**
     Validate all **mandatory parameters** before execution.  
