@@ -7,6 +7,7 @@ import AppForm from "./components/AppForm";
 import Analysis from "./components/Analysis";
 import Login from "./components/Login";
 import Signup from "./components/Signup";
+import ProtectedRoute from "./components/ProtectedRoute";
 
 function App() {
   return (
@@ -15,10 +16,10 @@ function App() {
 
       <Routes>
         <Route path="/login" element={<Login />} />
-        <Route path="/register" element={<Signup />} />
-        <Route path="/" element={<Analysis />} />
-        <Route path="/app" element={<AppForm />} />
-        <Route path="/appActions" element={<Form />} />
+        <Route path="/signup" element={<Signup />} />
+        <Route path="/" element={<ProtectedRoute><Analysis /></ProtectedRoute>} />
+        <Route path="/app" element={<ProtectedRoute><AppForm /></ProtectedRoute>} />
+        <Route path="/appActions" element={<ProtectedRoute><Form /></ProtectedRoute>} />
       </Routes>
     </>
   );
