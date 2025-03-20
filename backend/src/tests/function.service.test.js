@@ -10,7 +10,7 @@ let mockPipeline, mockFunctionRepository, functionService;
 
 describe("FunctionService", () => {
   beforeEach(() => {
-    mockPipeline = jest.fn(async (text, options) => ({
+    mockPipeline = jest.fn(async (_text, _options) => ({
       data: [0.1, 0.2, 0.3], // Mock embedding output
     }));
     pipeline.mockResolvedValue(mockPipeline);

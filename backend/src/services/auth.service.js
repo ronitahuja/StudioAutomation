@@ -4,6 +4,8 @@ class AuthService{
     }
     async login(userData){
         const {email,password} =  userData;
+        console.log("inside login service ");
+        console.log(email,password);
         const loggedInUser = await this.authRepository.login(email,password);
         return loggedInUser;
     }
