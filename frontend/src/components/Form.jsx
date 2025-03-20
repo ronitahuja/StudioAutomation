@@ -22,7 +22,8 @@ const Form = () => {
     const fetchApplications = async () => {
       try {
         const response = await axios.get(
-          "http://localhost:3000/api/v1/app/appNames"
+          "http://localhost:3000/api/v1/app/appNames",
+          { withCredentials: true }
         );
 
         if (Array.isArray(response.data.data)) {
@@ -48,7 +49,8 @@ const Form = () => {
         }
 
         const response = await axios.get(
-          `http://localhost:3000/api/v1/app/appNames/${formData.applicationName}`
+          `http://localhost:3000/api/v1/app/appNames/${formData.applicationName}`,
+          { withCredentials: true }
         );
         if (
           Array.isArray(response.data.data) &&
@@ -112,11 +114,11 @@ const Form = () => {
         code: localStorage.getItem("code"),
         details: formData.details || "",
       };
-      console.log("App Action Data:", appActionData);
       // Send data to backend
       await axios.post(
         "http://localhost:3000/api/v1/appActions/createAppActions",
-        appActionData
+        appActionData,
+        { withCredentials: true }
       );
 
       setSaveMessage({

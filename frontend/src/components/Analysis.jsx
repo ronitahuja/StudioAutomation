@@ -25,7 +25,7 @@ function App() {
     const api = "http://localhost:3000/api/v1/analysis/getallanalysis";
 
     axios
-      .get(api)
+      .get(api,{withCredentials: true })
       .then((response) => {
         const models = response.data.data;
         setData(models);

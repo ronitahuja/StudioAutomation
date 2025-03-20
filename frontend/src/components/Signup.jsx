@@ -1,6 +1,8 @@
 import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
 import { UserPlus } from 'lucide-react';
+import Cookies from 'js-cookie';
+import axios from 'axios';
 
 function Signup() {
   const [formData, setFormData] = useState({
@@ -18,7 +20,17 @@ function Signup() {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    console.log('Signup attempted:', formData);
+    axios.post('http://localhost:3000/api/v1/auth/register', formData)
+    .then((response) => {
+      const token = response.data.data.token;
+      const user= response.data.data.user;
+      Cookies.set('token', token);
+      Cookies.set('firstName', user.firstName);
+      Cookies.set('lastName', user.lastName);
+      Cookies.set('email', user.email);
+      Cookies.set('id', user._id);
+      window.location.href = '/';
+    });
   };
 
   return (

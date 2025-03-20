@@ -10,19 +10,27 @@ export default function LikeDislike({ modelName }) {
 
   const handleLike = () => {
     setLike(!like);
-    axios.post("http://localhost:3000/api/v1/analysis/update", {
-      modelName: modelName,
-      like: true,
-    });
+    axios.post(
+      "http://localhost:3000/api/v1/analysis/update",
+      {
+        modelName: modelName,
+        like: true,
+      },
+      { withCredentials: true }
+    );
     if (!like) setDislike(false);
   };
 
   const handleDislike = () => {
     setDislike(!dislike);
-    axios.post("http://localhost:3000/api/v1/analysis/update", {
-      modelName: modelName,
-      like: false,
-    });
+    axios.post(
+      "http://localhost:3000/api/v1/analysis/update",
+      {
+        modelName: modelName,
+        like: false,
+      },
+      { withCredentials: true }
+    );
     if (!dislike) setLike(false);
   };
 

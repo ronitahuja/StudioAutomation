@@ -1,5 +1,7 @@
 import React, { useState } from 'react';
-import { Box, LogIn } from 'lucide-react';
+import { Box,  LogIn } from 'lucide-react';
+import axios from 'axios';
+import Cookies from "js-cookie";
 
 function Login() {
   const [email, setEmail] = useState('');
@@ -8,7 +10,22 @@ function Login() {
   const handleSubmit = (e) => {
     e.preventDefault();
     // Handle login logic here
-    console.log('Login attempted:', { email, password });
+    axios.post('http://localhost:3000/api/v1/auth/login', {
+      email,
+      password
+    }).then((response) => {
+      const token = response.data.data.token;
+      const user= response.data.data.user;
+      Cookies.set('token', token);
+      Cookies.set('firstName', user.firstName);
+      Cookies.set('lastName', user.lastName);
+      Cookies.set('email', user.email);
+      Cookies.set('id', user._id);
+      window.location.href="/";
+    }).catch((error) => {
+      alert("No user found with the given credentials");
+      console.error(error);
+    });
   };
 
   return (

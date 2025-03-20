@@ -20,7 +20,6 @@ async function login(req,res,next){
 }
 async function register(req,res,next){
     try{
-        console.log("inside register");
         const registeredUser = await authService.register(req.body);
         return res.status(StatusCodes.CREATED).json({
             success: true,

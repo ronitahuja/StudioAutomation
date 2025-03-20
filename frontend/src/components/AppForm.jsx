@@ -18,8 +18,12 @@ function AppForm() {
     const fetchDropdownOptions = async () => {
       try {
         const [categoriesRes, authTypesRes] = await Promise.all([
-          axios.get("http://localhost:3000/api/v1/app/appCategories"),
-          axios.get("http://localhost:3000/api/v1/app/authenticationType"),
+          axios.get("http://localhost:3000/api/v1/app/appCategories", {
+            withCredentials: true,
+          }),
+          axios.get("http://localhost:3000/api/v1/app/authenticationType", {
+            withCredentials: true,
+          }),
         ]);
         setAllCat(categoriesRes.data.data);
         setAuthTypes(authTypesRes.data.data);
@@ -55,20 +59,23 @@ function AppForm() {
     try {
       // Check if the application already exists
       const { data } = await axios.get(
-        `http://localhost:3000/api/v1/app/${appName}`
+        `http://localhost:3000/api/v1/app/${appName}`,
+        { withCredentials: true }
       );
-      console.log(data.data);
 
       if (data?.data) {
         // Update existing application
         await axios.patch(
           `http://localhost:3000/api/v1/app/${appName}`,
-          newPayLoad
+          newPayLoad,
+          { withCredentials: true }
         );
         alert("Application updated successfully!");
       } else {
         // Create new application
-        await axios.post("http://localhost:3000/api/v1/app/", newPayLoad);
+        await axios.post("http://localhost:3000/api/v1/app/", newPayLoad, {
+          withCredentials: true,
+        });
         alert("Application saved successfully!");
       }
 

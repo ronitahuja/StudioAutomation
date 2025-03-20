@@ -91,7 +91,6 @@ const CodeEditor = ({
 
   const getAISuggestions = async (code, position) => {
     await new Promise((resolve) => setTimeout(resolve, 500));
-    console.log("getAISuggestions=>", code, position);
     const response = await axios.post(
       "http://localhost:3000/api/v1/autocomplete/query",
       {
@@ -99,7 +98,8 @@ const CodeEditor = ({
         applicationName: applicationName,
         language: language,
         appActionName: appActionName,
-      }
+      },
+      { withCredentials: true }
     );
     return response.data.code;
   };
@@ -140,7 +140,6 @@ const CodeEditor = ({
       try {
         setIsLoading(true);
         const suggestion = await getAISuggestions(code, position);
-        console.log("suggestion=>", suggestion);
         setCurrentSuggestion(suggestion);
         currentSuggestionRef.current = suggestion;
 
@@ -285,7 +284,6 @@ const CodeEditor = ({
     document.head.appendChild(style);
 
     editor.addCommand(monaco.KeyCode.Tab, () => {
-      console.log("Tab pressed");
       if (currentSuggestionRef.current) {
         acceptSuggestion();
         return null;

@@ -84,7 +84,6 @@ class LLMController {
     async generateAppActionsScript(req, res, next) {
         try {
             const queryObj = req.body;
-            console.log("Query Object=>", queryObj);
             const response = await this.llmService.generateAppActionsScript(queryObj);
 
             return res.status(200).json({
