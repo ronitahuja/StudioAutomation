@@ -1,6 +1,7 @@
 const { UserModel } = require("../models");
 const NotFound =  require("../errors/notFound.error");
 const BadRequest =  require("../errors/badRequest.error");
+
 const jwt = require('jsonwebtoken');
 
 class AuthRepository{
