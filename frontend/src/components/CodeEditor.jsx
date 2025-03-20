@@ -83,6 +83,12 @@ const CodeEditor = ({
     return languages[0] || "";
   });
 
+  useEffect(() => {
+    if (currentSuggestion) {
+      currentSuggestionRef.current = currentSuggestion;
+    }
+  }, [currentSuggestionRef]);
+
   const getAISuggestions = async (code, position) => {
     await new Promise((resolve) => setTimeout(resolve, 500));
     console.log("getAISuggestions=>", code, position);
@@ -102,7 +108,6 @@ const CodeEditor = ({
     if (!editorRef.current || !currentSuggestionRef.current) return;
 
     const position = editorRef.current.getPosition();
-    console.log("position=>", position);
     if (!position) return;
 
     const model = editorRef.current.getModel();
@@ -174,7 +179,6 @@ const CodeEditor = ({
     []
   );
 
-  
   // Save state to localStorage
   useEffect(() => {
     if (code !== "") localStorage.setItem("code", code);
@@ -282,9 +286,7 @@ const CodeEditor = ({
 
     editor.addCommand(monaco.KeyCode.Tab, () => {
       console.log("Tab pressed");
-      console.log("currentSuggestionRef=>", currentSuggestionRef.current);
       if (currentSuggestionRef.current) {
-        console.log("Accepting suggestion:", currentSuggestionRef.current);
         acceptSuggestion();
         return null;
       }
@@ -294,7 +296,7 @@ const CodeEditor = ({
 
   // Handle code changes and propagate to parent component
   const handleEditorChange = (value) => {
-    if(value.trim()==="")localStorage.setItem("code", "");
+    if (value.trim() === "") localStorage.setItem("code", "");
     if (!value || !editorRef.current) return;
 
     const position = editorRef.current.getPosition();
@@ -521,3 +523,4 @@ CodeEditor.propTypes = {
 };
 
 export default CodeEditor;
+ 
