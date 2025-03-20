@@ -14,7 +14,6 @@ class LLMService {
     async queryLLM(systemPrompt) {
         try {
             const prompt = systemPrompt;
-            console.log("Prompt=>", prompt);
             const response = await groq.chat.completions.create({
                 messages: [{ role: "user", content: prompt }],
                 model: this.model,
@@ -38,7 +37,6 @@ class LLMService {
 
             const data = JSON.stringify({ model, link, query });
 
-            // Spawn Python process
             const python = spawn(
               process.env.VENV_PATH,
               [
@@ -47,20 +45,16 @@ class LLMService {
               ]
             );
 
-            let dataBuffer = '';  // Buffer for accumulating stdout data
+            let dataBuffer = '';  
 
-            // Capture stdout
             python.stdout.on('data', (chunk) => {
-                dataBuffer += chunk.toString();  // Accumulate chunks
+                dataBuffer += chunk.toString();  
             });
-            console.log("Data Buffer=>", dataBuffer);
 
-            // Capture stderr
             python.stderr.on('data', (data) => {
                 console.error(`Python Error: ${data.toString()}`);
             });
 
-            // Handle process close event
             python.on('close', (code) => {
                 console.log(`Python process exited with code ${code}`);
 

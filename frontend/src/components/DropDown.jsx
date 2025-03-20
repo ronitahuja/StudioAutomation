@@ -7,7 +7,6 @@ const DropDown = ({ onSelect, models, topic, selected }) => {
     const [selectedModel, setSelectedModel] = useState(models[0]);
     const [isOpen, setIsOpen] = useState(false);
     
-    // Initialize with the selected prop or try to find the saved value
     useEffect(() => {
         if (selected) {
             setSelectedModel(selected);
@@ -15,19 +14,16 @@ const DropDown = ({ onSelect, models, topic, selected }) => {
             const savedValue = localStorage.getItem(topic.toLowerCase());
             if (savedValue) {
                 try {
-                    // For backward compatibility, try to parse JSON first
           const parsedValue = JSON.parse(savedValue);
           const modelName =
           typeof parsedValue === "string" ? parsedValue : parsedValue.name;
 
-          // Find the model by name
           const foundModel = models.find((m) => m.name === modelName);
           if (foundModel) {
               setSelectedModel(foundModel);
               onSelect(foundModel);
             }
         } catch (e) {
-            // If parsing fails, try to find the model directly by name
           console.log(e);
           const foundModel = models.find((m) => m.name === savedValue);
           if (foundModel) {

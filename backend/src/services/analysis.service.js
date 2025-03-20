@@ -13,7 +13,6 @@ class AnalysisService {
       } else {
         if(like)data.modelScore += 1;
         else data.modelScore -= 1;
-        console.log(data);
         await this.analysisRepository.updateAnalysis(data.modelName, {modelScore:data.modelScore});
       }
     } catch (err) {

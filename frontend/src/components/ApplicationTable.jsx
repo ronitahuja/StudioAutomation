@@ -15,7 +15,8 @@ const ApplicationTable = ({ setPayLoad }) => {
     const fetchApplications = async () => {
       try {
         const response = await axios.get(
-          "http://localhost:3000/api/v1/app/appNames"
+          "http://localhost:3000/api/v1/app/appNames",
+          { withCredentials: true }
         );
         setApplications(response.data.data);
       } catch (error) {
@@ -51,15 +52,12 @@ const ApplicationTable = ({ setPayLoad }) => {
     setLoading(true);
     try {
       const response = await axios.get(
-        `http://localhost:3000/api/v1/app/${appName}`
+        `http://localhost:3000/api/v1/app/${appName}`,
+        { withCredentials: true }
       );
       const appData = response.data.data;
 
       if (appData) {
-        console.log(
-          "fetched connectionLevelParamFields:",
-          appData.connectionLevelParamFields
-        );
         setPayLoad({
           appName: appData.appName,
           appCategory: appData.appCategory,

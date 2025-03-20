@@ -12,14 +12,19 @@ const app = express();
 
 app.use(loggerMiddleware);
 
-app.use(cors({ origin: "*" })); 
+app.use(
+  cors({
+    origin: "http://localhost:5173",
+    credentials: true, 
+  })
+);
 
 
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.text());
 
-app.use("/api", apiRouter);
+app.use("/api" ,apiRouter);
 
 app.use(errorHandler);
 

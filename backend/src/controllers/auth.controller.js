@@ -4,9 +4,6 @@ const {StatusCodes} = require("http-status-codes")
 
 const authService = new AuthService(new AuthRepository());
 
-function pingAuthController(req, res) {
-    return res.json({message: "Auth Controller is up"});
-}
 async function login(req,res,next){
     try{
         const loggedInUser = await authService.login(req.body);
@@ -23,7 +20,6 @@ async function login(req,res,next){
 }
 async function register(req,res,next){
     try{
-        console.log("inside register");
         const registeredUser = await authService.register(req.body);
         return res.status(StatusCodes.CREATED).json({
             success: true,
@@ -37,7 +33,6 @@ async function register(req,res,next){
     }
 }
 module.exports ={
-    pingAuthController,
     login,
     register
 
