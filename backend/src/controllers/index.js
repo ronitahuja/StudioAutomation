@@ -4,5 +4,6 @@ module.exports = {
     AppActionController : require('./appAction.controller'),
     AppController :require('./app.controller'),
     AutoCompleteController:require('./autoComplete.controller'),
-    AnalysisController:require('./analysis.controller')
+    AnalysisController:require('./analysis.controller'),
+    AuthController:require('./auth.controller'),
 }
