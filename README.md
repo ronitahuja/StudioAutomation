@@ -13,9 +13,11 @@
 | `/api/v1/app/authenticationType` | GET | Get Authentication Type | None | No |
 | `/api/v1/app/appNames` | GET | Get App Names | None | No |
 | `/api/v1/app/appNames/:appName` | GET | Get Connection Level Params of Specific App | `appName: string` (as URL param) | No |
-| `/api/v1/llm/generate` | POST | Generate Script for Application | `{ appName: string, sdkData: object }` | Yes |
-| `/api/v1/llm/query` | POST | Query Internal SDK Docs | `{ query: string }` | Yes |
+
+| `/api/v1/llm/generate` | POST | Generate Script for Application | `{ link: string, query:string ,model:string }` | Yes |
+| `/api/v1/llm/query` | POST | Query Internal SDK Docs | `{ model:string, prompt:string, }` | Yes |
 | `/api/v1/llm/generate` | POST | Web Scraping for Script Generation | `{ appName: string, sourceUrl: string }` | Yes |
+
 | `/api/v1/functions` | POST | Insert All SDK Docs | `{ sdkDocs: array }` | Yes |
 | `/api/v1/functions/search` | POST | Vector Search for SDK Functions | `{ query: string }` | Yes |
 | `/api/v1/autocomplete/query` | POST | Get Auto-Completion Suggestions | `{ prefix: string }` | No |
