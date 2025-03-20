@@ -23,6 +23,9 @@
 | `/api/v1/analysis/update` | POST | Updates the Model Rating ...If Absent Then it Adds it |
 | `/api/v1/analysis/getallanalysis` | GET | Gets All Models Along With Name And Rating |
 | `/api/v1/analysis/getanalysis` | POST | Sets Details Of Specific Model |
+| `/api/v1/auth/login` | POST | Checks the password and logs in the User |
+| `/api/v1/analysis/register` | POST | Registers a new User |
+
 
 ## Installation
 1. Clone the repository
