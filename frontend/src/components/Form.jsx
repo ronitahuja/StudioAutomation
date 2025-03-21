@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import ParamTable from "./PramTable";
 import MonacoEditor from "./CodeEditor";
+// import Temp from "./Temp";
 import axios from "axios";
 
 const Form = () => {
@@ -305,6 +306,7 @@ const Form = () => {
           onCodeChange={updateCode}
           onLanguageChange={updateLanguage}
         />
+        {/* <Temp></Temp> */}
       </div>
     </div>
   );
