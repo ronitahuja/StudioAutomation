@@ -125,58 +125,81 @@ const CodeEditor = ({
         forceMoveMarkers: true,
       },
     ]);
+
+
     clearDecorations();
     setCurrentSuggestion(null);
+    currentSuggestionRef.current = null;
   };
 
   const clearDecorations = () => {
     if (!editorRef.current) return;
+    const editor = editorRef.current;
     const oldDecorations = decorationIds;
-    setDecorationIds(editorRef.current.deltaDecorations(oldDecorations, []));
+    setDecorationIds(editor.deltaDecorations(oldDecorations, []));
   };
 
   const debouncedSuggestions = useCallback(
     debounce(async (code, position) => {
       try {
         setIsLoading(true);
+  
+        // Clear previous suggestion reference before fetching new one
+        currentSuggestionRef.current = "";
+  
         const suggestion = await getAISuggestions(code, position);
         setCurrentSuggestion(suggestion);
+  
         currentSuggestionRef.current = suggestion;
-
+        console.log(currentSuggestionRef.current);
+  
         if (!editorRef.current || !monacoRef.current) return;
-
+  
         const model = editorRef.current.getModel();
         if (!model) return;
-
-        clearDecorations();
-
+  
+        // Clear previous decorations
+        if (decorationIds.length > 0) {
+          setDecorationIds([]);
+          editorRef.current.deltaDecorations(decorationIds, []);
+        }
+  
+        // Ensure position values are correct
+        const editorPosition = editorRef.current.getPosition();
+        if (!editorPosition) return;
+  
         const newDecorations = editorRef.current.deltaDecorations(
           [],
           [
             {
               range: {
-                startLineNumber: position.lineNumber + 1,
-                startColumn: 1,
-                endLineNumber: position.lineNumber + 1,
-                endColumn: 1,
+                startLineNumber: position.lineNumber,
+                startColumn: position.column,
+                endLineNumber: position.lineNumber,
+                endColumn: position.column,
               },
               options: {
                 after: {
-                  content: `${suggestion}`,
+                  content: currentSuggestionRef.current,
                   inlineClassName: "ai-suggestion",
                 },
               },
             },
           ]
         );
-
+  
         setDecorationIds(newDecorations);
+      } catch (error) {
+        console.error("Error fetching suggestions:", error);
       } finally {
         setIsLoading(false);
       }
-    }, 1000),
-    []
+    }, 1000), 
+    [editorRef.current, monacoRef.current, decorationIds]
   );
+  useEffect(()=>{
+    currentSuggestionRef.current = "";
+  },[])
 
   // Save state to localStorage
   useEffect(() => {
@@ -271,8 +294,9 @@ const CodeEditor = ({
 
   const handleEditorDidMount = (editor, monaco) => {
     editorRef.current = editor;
-    monacoRef.current = monaco; // Store Monaco instance for later use
-
+    monacoRef.current = monaco;
+  
+    // Add AI suggestion style
     const style = document.createElement("style");
     style.textContent = `
       .ai-suggestion {
@@ -282,7 +306,7 @@ const CodeEditor = ({
       }
     `;
     document.head.appendChild(style);
-
+  
     editor.addCommand(monaco.KeyCode.Tab, () => {
       if (currentSuggestionRef.current) {
         acceptSuggestion();
@@ -291,24 +315,24 @@ const CodeEditor = ({
       return false;
     });
   };
-
+  
   // Handle code changes and propagate to parent component
   const handleEditorChange = (value) => {
     if (value.trim() === "") localStorage.setItem("code", "");
     if (!value || !editorRef.current) return;
-
+  
+    // Capture position at the start to ensure accuracy
     const position = editorRef.current.getPosition();
     if (!position) return;
+  
     debouncedSuggestions(value, position);
-
+  
     setCode(value || "");
-
-    // Pass the updated code to parent component
+  
     if (onCodeChange) {
       onCodeChange(value || "");
     }
   };
-
   // Handle language change
   const handleLanguageChange = (newLanguage) => {
     setLanguage(newLanguage); // Update local state
