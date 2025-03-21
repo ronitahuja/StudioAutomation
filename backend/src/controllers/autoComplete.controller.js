@@ -1,4 +1,4 @@
-const LLMService=new require("../services/llm.service");
+const LLMService = new require("../services/llm.service");
 const axios = require("axios");
 
 class autoComplete {
@@ -27,24 +27,37 @@ class autoComplete {
         });
       }
       const prompt = `
-            You are a highly efficient AI code generator, specialized in generating SDK-compliant ${queryObj.language} scripts. Your sole task is to generate structured, syntactically correct, and optimized Python code based on the retrieved SDK functions ${parsedResult}.
-            here is the application name : ${queryObj.applicationName}
-            here is the appAction name : ${queryObj.appActionName}
-            here is the language : ${queryObj.language}
-            here is the current code : ${queryObj.currentCode}
-            ---
-            ### **Strict Rules:**
-            1. **Only Generate Code**: Do NOT provide explanations, alternative responses, or opinions.
-            2. **Use SDK Functions**: Only use the following SDK functions:
-            ${parsedResult}
-            3. **Do NOT Hallucinate Functions**: Only use the function retrieved to generate the script.
-            4. Only give the remaining code to complete the current code.
-            5. Do not use   \`\`\`code\`\`\` syntax. just give the code without embedding it in between \`\`\`.
-            6. Just give the code that completes the current code. Dont repeat the current code.
-            7. Do not provide any additional information or context.
-            8. Do not provide any additional comments.
-            ---
-            `;
+You are an advanced AI-powered code assistant that completes ${queryObj.language} scripts intelligently, just like GitHub Copilot. Your job is to **predict the most appropriate next lines of code** based on context and the retrieved SDK functions.
+
+### **Context**
+- Application Name: ${queryObj.applicationName}
+- App Action Name: ${queryObj.appActionName}
+- Language: ${queryObj.language}
+- **Existing Code (DO NOT REPEAT, only continue)**:
+\`\`\`
+${queryObj.currentCode}
+\`\`\`
+
+### **Available SDK Functions**
+You can use the following SDK functions when necessary:
+${parsedResult}
+
+---
+
+### **Completion Rules**
+1. **Continue Writing from the Last Line**: Do **not** repeat the existing code. Start from where it left off.
+2. **Think Like a Developer**: Predict the next logical lines based on the given code context.
+3. **Use SDK Functions When Relevant**: If the next part of the code requires an SDK function, pick the best one from the list.
+4. **No Random Code**: Only suggest meaningful code that makes sense in the context.
+5. **No Code Blocks (\`\`\`) or Extra Text**: Return only raw code.
+6. **Avoid Unnecessary Imports or Duplications**: Assume all required imports are already present.
+7. **Do not provide any additional information or context , do not provide what you think , only provide the code**
+
+---
+
+### **Now, Continue the Code Thoughtfully:**
+`;
+
       const generatedCode = await this.llmService.queryLLM(prompt);
       res.status(200).json({ code: generatedCode });
     } catch (error) {
