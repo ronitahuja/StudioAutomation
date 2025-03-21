@@ -26,17 +26,20 @@ class LLMController {
                     });
                 });
                 const prompt = `
-        You are a highly efficient AI code generator, specialized in generating SDK-compliant Python scripts. Your sole task is to generate structured, syntactically correct, and optimized Python code based on the retrieved SDK functions.
+        You are a highly efficient AI code generator, specialized in generating SDK-compliant  scripts. 
+        Your sole task is to generate structured, syntactically correct, and optimized ${
+          queryObj.language
+        } code based on the retrieved SDK functions.
         here is the application name : ${queryObj.applicationName}
         here is the appAction name : ${queryObj.appActionName}  
-        here is the language : ${queryObj.language}
+        current code is: ${queryObj.currentCode}
         ---
         ### **Strict Rules:**
         1. **Only Generate Code**: Do NOT provide explanations, alternative responses, or opinions.
   
         3. **Do NOT Hallucinate Functions**: Only use the following SDK functions:
           ${parsedResult}
-        4. You should use the function retrieved to generate the script. you should not create your own functions.
+        4. You should use the function retrieved to generate the **script**. you should not create your own functions.
         5. Do not use   \`\`\`code\`\`\` syntax. just give the code without embedding it in between \`\`\`.
         6. Just give the code that completes the current code. Dont repeat the current code.
         7. Do not provide any additional information or context.
@@ -60,7 +63,7 @@ class LLMController {
     ---
     ### **Important Validation Rules:**
     Validate all **mandatory parameters** before execution.  
-    Ensure efficient, readable, and maintainable Python code.  
+    Ensure efficient, readable, and maintainable ${queryObj.language} code.  
     Use proper **error handling** and logging.  
     If necessary, assume default values but do NOT invent non-existent parameters.  
     ---
@@ -71,6 +74,8 @@ class LLMController {
     No need to import the SDK functions, just use them directly in the code.
     for eg: you dont need to write "import DBSResponse" because the functions that are coming in  ${parsedResult} are already imported.
     also dont give any explanation or <think> </think> tags in the response.`;
+
+    console.log("prompt", prompt);
 
                 const response = await this.llmService.queryLLM(prompt);
 

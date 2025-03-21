@@ -222,6 +222,7 @@ const CodeEditor = ({
           language: typeof language === "object" ? language.name : language, // Same for language,
           appActionName: appActionName,
           applicationName: applicationName,
+          currentCode: code,
         }),
       });
 
