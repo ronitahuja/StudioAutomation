@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { Search, Settings2, Copy, Trash2, RotateCcw } from "lucide-react";
+import { Search, Settings2, Trash2 } from "lucide-react";
 import axios from "axios";
 import PropTypes from "prop-types";
 
@@ -31,13 +31,6 @@ const ApplicationTable = ({ setPayLoad }) => {
   const filteredApplications = applications.filter((app) =>
     app.appName.toLowerCase().includes(searchTerm.toLowerCase())
   );
-
-  // Reset to page 1 if no results on the current page
-  useEffect(() => {
-    if (filteredApplications.length <= (currentPage - 1) * itemsPerPage) {
-      setCurrentPage(1);
-    }
-  }, [filteredApplications, currentPage]);
 
   // Pagination logic
   const totalPages = Math.ceil(filteredApplications.length / itemsPerPage);
@@ -154,12 +147,10 @@ const ApplicationTable = ({ setPayLoad }) => {
                             className="h-5 w-5 text-gray-400 cursor-pointer hover:text-gray-600"
                             onClick={() => handleEdit(app.appName)}
                           />
-                          <Copy className="h-5 w-5 text-gray-400 cursor-pointer hover:text-gray-600" />
                           <Trash2
                             className="h-5 w-5 text-gray-400 cursor-pointer hover:text-gray-600"
                             onClick={() => handleDelete(app.appName)}
                           />
-                          <RotateCcw className="h-5 w-5 text-gray-400 cursor-pointer hover:text-gray-600" />
                         </div>
                       </td>
                     </tr>
