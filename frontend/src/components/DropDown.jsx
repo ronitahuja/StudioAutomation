@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import PropTypes, { object } from "prop-types";
+import PropTypes from "prop-types";
 
 
 const DropDown = ({ onSelect, models, topic, selected }) => {

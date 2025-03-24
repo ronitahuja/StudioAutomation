@@ -1,4 +1,4 @@
-import { mistral, huggingface, google, meta, qwen, deepseek } from "../assets";
+import { mistral, google, meta, qwen, deepseek } from "../assets";
 
 const models = [
   {

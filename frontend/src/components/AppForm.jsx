@@ -86,6 +86,7 @@ function AppForm() {
       setDescription("");
       setRows([]);
       setPayLoad(null);
+      window.location.reload();
     } catch (error) {
       console.error("Error saving application:", error);
       alert("Failed to save application.");

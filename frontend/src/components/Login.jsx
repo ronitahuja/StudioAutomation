@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Box,  LogIn } from 'lucide-react';
+import {LogIn } from 'lucide-react';
 import axios from 'axios';
 import Cookies from "js-cookie";
 
@@ -95,7 +95,7 @@ function Login() {
           </form>
 
           <p className="mt-6 text-center text-sm text-gray-600">
-            Don't have an account?{' '}
+            Don&apos;t have an account?{' '}
             <a href="#" className="font-medium text-[#3366FF] hover:text-[#2952CC]">
               Sign up
             </a>

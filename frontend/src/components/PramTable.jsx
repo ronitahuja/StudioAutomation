@@ -4,7 +4,7 @@ import { AiOutlineDelete } from "react-icons/ai";
 import PropTypes from "prop-types";
 
 const ParamTable = ({ rows, setRows }) => {
-  const paramTypes = ["Text", "Number", "Boolean", "Date", "Dropdown"];
+  const paramTypes = ["Text", "Number", "Boolean"];
   const [newRowInput, setNewRowInput] = useState({
     paramName: "",
     paramType: "Text",

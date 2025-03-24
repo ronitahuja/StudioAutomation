@@ -1,4 +1,5 @@
 import React from 'react';
+import PropTypes from "prop-types";
 import { Navigate } from 'react-router-dom';
 import Cookies from 'js-cookie';
 import {jwtDecode} from 'jwt-decode';
@@ -18,9 +19,13 @@ const ProtectedRoute = ({children}) => {
             return true;
         }
         catch(err){
+            console.lof(err);
             return false;
         }
     })()
     return isAuthenticated ? children : <Navigate to="/login" />;
 }
+ProtectedRoute.propTypes = {
+    children: PropTypes.node.isRequired, // Ensure `children` is a valid React node
+};
 export default ProtectedRoute;

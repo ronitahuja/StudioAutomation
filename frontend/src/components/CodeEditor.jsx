@@ -3,7 +3,6 @@ import Editor from "@monaco-editor/react";
 import PropTypes from "prop-types";
 import debounce from "lodash.debounce";
 import { Brain } from "lucide-react";
-
 import { llm_query } from "../constants/llm-api";
 import models from "../constants/models";
 import DropDown from "./DropDown";
@@ -11,6 +10,7 @@ import themes from "../constants/themes";
 import languages from "../constants/languages";
 import LikeDislike from "./LikeDislike";
 import axios from "axios";
+import * as monaco from "monaco-editor";
 
 const CodeEditor = ({
   transactionRows,
@@ -21,7 +21,6 @@ const CodeEditor = ({
   onLanguageChange, // New prop to send language back to parent
 }) => {
   const editorRef = useRef(null);
-  const monacoRef = useRef(null); // Reference to Monaco instance
   const textareaRef = useRef(null); // Reference for the textarea
   const currentSuggestionRef = useRef(null);
   const [code, setCode] = useState(localStorage.getItem("code") || "");
@@ -37,49 +36,31 @@ const CodeEditor = ({
   const [isLoading, setIsLoading] = useState(false);
 
   const [model, setModel] = useState(() => {
-    // Get the stored model value
     const storedModel = localStorage.getItem("model");
-
-    // Find the actual model object from models array
     if (storedModel) {
       const foundModel = models.find((m) => m.name === storedModel);
-      return (
-        foundModel ||
-        models.find((m) => m.name === "llama-3.3-70b-specdec") ||
-        models[0]
-      );
+      return foundModel;
     }
-
     return models.find((m) => m.name === "llama-3.3-70b-specdec") || models[0];
   });
   const [theme, setTheme] = useState(() => {
-    // Get the stored theme value
     const storedTheme = localStorage.getItem("theme");
-
-    // Find the actual theme object from themes array
     if (storedTheme) {
       const foundTheme = themes.find((t) => t.name === storedTheme);
       if (foundTheme) {
         return foundTheme;
       }
     }
-
-    // Default to the first theme or empty string
     return themes[0] || "";
   });
   const [language, setLanguage] = useState(() => {
-    // Get the stored language value
     const storedLanguage = localStorage.getItem("language");
-
-    // Find the actual language object from languages array
     if (storedLanguage) {
       const foundLanguage = languages.find((l) => l.name === storedLanguage);
       if (foundLanguage) {
         return foundLanguage;
       }
     }
-
-    // Default to the first language or empty string
     return languages[0] || "";
   });
 
@@ -89,7 +70,7 @@ const CodeEditor = ({
     }
   }, [currentSuggestionRef]);
 
-  const getAISuggestions = async (code, position) => {
+  const getAISuggestions = async (code) => {
     await new Promise((resolve) => setTimeout(resolve, 500));
     const response = await axios.post(
       "http://localhost:3000/api/v1/autocomplete/query",
@@ -153,7 +134,7 @@ const CodeEditor = ({
         currentSuggestionRef.current = suggestion;
         console.log(currentSuggestionRef.current);
   
-        if (!editorRef.current || !monacoRef.current) return;
+        if (!editorRef.current ) return;
   
         const model = editorRef.current.getModel();
         if (!model) return;
@@ -195,7 +176,7 @@ const CodeEditor = ({
         setIsLoading(false);
       }
     }, 1000), 
-    [editorRef.current, monacoRef.current, decorationIds]
+    [editorRef.current, decorationIds]
   );
   useEffect(()=>{
     currentSuggestionRef.current = "";
@@ -295,7 +276,6 @@ const CodeEditor = ({
 
   const handleEditorDidMount = (editor, monaco) => {
     editorRef.current = editor;
-    monacoRef.current = monaco;
   
     // Add AI suggestion style
     const style = document.createElement("style");
@@ -468,9 +448,8 @@ const CodeEditor = ({
             <div className="flex justify-end space-x-2 mt-2">
               <button
                 onClick={() => {
-                  if (editorRef.current && monacoRef.current) {
+                  if (editorRef.current) {
                     const editor = editorRef.current;
-                    const monaco = monacoRef.current;
                     const position = editor.getPosition();
 
                     // Insert AI-generated code at cursor position
