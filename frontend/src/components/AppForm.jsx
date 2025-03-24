@@ -98,10 +98,6 @@ function AppForm() {
       <div className="bg-gray-50 p-6">
         <div className="max-w-7xl mx-auto bg-white rounded-lg shadow-sm p-6">
           <div className="space-y-6">
-            <h1 className="text-2xl text-purple-600 font-medium">
-              Application
-            </h1>
-
             {/* Application Name */}
             <div className="space-y-2">
               <label className="flex items-center gap-1">
@@ -179,19 +175,25 @@ function AppForm() {
 
           {/* Action Buttons */}
           <div className="flex justify-end gap-2 mt-6">
-            <button
-              className="px-4 py-2 border rounded-md hover:bg-gray-50"
-              onClick={() => {
-                setPayLoad(null); // Clear payload to reset form
-                setAppName("");
-                setAppCategory("");
-                setAuthenticationType("");
-                setDescription("");
-                setRows([]);
-              }}
-            >
-              CANCEL
-            </button>
+            {(appName ||
+              appCategory ||
+              authenticationType ||
+              appDescription ||
+              rows.length > 0) && (
+              <button
+                className="px-4 py-2 border rounded-md hover:bg-gray-50"
+                onClick={() => {
+                  setPayLoad(null); // Clear payload to reset form
+                  setAppName("");
+                  setAppCategory("");
+                  setAuthenticationType("");
+                  setDescription("");
+                  setRows([]);
+                }}
+              >
+                CANCEL
+              </button>
+            )}
             <button
               onClick={handleSave}
               className="px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700"
