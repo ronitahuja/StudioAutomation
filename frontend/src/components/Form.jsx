@@ -171,7 +171,7 @@ const Form = () => {
           {/* Action Name */}
           <div>
             <label className="block text-lg font-medium text-gray-700">
-              App Action Name
+              App Action Name<span className="text-red-500">*</span>
             </label>
             <input
               name="appActionName"
@@ -183,7 +183,7 @@ const Form = () => {
           </div>
           <div>
             <label className="block text-lg font-medium text-gray-700">
-              Application Name
+              Application Name<span className="text-red-500">*</span>
             </label>
             <select
               name="applicationName"
@@ -273,7 +273,7 @@ const Form = () => {
           {/* Details */}
           <div>
             <label className="block text-lg font-medium text-gray-700">
-              Details
+              Details<span className="text-red-500">*</span>
             </label>
             <textarea
               name="details"

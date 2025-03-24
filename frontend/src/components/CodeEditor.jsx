@@ -327,7 +327,7 @@ const CodeEditor = ({
   return (
     <div className="top-[80px] right-[25px] p-5 border rounded-lg shadow-lg bg-white w-5/5 h-full flex flex-col">
       {/* Code Editor */}
-      <div className="absolute top-2 right-2 z-10 flex items-center gap-2 bg-white/80 backdrop-blur-sm px-3 py-1.5 rounded-full">
+      <div className="absolute top-[80px] right-2 z-10 flex items-center gap-2 bg-grey-600/80 backdrop-blur-sm px-3 py-1.5 rounded-full">
         {isLoading && (
           <>
             <Brain className="w-4 h-4 animate-pulse text-blue-500" />
