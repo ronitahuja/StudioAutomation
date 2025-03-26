@@ -9,7 +9,7 @@ class autoComplete {
     try {
       const queryObj = req.body;
       const result = await axios.post(
-        "http://localhost:3000/api/v1/functions/search",
+        `${process.env.BACKEND_URL}/functions/search`,
         { query: queryObj.currentCode },
         { headers: { "Content-Type": "application/json" } }
       );
