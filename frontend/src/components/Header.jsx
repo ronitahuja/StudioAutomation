@@ -52,6 +52,14 @@ const Header = () => {
           >
             App Actions
           </NavLink>
+          <NavLink
+            to="/curl"
+            className={({ isActive }) =>
+              `hover:text-gray-300 ${isActive ? "font-bold text-gray-200" : ""}`
+            }
+          >
+            Curl
+          </NavLink>
         </div>
       </div>
 

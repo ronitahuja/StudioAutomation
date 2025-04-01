@@ -175,7 +175,7 @@ const CodeEditor = ({
       } finally {
         setIsLoading(false);
       }
-    }, 1000), 
+    }, 5000), 
     [editorRef.current, decorationIds]
   );
   useEffect(()=>{

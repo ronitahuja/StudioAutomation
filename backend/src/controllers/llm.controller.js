@@ -9,9 +9,9 @@ class LLMController {
         try {
             const queryObj = req.body;
             const result = await axios.post(
-                "http://localhost:3000/api/v1/functions/search",
-                { query: queryObj.query },
-                { headers: { "Content-Type": "application/json" } }
+              `${process.env.BACKEND_URL}/functions/search`,
+              { query: queryObj.query },
+              { headers: { "Content-Type": "application/json" } }
             );
             let parsedResult;
             if (result.data && result.data.data) {
@@ -29,7 +29,7 @@ class LLMController {
         You are a highly efficient AI code generator, specialized in generating SDK-compliant  scripts. 
         Your sole task is to generate structured, syntactically correct, and optimized ${
           queryObj.language
-        } code based on the retrieved SDK functions.
+        } code.
         here is the application name : ${queryObj.applicationName}
         here is the appAction name : ${queryObj.appActionName}  
         current code is: ${queryObj.currentCode}
@@ -44,6 +44,7 @@ class LLMController {
         6. Just give the code that completes the current code. Dont repeat the current code.
         7. Do not provide any additional information or context.
         8. Do not provide any additional comments.
+        9. if the query is not related to generating any script or generate any code , you should provide a response saying "This AI assistant is specifically designed for script generation and code-related tasks. Unfortunately, it is not trained to handle this request."
         ---
         ### **User Query:**
         "${queryObj.query}"

@@ -29,7 +29,8 @@
   "scripts": {
     "dev": "npx nodemon src/index.js",
     "test": "jest",
-    "lint": "eslint"
+    "lint": "eslint",
+    "start": "node src/index.js"
   },
   "author": "",
   "license": "ISC",

@@ -7,67 +7,83 @@ const models = [
   },
   {
     name: "mixtral-8x7b-32768",
-    image: mistral,
+    image:
+      "https://studioautomation-images.s3.ap-south-1.amazonaws.com/mistral.png",
   },
   {
     name: "mistral-saba-24b",
-    image: mistral,
+    image:
+      "https://studioautomation-images.s3.ap-south-1.amazonaws.com/mistral.png",
   },
   {
     name: "qwen-qwq-32b",
-    image: qwen,
+    image:
+      "https://studioautomation-images.s3.ap-south-1.amazonaws.com/qwen.jpeg",
   },
   {
     name: "qwen-2.5-coder-32b",
-    image: qwen,
+    image:
+      "https://studioautomation-images.s3.ap-south-1.amazonaws.com/qwen.jpeg",
   },
   {
     name: "qwen-2.5-32b",
-    image: qwen,
+    image:
+      "https://studioautomation-images.s3.ap-south-1.amazonaws.com/qwen.jpeg",
   },
   {
     name: "deepseek-r1-distill-qwen-32b",
-    image: deepseek,
+    image:
+      "https://studioautomation-images.s3.ap-south-1.amazonaws.com/deepseek.png",
   },
   {
     name: "deepseek-r1-distill-llama-70b-specdec",
-    image: deepseek,
+    image:
+      "https://studioautomation-images.s3.ap-south-1.amazonaws.com/deepseek.png",
   },
   {
     name: "deepseek-r1-distill-llama-70b",
-    image: deepseek,
+    image:
+      "https://studioautomation-images.s3.ap-south-1.amazonaws.com/deepseek.png",
   },
   {
     name: "llama-3.3-70b-versatile",
-    image: meta,
+    image:
+      "https://studioautomation-images.s3.ap-south-1.amazonaws.com/meta.jpeg",
   },
   {
     name: "llama-3.1-8b-instant",
-    image: meta,
+    image:
+      "https://studioautomation-images.s3.ap-south-1.amazonaws.com/meta.jpeg",
   },
   {
     name: "llama-guard-3-8b",
-    image: meta,
+    image:
+      "https://studioautomation-images.s3.ap-south-1.amazonaws.com/meta.jpeg",
   },
   {
     name: "llama3-70b-8192",
-    image: meta,
+    image:
+      "https://studioautomation-images.s3.ap-south-1.amazonaws.com/meta.jpeg",
   },
   {
     name: "llama3-8b-8192",
-    image: meta,
+    image:
+      "https://studioautomation-images.s3.ap-south-1.amazonaws.com/meta.jpeg",
   },
   {
     name: "llama-3.3-70b-specdec",
-    image: meta,
+    image:
+      "https://studioautomation-images.s3.ap-south-1.amazonaws.com/meta.jpeg",
   },
   {
     name: "llama-3.2-1b-preview",
-    image: meta,
+    image:
+      "https://studioautomation-images.s3.ap-south-1.amazonaws.com/meta.jpeg",
   },
   {
     name: "llama-3.2-3b-preview",
-    image: meta,
+    image:
+      "https://studioautomation-images.s3.ap-south-1.amazonaws.com/meta.jpeg",
   },
 ];
 export default models;
