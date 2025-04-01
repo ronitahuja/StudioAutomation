@@ -37,6 +37,14 @@ const Form = () => {
         console.error("Error fetching application names:", error);
       }
     };
+    let data = JSON.parse(localStorage.getItem("TransactionLevelParamFields"));
+    for (let i = 0; i < data.length; i++) {
+      data[i] = JSON.parse(data[i]);
+    }
+    console.log(data);
+    if (data !== null) {
+      setRows(data);
+    }
     fetchApplications();
   }, []);
 

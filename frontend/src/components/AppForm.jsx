@@ -31,7 +31,14 @@ function AppForm() {
         console.error("Error fetching dropdown options:", error);
       }
     };
-
+    let data=JSON.parse(localStorage.getItem("ConnectionLevelParamFields"));
+    for(let i=0;i<data.length;i++){
+      data[i]=JSON.parse(data[i]);
+    }
+    console.log(data)
+    if(data!==null){
+      setRows(data);
+    }
     fetchDropdownOptions();
   }, []);
 

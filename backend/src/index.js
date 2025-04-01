@@ -14,7 +14,7 @@ app.use(loggerMiddleware);
 
 app.use(
   cors({
-    origin: "*",
+    origin: "http://localhost:5173",
     credentials: true, 
   })
 );
@@ -25,6 +25,47 @@ app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.text());
 
 app.use("/api" ,apiRouter);
+app.get("/dummydata", (req, res) => {
+  res.send({
+    ConnectionLevel: [
+      {
+        paramName: "ClientID",
+        paramType: "Number",
+        mandatory: true,
+        sensitive: false,
+        variableName: "client_id",
+        description: "Client ID",
+      },
+      {
+        paramName: "x-cal-secret-key",
+        paramType: "String",
+        mandatory: true,
+        sensitive: true,
+        variableName: "x_cal_secret_key",
+        description: "Secret Key",
+      },
+      
+    ],
+    TransactionLevel: [
+      {
+        paramName: "Email",
+        paramType: "String",
+        mandatory: true,
+        sensitive: false,
+        variableName: "email",
+        description: "Email",
+      },
+      {
+        paramName: "Name",
+        paramType: "",
+        mandatory: true,
+        sensitive: true,
+        variableName: "name",
+        description: "name",
+      },
+    ],
+  });
+});
 
 app.use(errorHandler);
 

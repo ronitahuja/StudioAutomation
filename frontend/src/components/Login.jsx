@@ -80,9 +80,9 @@ function Login() {
                   Remember me
                 </label>
               </div>
-              <a href="#" className="text-sm font-medium text-[#3366FF] hover:text-[#2952CC]">
+              {/* <a href="#" className="text-sm font-medium text-[#3366FF] hover:text-[#2952CC]">
                 Forgot password?
-              </a>
+              </a> */}
             </div>
 
             <button

@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<coverage generated="1742901119135" clover="3.2.0">
-  <project timestamp="1742901119135" name="All files">
+<coverage generated="1743156163497" clover="3.2.0">
+  <project timestamp="1743156163497" name="All files">
     <metrics statements="70" coveredstatements="58" conditionals="18" coveredconditionals="12" methods="22" coveredmethods="21" elements="110" coveredelements="91" complexity="0" loc="70" ncloc="70" packages="1" files="5" classes="5"/>
     <file name="analysis.service.js" path="/home/ronit.a/Desktop/StudioAutomation/backend/src/services/analysis.service.js">
       <metrics statements="22" coveredstatements="16" conditionals="6" coveredconditionals="6" methods="4" coveredmethods="4"/>
