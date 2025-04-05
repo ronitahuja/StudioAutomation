@@ -4,5 +4,6 @@ module.exports={
     AppActionService : require('./appAction.service'),
     AppService : require('./app.service'),
     AnalysisService:require('./analysis.service'),
-    AuthService: require('./auth.service')
+    AuthService: require('./auth.service'),
+    CurlHandlerService: require('./curlHandler.service')
 }

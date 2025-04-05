@@ -6,4 +6,5 @@ module.exports = {
     AutoCompleteController:require('./autoComplete.controller'),
     AnalysisController:require('./analysis.controller'),
     AuthController:require('./auth.controller'),
+    CurlHandlerController : require('./curlHandler.controller')
 }
