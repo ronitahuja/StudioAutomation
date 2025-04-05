@@ -8,6 +8,7 @@ const AutoCompleteRouter = require('./autoComplete.route')
 const AnalysisRouter=require('./analysis.route')
 const AuthRouter = require('./auth.route');
 const { verifyToken } = require('../../middleware/auth.middleware');
+const CurlRouter = require('./curlHandler.route');
 
 
 const v1Router = express.Router();
@@ -21,6 +22,7 @@ v1Router.use('/app',AppRouter);
 v1Router.use('/autocomplete',AutoCompleteRouter);
 v1Router.use('/analysis',AnalysisRouter);
 v1Router.use('/auth', AuthRouter);
+v1Router.use('/curlHandler',CurlRouter);
 
 
 module.exports = v1Router;

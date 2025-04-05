@@ -25,6 +25,7 @@ app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.text());
 
 app.use("/api" ,apiRouter);
+
 app.get("/dummydata", (req, res) => {
   res.send({
     ConnectionLevel: [
@@ -67,7 +68,7 @@ app.get("/dummydata", (req, res) => {
   });
 });
 
-app.use(errorHandler);
+// app.use(errorHandler);
 
 logger.on("error", (error) => {
   console.error("Winston logger error:", error.message);
