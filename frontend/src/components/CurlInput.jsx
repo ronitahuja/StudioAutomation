@@ -17,29 +17,32 @@ const CurlInput = () => {
         <button
           className="w-full h-14 bg-blue-500 text-white text-lg font-semibold rounded-md hover:bg-blue-600 transition-all"
           onClick={() => {
-            axios.post("http://localhost:3000/api/v1/curlHandler/curl",{
-                curl
-            }).then((res) => {
-              const data1 = res.data.ConnectionLevel;
-              let temp = [];
-              data1.forEach((element) => {
-                temp.push(JSON.stringify(element));
-              });
-              localStorage.setItem(
-                "ConnectionLevelParamFields",
-                JSON.stringify(temp)
-              );
+            axios
+              .post("http://127.0.0.1:8000/api/user_prompt", {
+                prompt:curl,
+                session_id:1,
+              })
+              .then((res) => {
+                const data1 = res.data.ConnectionLevel;
+                let temp = [];
+                data1.forEach((element) => {
+                  temp.push(JSON.stringify(element));
+                });
+                localStorage.setItem(
+                  "ConnectionLevelParamFields",
+                  JSON.stringify(temp)
+                );
 
-              const data2 = res.data.TransactionLevel;
-              let temp2 = [];
-              data2.forEach((element) => {
-                temp2.push(JSON.stringify(element));
+                const data2 = res.data.TransactionLevel;
+                let temp2 = [];
+                data2.forEach((element) => {
+                  temp2.push(JSON.stringify(element));
+                });
+                localStorage.setItem(
+                  "TransactionLevelParamFields",
+                  JSON.stringify(temp2)
+                );
               });
-              localStorage.setItem(
-                "TransactionLevelParamFields",
-                JSON.stringify(temp2)
-              );
-            });
           }}
         >
           Send
