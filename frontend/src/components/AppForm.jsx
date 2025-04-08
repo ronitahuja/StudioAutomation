@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import axios from "axios";
 import ParamTable from "./PramTable";
 import ApplicationTable from "./ApplicationTable";
+import ApplicationAIAgent from "./ApplicationAIAgent";
 
 function AppForm() {
   const [rows, setRows] = useState([]);
@@ -12,6 +13,7 @@ function AppForm() {
   const [appDescription, setDescription] = useState("");
   const [authTypes, setAuthTypes] = useState([]);
   const [payload, setPayLoad] = useState(null);
+  const [aiagentResponse, setAiagentresponse] =  useState('');
 
   // Fetch dropdown options from the backend
   useEffect(() => {
@@ -53,6 +55,24 @@ function AppForm() {
       setRows(payload.connectionLevelParamFields || []);
     }
   }, [payload]);
+
+  const setData = (aiagentResponse) => {
+    console.log(aiagentResponse);
+    setAppName(aiagentResponse?.app.appName || "");
+    setAppCategory(aiagentResponse?.app.appCategory);
+    setAuthenticationType(aiagentResponse?.app.authenticationType);
+    setDescription(aiagentResponse?.app.appDescription);
+    setAppCategory(aiagentResponse?.app.appDescription);
+    setRows(aiagentResponse?.app.connectionLevelParamFields);
+
+    //save appAction data to locastorage
+    if(aiagentResponse.appAction){
+        localStorage.setItem('appActionName',aiagentResponse.appAction.appActionName);
+        localStorage.setItem('applicationName',aiagentResponse.appAction.applicationName)
+        localStorage.setItem('transcationLevelParamFields',JSON.stringify(aiagentResponse.appAction.transcationLevelParamFields))
+    }
+  };
+
 
   // Handle Save Button Click
   const handleSave = async () => {
@@ -103,6 +123,7 @@ function AppForm() {
 
   return (
     <>
+    <ApplicationAIAgent setData={setData} sendData={setAiagentresponse}/>
       <div className="bg-gray-50 p-6">
         <div className="max-w-7xl mx-auto bg-white rounded-lg shadow-sm p-6">
           <div className="space-y-6">
@@ -111,9 +132,12 @@ function AppForm() {
               <label className="flex items-center gap-1">
                 Application Name<span className="text-red-500">*</span>
               </label>
+            
               <input
                 type="text"
-                value={appName}
+
+                // value={appName}
+                value={appName ?? ""}
                 onChange={(e) => setAppName(e.target.value)}
                 className="w-full p-2 border rounded-md"
                 placeholder="Enter application name here"
