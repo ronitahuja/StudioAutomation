@@ -22,10 +22,10 @@ const ApplicationAIAgent = ({setData, sendData}) => {
   }
 
   return (
-    <div className="flex h-screen">
+    <div className="flex mt-10 w-[400px] h-screen ">
       {/* Sidebar */}
       {showSidebar && (
-        <div className="w-1/4 bg-gray-800 text-white p-4 transition-all duration-300">
+        <div className="w-full  bg-gray-800 text-white p-4 transition-all duration-300">
           <div className="flex justify-between items-center mb-4">
             <h2 className="text-xl font-bold">App Builder</h2>
             <button
@@ -52,17 +52,17 @@ const ApplicationAIAgent = ({setData, sendData}) => {
       )}
 
       {/* Main Content */}
-      <div className="flex-1 p-4 relative">
         {!showSidebar && (
+      <div className="flex-1  p-2 absolute ">
           <button
-            className="absolute top-4 left-4 bg-gray-800 text-white px-3 py-1 rounded hover:bg-gray-700"
+            className=" bg-gray-800 text-white px-3 py-1 rounded hover:bg-gray-700"
             onClick={() => setShowSidebar(true)}
           >
             ☰ Show Sidebar
           </button>
-        )}
         {/* Main content goes here */}
       </div>
+        )}
     </div>
   )
 }
