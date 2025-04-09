@@ -7,7 +7,6 @@ def take_input_tool(prompt: str) -> str:
     
     user_response = input(f"{prompt}: ")
     
-   
+    print(f"Collected input: {user_response}")
     
-    return user_response 
-
+    return user_response  

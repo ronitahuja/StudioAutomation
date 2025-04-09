@@ -1,4 +1,4 @@
 crewai
 crewai_tools
-fastapi
+flask
 uvicorn
