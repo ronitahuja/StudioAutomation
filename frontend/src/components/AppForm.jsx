@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import axios from "axios";
 import ParamTable from "./PramTable";
 import ApplicationTable from "./ApplicationTable";
+import ApplicationAIAgent from "./ApplicationAIAgent";
 
 function AppForm() {
   const [rows, setRows] = useState([]);
@@ -12,6 +13,7 @@ function AppForm() {
   const [appDescription, setDescription] = useState("");
   const [authTypes, setAuthTypes] = useState([]);
   const [payload, setPayLoad] = useState(null);
+  const [aiagentResponse, setAiagentresponse] =  useState('');
 
   // Fetch dropdown options from the backend
   useEffect(() => {
@@ -53,6 +55,24 @@ function AppForm() {
       setRows(payload.connectionLevelParamFields || []);
     }
   }, [payload]);
+
+  const setData = (aiagentResponse) => {
+    console.log(aiagentResponse);
+    setAppName(aiagentResponse?.app.appName || "");
+    setAppCategory(aiagentResponse?.app.appCategory);
+    setAuthenticationType(aiagentResponse?.app.authenticationType);
+    setDescription(aiagentResponse?.app.appDescription);
+    setAppCategory(aiagentResponse?.app.appDescription);
+    setRows(aiagentResponse?.app.connectionLevelParamFields);
+
+    //save appAction data to locastorage
+    if(aiagentResponse.appAction){
+        localStorage.setItem('appActionName',aiagentResponse.appAction.appActionName);
+        localStorage.setItem('applicationName',aiagentResponse.appAction.applicationName)
+        localStorage.setItem('transcationLevelParamFields',JSON.stringify(aiagentResponse.appAction.transcationLevelParamFields))
+    }
+  };
+
 
   // Handle Save Button Click
   const handleSave = async () => {
@@ -103,7 +123,18 @@ function AppForm() {
 
   return (
     <>
-      <div className="bg-gray-50 p-6">
+    <div className="flex ">
+
+  
+    
+    <ApplicationAIAgent setData={setData} sendData={setAiagentresponse}/>
+
+
+
+    <div className="flex flex-col items-center">
+
+ 
+      <div className="bg-gray-50  p-6">
         <div className="max-w-7xl mx-auto bg-white rounded-lg shadow-sm p-6">
           <div className="space-y-6">
             {/* Application Name */}
@@ -111,14 +142,17 @@ function AppForm() {
               <label className="flex items-center gap-1">
                 Application Name<span className="text-red-500">*</span>
               </label>
+            
               <input
                 type="text"
-                value={appName}
+
+                // value={appName}
+                value={appName ?? ""}
                 onChange={(e) => setAppName(e.target.value)}
                 className="w-full p-2 border rounded-md"
                 placeholder="Enter application name here"
                 disabled={!!payload} // Disable appName during edit mode
-              />
+                />
 
               {/* App Category Dropdown */}
               <label className="flex items-center gap-1">
@@ -128,7 +162,7 @@ function AppForm() {
                 value={appCategory}
                 onChange={(e) => setAppCategory(e.target.value)}
                 className="w-full p-2 border rounded-md"
-              >
+                >
                 <option value="">Select Application Category</option>
                 {allCat.map((category, index) => (
                   <option key={index} value={category}>
@@ -145,10 +179,10 @@ function AppForm() {
                 value={authenticationType}
                 onChange={(e) => setAuthenticationType(e.target.value)}
                 className="w-full p-2 border rounded-md"
-              >
+                >
                 <option value="">Select Authentication Type</option>
                 {authTypes.map((auth, index) => (
-                  <option key={index} value={auth}>
+                    <option key={index} value={auth}>
                     {auth}
                   </option>
                 ))}
@@ -166,7 +200,7 @@ function AppForm() {
                   onChange={(e) => setDescription(e.target.value)}
                   className="w-full p-2 min-h-[100px] resize-none"
                   placeholder="Enter description..."
-                />
+                  />
               </div>
             </div>
 
@@ -188,14 +222,14 @@ function AppForm() {
               authenticationType ||
               appDescription ||
               rows.length > 0) && (
-              <button
-                className="px-4 py-2 border rounded-md hover:bg-gray-50"
-                onClick={() => {
-                  setPayLoad(null); // Clear payload to reset form
-                  setAppName("");
-                  setAppCategory("");
-                  setAuthenticationType("");
-                  setDescription("");
+                  <button
+                  className="px-4 py-2 border rounded-md hover:bg-gray-50"
+                  onClick={() => {
+                      setPayLoad(null); // Clear payload to reset form
+                      setAppName("");
+                      setAppCategory("");
+                      setAuthenticationType("");
+                      setDescription("");
                   setRows([]);
                 }}
               >
@@ -205,7 +239,7 @@ function AppForm() {
             <button
               onClick={handleSave}
               className="px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700"
-            >
+              >
               {payload ? "UPDATE" : "SAVE"}
             </button>
           </div>
@@ -214,6 +248,8 @@ function AppForm() {
 
       {/* Application Table */}
       <ApplicationTable payload={payload} setPayLoad={setPayLoad} />
+                </div>
+      </div>
     </>
   );
 }
