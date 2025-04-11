@@ -1,25 +1,28 @@
-import React, { useState } from 'react'
-import axios from 'axios'
+import React, { useState } from "react";
+import axios from "axios";
 
-const ApplicationAIAgent = ({setData, sendData}) => {
-  const [showSidebar, setShowSidebar] = useState(true)
-  const [prompt, setPrompt] = useState('')
-  const [loading, setLoading] = useState(false)
+const ApplicationAIAgent = ({ setData, sendData }) => {
+  const [showSidebar, setShowSidebar] = useState(true);
+  const [prompt, setPrompt] = useState("");
+  const [loading, setLoading] = useState(false);
 
   const handleSend = async () => {
-    if (!prompt.trim()) return alert('Please enter a prompt')
-    setLoading(true)
+    if (!prompt.trim()) return alert("Please enter a prompt");
+    setLoading(true);
     try {
-        console.log(prompt);
-        const response = await axios.post('http://127.0.0.1:8000/api/create-app-with-ai',{prompt});
-        const data = JSON.parse(response.data.app.raw);
-        setData(data);
+      console.log(prompt);
+      const response = await axios.post(
+        "http://127.0.0.1:8000/api/user_prompt",
+        { prompt }
+      );
+      console.log(response.data.results);
+      setData(response.data.results);
     } catch (error) {
-      console.error('Error calling API:', error)
+      console.error("Error calling API:", error);
     } finally {
-      setLoading(false)
+      setLoading(false);
     }
-  }
+  };
 
   return (
     <div className="flex mt-10 w-[400px] h-screen ">
@@ -46,25 +49,25 @@ const ApplicationAIAgent = ({setData, sendData}) => {
             className="mt-4 w-full bg-blue-600 hover:bg-blue-700 text-white py-2 px-4 rounded disabled:opacity-50"
             disabled={loading}
           >
-            {loading ? 'Sending...' : 'Send'}
+            {loading ? "Sending..." : "Send"}
           </button>
         </div>
       )}
 
       {/* Main Content */}
-        {!showSidebar && (
-      <div className="flex-1  p-2 absolute ">
+      {!showSidebar && (
+        <div className="flex-1  p-2 absolute ">
           <button
             className=" bg-gray-800 text-white px-3 py-1 rounded hover:bg-gray-700"
             onClick={() => setShowSidebar(true)}
           >
             ☰ Show Sidebar
           </button>
-        {/* Main content goes here */}
-      </div>
-        )}
+          {/* Main content goes here */}
+        </div>
+      )}
     </div>
-  )
-}
+  );
+};
 
 export default ApplicationAIAgent;
