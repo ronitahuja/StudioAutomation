@@ -117,7 +117,6 @@
 #     "fetch_app_from_mongodb_task": fetch_app_from_mongodb_task,
 #     "return_new_app_details_task": return_new_app_details_task,
 # }
-
 from crewai import Task
 from agents import AGENTS
 from crewai.tasks.task_output import TaskOutput
@@ -161,46 +160,8 @@ fetch_app_from_mongodb_task = Task(
     output_key="fetch_app_from_mongodb_task" 
 )
 
-# Create a formatted JSON string representation with escaped braces
-json_example = (
-    'Format example:\\n'
-    '{\\n'
-    '    "appName": "example_app",\\n'
-    '    "appCategory": "example_category",\\n'
-    '    "authenticationType": "example_authentication",\\n'
-    '    "appDescription": "example_description",\\n'
-    '    "connectionLevelParamFields": [\\n'
-    '        {\\n'
-    '            "paramName": "value1",\\n'
-    '            "paramType": "Text/Number/Boolean",\\n'
-    '            "mandatory": true/false,\\n'
-    '            "sensitive": true/false,\\n'
-    '            "description": "Parameter description",\\n'
-    '            "variableName": "variable_name"\\n'
-    '        }\\n'
-    '    ],\\n'
-    '    "transcationLevelParamFields": [\\n'
-    '        {\\n'
-    '           "paramName": "value1",\\n'
-    '            "paramType": "Text/Number/Boolean",\\n'
-    '            "mandatory": true/false,\\n'
-    '            "sensitive": true/false,\\n'
-    '            "description": "Parameter description",\\n'
-    '            "variableName": "variable_name"\\n'
-    '        }\\n'
-    '    ]\\n'
-    '}\\n'
-)
-
 return_new_app_details_task = Task(
-    description=(
-        "If the app is not present in MongoDB, build the app details from the request and return them. "
-        "If anything is missing, ask the user for the missing details. "
-        "No need to create the app if it exists(means exists:true). If it exists just dont return anything and end your task. "
-        "To create the app, you will get details conneection_level_parameters, transaction_level_parameters, app_name, app_category, authentication_type and description from the previous task. "
-        "Now you need to divide each connection_level_parameters and transaction_level_parameters into \"paramName\": \"value1\",\"paramType\": \"Text/Number/Boolean\",\"mandatory\": true/false,\"sensitive\": true/false,\"description\": \"Parameter description\",\"variableName\": \"variable_name\" "
-        "then return the app details in the following format: " + json_example
-    ),
+    description="If the app is not present in MongoDB, build the app details from the request and return them. If anything is missing, ask the user for the missing details. No need to create the app if it exists(means exists:true). If it exists just dont return anything and end your task. To create the app, you will get details conneection_level_parameters, transaction_level_parameters, app_name, app_category, authentication_type and description from the previous task. Now you need to divide each connection_level_parameters and transaction_level_parameters into paramName, paramType (Text/Number/Boolean), mandatory (true/false), sensitive (true/false), description, and variableName. Return app details with appName, appCategory, authenticationType, appDescription, connectionLevelParamFields and transcationLevelParamFields.",
     agent=AGENTS["return_new_app_details_agent"],
     condition=is_app_absent,
     expected_output="""{
