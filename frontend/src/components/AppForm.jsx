@@ -13,7 +13,7 @@ function AppForm() {
   const [appDescription, setDescription] = useState("");
   const [authTypes, setAuthTypes] = useState([]);
   const [payload, setPayLoad] = useState(null);
-  const [aiagentResponse, setAiagentresponse] =  useState('');
+  const [aiagentResponse, setAiagentresponse] = useState("");
 
   // Fetch dropdown options from the backend
   useEffect(() => {
@@ -33,14 +33,32 @@ function AppForm() {
         console.error("Error fetching dropdown options:", error);
       }
     };
-    if(localStorage.getItem("ConnectionLevelParamFields")){
-      let data=JSON.parse(localStorage.getItem("ConnectionLevelParamFields"));
-      for(let i=0;i<data.length;i++){
-        data[i]=JSON.parse(data[i]);
-      }
-      if(data!==null){
+    console.log(
+      "localStorage",
+      localStorage.getItem("ConnectionLevelParamFields")
+    );
+
+    if (localStorage.getItem("ConnectionLevelParamFields")) {
+      let data = JSON.parse(localStorage.getItem("ConnectionLevelParamFields"));
+      console.log("data", data);
+      // for(let i=0;i<data.length;i++){
+      //   data[i]=JSON.parse(data[i]);
+      // }
+      if (data !== null) {
         setRows(data);
       }
+    }
+    if(localStorage.getItem("appName")) {
+      setAppName(localStorage.getItem("appName"));
+    }
+    if(localStorage.getItem("authenticationType")) {
+      setAuthenticationType(localStorage.getItem("authenticationType"));
+    }
+    if(localStorage.getItem("appDescription")) {  
+      setDescription(localStorage.getItem("appDescription")); 
+    }
+    if(localStorage.getItem("appCategory")) {
+      setAppCategory(localStorage.getItem("appCategory"));
     }
     fetchDropdownOptions();
   }, []);
@@ -58,21 +76,32 @@ function AppForm() {
 
   const setData = (aiagentResponse) => {
     console.log(aiagentResponse);
-    setAppName(aiagentResponse?.app.appName || "");
-    setAppCategory(aiagentResponse?.app.appCategory);
-    setAuthenticationType(aiagentResponse?.app.authenticationType);
-    setDescription(aiagentResponse?.app.appDescription);
-    setAppCategory(aiagentResponse?.app.appDescription);
-    setRows(aiagentResponse?.app.connectionLevelParamFields);
+    setAppName(aiagentResponse?.appName || "");
+    setAuthenticationType(aiagentResponse?.authenticationType);
+    setDescription(aiagentResponse?.appDescription);
+    setAppCategory(aiagentResponse?.appDescription);
+    setRows(aiagentResponse?.connectionLevelParamFields);
 
-    //save appAction data to locastorage
-    if(aiagentResponse.appAction){
-        localStorage.setItem('appActionName',aiagentResponse.appAction.appActionName);
-        localStorage.setItem('applicationName',aiagentResponse.appAction.applicationName)
-        localStorage.setItem('transcationLevelParamFields',JSON.stringify(aiagentResponse.appAction.transcationLevelParamFields))
-    }
+    localStorage.setItem(
+      "ConnectionLevelParamFields",
+      JSON.stringify(aiagentResponse?.connectionLevelParamFields)
+    );
+    localStorage.setItem("appName", aiagentResponse?.appName);
+    localStorage.setItem(
+      "authenticationType",
+      aiagentResponse?.authenticationType
+    );
+    localStorage.setItem("appDescription", aiagentResponse?.appDescription);
+    localStorage.setItem("appCategory", aiagentResponse?.appDescription);
+    localStorage.setItem(
+      "authenticationType",
+      aiagentResponse?.authenticationType
+    );
+    localStorage.setItem(
+      "TransactionLevelParamFields",
+      JSON.stringify(aiagentResponse?.transactionLevelParamFields)
+    );
   };
-
 
   // Handle Save Button Click
   const handleSave = async () => {
@@ -123,132 +152,124 @@ function AppForm() {
 
   return (
     <>
-    <div className="flex ">
+      <div className="flex ">
+        <ApplicationAIAgent setData={setData} sendData={setAiagentresponse} />
 
-  
-    
-    <ApplicationAIAgent setData={setData} sendData={setAiagentresponse}/>
+        <div className="flex flex-col items-center">
+          <div className="bg-gray-50  p-6">
+            <div className="max-w-7xl mx-auto bg-white rounded-lg shadow-sm p-6">
+              <div className="space-y-6">
+                {/* Application Name */}
+                <div className="space-y-2">
+                  <label className="flex items-center gap-1">
+                    Application Name<span className="text-red-500">*</span>
+                  </label>
 
-
-
-    <div className="flex flex-col items-center">
-
- 
-      <div className="bg-gray-50  p-6">
-        <div className="max-w-7xl mx-auto bg-white rounded-lg shadow-sm p-6">
-          <div className="space-y-6">
-            {/* Application Name */}
-            <div className="space-y-2">
-              <label className="flex items-center gap-1">
-                Application Name<span className="text-red-500">*</span>
-              </label>
-            
-              <input
-                type="text"
-
-                // value={appName}
-                value={appName ?? ""}
-                onChange={(e) => setAppName(e.target.value)}
-                className="w-full p-2 border rounded-md"
-                placeholder="Enter application name here"
-                disabled={!!payload} // Disable appName during edit mode
-                />
-
-              {/* App Category Dropdown */}
-              <label className="flex items-center gap-1">
-                App Category<span className="text-red-500">*</span>
-              </label>
-              <select
-                value={appCategory}
-                onChange={(e) => setAppCategory(e.target.value)}
-                className="w-full p-2 border rounded-md"
-                >
-                <option value="">Select Application Category</option>
-                {allCat.map((category, index) => (
-                  <option key={index} value={category}>
-                    {category}
-                  </option>
-                ))}
-              </select>
-
-              {/* Authentication Type Dropdown */}
-              <label className="flex items-center gap-1">
-                Authentication Type<span className="text-red-500">*</span>
-              </label>
-              <select
-                value={authenticationType}
-                onChange={(e) => setAuthenticationType(e.target.value)}
-                className="w-full p-2 border rounded-md"
-                >
-                <option value="">Select Authentication Type</option>
-                {authTypes.map((auth, index) => (
-                    <option key={index} value={auth}>
-                    {auth}
-                  </option>
-                ))}
-              </select>
-            </div>
-
-            {/* App Description */}
-            <div className="space-y-2">
-              <label className="flex items-center gap-1">
-                App Description<span className="text-red-500">*</span>
-              </label>
-              <div className="border rounded-md">
-                <textarea
-                  value={appDescription}
-                  onChange={(e) => setDescription(e.target.value)}
-                  className="w-full p-2 min-h-[100px] resize-none"
-                  placeholder="Enter description..."
+                  <input
+                    type="text"
+                    // value={appName}
+                    value={appName ?? ""}
+                    onChange={(e) => setAppName(e.target.value)}
+                    className="w-full p-2 border rounded-md"
+                    placeholder="Enter application name here"
+                    disabled={!!payload} // Disable appName during edit mode
                   />
-              </div>
-            </div>
 
-            {/* Connection Parameters Table */}
-            <div className="space-y-2">
-              <div className="mt-8">
-                <h3 className="text-xl font-semibold text-gray-800 mb-4">
-                  Connection Level Param Fields
-                </h3>
-                <ParamTable rows={rows} setRows={setRows} />
-              </div>
-            </div>
-          </div>
+                  {/* App Category Dropdown */}
+                  <label className="flex items-center gap-1">
+                    App Category<span className="text-red-500">*</span>
+                  </label>
+                  <select
+                    value={appCategory}
+                    onChange={(e) => setAppCategory(e.target.value)}
+                    className="w-full p-2 border rounded-md"
+                  >
+                    <option value="">Select Application Category</option>
+                    {allCat.map((category, index) => (
+                      <option key={index} value={category}>
+                        {category}
+                      </option>
+                    ))}
+                  </select>
 
-          {/* Action Buttons */}
-          <div className="flex justify-end gap-2 mt-6">
-            {(appName ||
-              appCategory ||
-              authenticationType ||
-              appDescription ||
-              rows.length > 0) && (
+                  {/* Authentication Type Dropdown */}
+                  <label className="flex items-center gap-1">
+                    Authentication Type<span className="text-red-500">*</span>
+                  </label>
+                  <select
+                    value={authenticationType}
+                    onChange={(e) => setAuthenticationType(e.target.value)}
+                    className="w-full p-2 border rounded-md"
+                  >
+                    <option value="">Select Authentication Type</option>
+                    {authTypes.map((auth, index) => (
+                      <option key={index} value={auth}>
+                        {auth}
+                      </option>
+                    ))}
+                  </select>
+                </div>
+
+                {/* App Description */}
+                <div className="space-y-2">
+                  <label className="flex items-center gap-1">
+                    App Description<span className="text-red-500">*</span>
+                  </label>
+                  <div className="border rounded-md">
+                    <textarea
+                      value={appDescription}
+                      onChange={(e) => setDescription(e.target.value)}
+                      className="w-full p-2 min-h-[100px] resize-none"
+                      placeholder="Enter description..."
+                    />
+                  </div>
+                </div>
+
+                {/* Connection Parameters Table */}
+                <div className="space-y-2">
+                  <div className="mt-8">
+                    <h3 className="text-xl font-semibold text-gray-800 mb-4">
+                      Connection Level Param Fields
+                    </h3>
+                    <ParamTable rows={rows} setRows={setRows} />
+                  </div>
+                </div>
+              </div>
+
+              {/* Action Buttons */}
+              <div className="flex justify-end gap-2 mt-6">
+                {(appName ||
+                  appCategory ||
+                  authenticationType ||
+                  appDescription ||
+                  rows.length > 0) && (
                   <button
-                  className="px-4 py-2 border rounded-md hover:bg-gray-50"
-                  onClick={() => {
+                    className="px-4 py-2 border rounded-md hover:bg-gray-50"
+                    onClick={() => {
                       setPayLoad(null); // Clear payload to reset form
                       setAppName("");
                       setAppCategory("");
                       setAuthenticationType("");
                       setDescription("");
-                  setRows([]);
-                }}
-              >
-                CANCEL
-              </button>
-            )}
-            <button
-              onClick={handleSave}
-              className="px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700"
-              >
-              {payload ? "UPDATE" : "SAVE"}
-            </button>
+                      setRows([]);
+                    }}
+                  >
+                    CANCEL
+                  </button>
+                )}
+                <button
+                  onClick={handleSave}
+                  className="px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700"
+                >
+                  {payload ? "UPDATE" : "SAVE"}
+                </button>
+              </div>
+            </div>
           </div>
-        </div>
-      </div>
 
-      {/* Application Table */}
-      <ApplicationTable payload={payload} setPayLoad={setPayLoad} />
-                </div>
+          {/* Application Table */}
+          <ApplicationTable payload={payload} setPayLoad={setPayLoad} />
+        </div>
       </div>
     </>
   );

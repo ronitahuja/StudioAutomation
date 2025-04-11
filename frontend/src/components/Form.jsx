@@ -38,10 +38,9 @@ const Form = () => {
       }
     };
     if (localStorage.getItem("TransactionLevelParamFields")) {
-      let data = JSON.parse(localStorage.getItem("TransactionLevelParamFields"));
-      for (let i = 0; i < data.length; i++) {
-        data[i] = JSON.parse(data[i]);
-      }
+      let data = JSON.parse(
+        localStorage.getItem("TransactionLevelParamFields")
+      );
       if (data !== null) {
         setRows(data);
       }

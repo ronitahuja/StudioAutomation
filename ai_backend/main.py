@@ -9,6 +9,7 @@ from flask_cors import CORS
 from dotenv import load_dotenv
 import os
 import asyncio
+import json
 
 
 load_dotenv()
@@ -50,8 +51,57 @@ def get_prompt():
         )
 
         results = crew.kickoff_for_each(inputs=[{"query": user_input}])
+        results=results[0]
+        print(results)
 
-        return jsonify({"message": "Execution complete", "results": str(results)}), 200
+        if isinstance(results.raw,str):
+            json_result = json.loads(results.raw)
+            print(json_result)
+            return jsonify({"message": "Execution complete", "results": json_result}), 200
+        
+        # json_result = {
+        #     "appName": "example_app",
+        #     "appCategory": "example_category",
+        #     "authenticationType": "example_authentication",
+        #     "appDescription": "example_description",
+        #     "connectionLevelParamFields": [
+        #         {
+        #             "paramName": "value1",
+        #             "paramType": "Text",
+        #             "mandatory": True,
+        #             "sensitive": False,
+        #             "description": "Parameter description",
+        #             "variableName": "variable_name"
+        #         },
+        #         {
+        #             "paramName": "value2",
+        #             "paramType": "Number",
+        #             "mandatory": False,
+        #             "sensitive": True,
+        #             "description": "Parameter description",
+        #             "variableName": "variable_name"
+        #         }
+        #     ],
+        #     "transactionLevelParamFields": [
+        #         {
+        #             "paramName": "value3",
+        #             "paramType": "Boolean",
+        #             "mandatory": True,
+        #             "sensitive": False,
+        #             "description": "Parameter description",
+        #             "variableName": "variable_name"
+        #         },
+        #         {
+        #             "paramName": "value4",
+        #             "paramType": "Text",
+        #             "mandatory": False,
+        #             "sensitive": True,
+        #             "description": "Parameter description",
+        #             "variableName": "variable_name"
+        #         }
+        #     ]
+        # }
+        # return jsonify({"message": "Execution complete", "results": json_result}), 200
 
     except Exception as e:
         import traceback
