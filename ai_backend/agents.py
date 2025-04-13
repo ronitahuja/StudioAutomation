@@ -173,6 +173,7 @@ input_agent = Agent(
     verbose=True,
     memory=True,
     allow_delegation=True,
+    human_input=True,
     max_iter=2
 )
 
@@ -186,6 +187,7 @@ search_agent = Agent(
     backstory="A search specialist that fetches the latest and most relevant news headlines efficiently.",
     verbose=True,
     memory=True,
+    human_input=True,
     allow_delegation=True,
 )
 
@@ -199,6 +201,7 @@ insert_in_mongodb_agent = Agent(
     backstory="A database expert specializing in storing application data securely and efficiently.",
     verbose=True,
     memory=True,
+    human_input=True,
     allow_delegation=False,
 )
 
@@ -213,6 +216,7 @@ fetch_app_from_mongodb_agent = Agent(
     verbose=True,
     memory=True,
     allow_delegation=True,
+    human_input=True,
     max_iter=30
 )
 
@@ -235,6 +239,7 @@ segregate_params_agent = Agent(
     ),
     verbose=True,
     memory=True,
+    human_input=True,
     allow_delegation=True,
     max_iter=3
 )
@@ -249,6 +254,7 @@ return_new_app_details_agent = Agent(
     backstory="An AI assistant responsible for creating app details based on request parameters and user input.",
     verbose=True,
     memory=True,
+    human_input=True,
     allow_delegation=False,
     max_iter=3
 )
