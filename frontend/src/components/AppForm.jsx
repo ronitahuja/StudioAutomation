@@ -3,6 +3,7 @@ import axios from "axios";
 import ParamTable from "./PramTable";
 import ApplicationTable from "./ApplicationTable";
 import ApplicationAIAgent from "./ApplicationAIAgent";
+import ChatApp from "./ChatApp";
 
 function AppForm() {
   const [rows, setRows] = useState([]);
@@ -144,6 +145,7 @@ function AppForm() {
   return (
     <>
       <div className="flex ">
+        <ChatApp />
         <ApplicationAIAgent setData={setData} sendData={setAiagentresponse} />
 
         <div className="flex flex-col items-center">

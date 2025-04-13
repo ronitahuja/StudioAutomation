@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>CrewAI Interactive</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/4.0.1/socket.io.js"></script>
+  </head>
+  <body>
+    <button onclick="startCrew()">Start Crew</button>
+    <h1>CrewAI Interactive</h1>
+    <div id="output"></div>
+    <div id="input-area">
+      <input type="text" id="user-input" placeholder="Enter your input" />
+      <button onclick="submitInput()">Submit</button>
+    </div>
+
+    <div id="agent-question">
+      <p id="question-text"></p>
+      <input type="text" id="user-answer" placeholder="Your answer" />
+      <button onclick="submitAnswer()">Submit Answer</button>
+    </div>
+
+    <script>
+      var socket = io();
+        function startCrew() {
+        socket.emit('start_crew');
+     }
+      socket.on("crew_started", function (data) {
+        appendToOutput("Crew execution started");
+      });
+
+      socket.on("agent_started", function (data) {
+        appendToOutput(`Agent ${data.agent} started task: ${data.task}`);
+      });
+
+      socket.on("agent_completed", function (data) {
+        appendToOutput(
+          `Agent ${data.agent} completed task. Output: ${data.output}`
+        );
+      });
+
+      socket.on("crew_completed", function (data) {
+        appendToOutput(
+          `Crew execution completed. Final output: ${data.output}`
+        );
+      });
+
+      socket.on("request_input", function (data) {
+        appendToOutput(data.message);
+        document.getElementById("input-area").style.display = "block";
+      });
+      socket.on("agent_question", function (data) {
+        document.getElementById("agent-question").style.display = "block";
+        document.getElementById("question-text").innerText = data.question;
+      });
+
+      function submitAnswer() {
+        const answer = document.getElementById("user-answer").value;
+        socket.emit("provide_answer", { answer: answer });
+        document.getElementById("agent-question");
+      }
+
+      function submitInput() {
+        var input = document.getElementById("user-input").value;
+        socket.emit("provide_input", { input: input });
+        document.getElementById("input-area").style.display = "none";
+        document.getElementById("user-input").value = "";
+        appendToOutput(`User input provided: ${input}`);
+      }
+
+      function appendToOutput(message) {
+        var outputDiv = document.getElementById("output");
+        outputDiv.innerHTML += "<p>" + message + "</p>";
+      }
+    </script>
+  </body>
+</html>
