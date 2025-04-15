@@ -66,16 +66,11 @@
 
 from crewai.tools import tool
 import context
-<<<<<<< HEAD
 from socket_manager import socketio  
-=======
-from socket_manager import socketio  # no circular import
->>>>>>> cb49e98 (socket trial)
 
 @tool("Take Input Tool")
 def take_input_tool(prompt: str) -> str:
     """Prompts the user for input and waits for the response via frontend."""
-<<<<<<< HEAD
     print(f"[TOOL] Asking user: {prompt}") 
     socketio.emit('agent_question', {'question': prompt})
 
@@ -85,14 +80,3 @@ def take_input_tool(prompt: str) -> str:
     print(f"[TOOL] User responded: {context.user_answer}") 
 
     return context.user_answer if context.user_answer else "No answer received"
-=======
-    print(f"[TOOL] Asking user: {prompt}")  # Debug print
-    socketio.emit('agent_question', {'question': prompt})
-
-    context.waiting_event.clear()
-    context.waiting_event.wait()  # Pauses until frontend responds
-
-    print(f"[TOOL] User responded: {context.user_answer}") 
-
-    return context.user_answer if context.user_answer else "No answer received"
->>>>>>> cb49e98 (socket trial)

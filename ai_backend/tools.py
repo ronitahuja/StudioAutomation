@@ -80,10 +80,6 @@ from custom_tools.insert_app_in_mongodb_tool import insert_app_in_mongodb_tool
 from custom_tools.take_input_tool import take_input_tool
 from custom_tools.fetch_app_from_mongodb_tool import fetch_app_from_mongodb_tool
 
-<<<<<<< HEAD
-=======
-# External tools
->>>>>>> cb49e98 (socket trial)
 serper_tool = SerperDevTool(api_key=os.getenv("SERPER_API_KEY"))
 
 TOOLS = {
