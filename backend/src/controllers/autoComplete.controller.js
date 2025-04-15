@@ -2,7 +2,7 @@ const LLMService = new require("../services/llm.service");
 const axios = require("axios");
 
 class autoComplete {
-  constructor(model = "llama-3.3-70b-specdec") {
+  constructor(model = "gpt-4.1") {
     this.llmService = new LLMService(model);
   }
   async completeCode(req, res, next) {

@@ -8,7 +8,6 @@ import models from "../constants/models";
 import DropDown from "./DropDown";
 import themes from "../constants/themes";
 import languages from "../constants/languages";
-import LikeDislike from "./LikeDislike";
 import axios from "axios";
 import * as monaco from "monaco-editor";
 
@@ -125,7 +124,6 @@ const CodeEditor = ({
       try {
         setIsLoading(true);
   
-        // Clear previous suggestion reference before fetching new one
         currentSuggestionRef.current = "";
   
         const suggestion = await getAISuggestions(code, position);
@@ -139,13 +137,11 @@ const CodeEditor = ({
         const model = editorRef.current.getModel();
         if (!model) return;
   
-        // Clear previous decorations
         if (decorationIds.length > 0) {
           setDecorationIds([]);
           editorRef.current.deltaDecorations(decorationIds, []);
         }
   
-        // Ensure position values are correct
         const editorPosition = editorRef.current.getPosition();
         if (!editorPosition) return;
   
@@ -261,7 +257,6 @@ const CodeEditor = ({
     };
   }, []);
 
-  // Focus the textarea when the modal opens
   useEffect(() => {
     if (isModalOpen && textareaRef.current) {
       textareaRef.current.focus();
@@ -297,12 +292,10 @@ const CodeEditor = ({
     });
   };
   
-  // Handle code changes and propagate to parent component
   const handleEditorChange = (value) => {
     if (value.trim() === "") localStorage.setItem("code", "");
     if (!value || !editorRef.current) return;
   
-    // Capture position at the start to ensure accuracy
     const position = editorRef.current.getPosition();
     if (!position) return;
   
@@ -314,11 +307,9 @@ const CodeEditor = ({
       onCodeChange(value || "");
     }
   };
-  // Handle language change
   const handleLanguageChange = (newLanguage) => {
-    setLanguage(newLanguage); // Update local state
+    setLanguage(newLanguage); 
 
-    // Pass the updated language to parent component
     if (onLanguageChange) {
       onLanguageChange(newLanguage);
     }
@@ -481,7 +472,7 @@ const CodeEditor = ({
                       onCodeChange(updatedCode);
                     }
 
-                    setIsAiResponseVisible(false); // Hide AI response after inserting
+                    setIsAiResponseVisible(false); 
                   }
                 }}
                 className="px-3 py-1 bg-green-600 text-white rounded text-sm"
@@ -490,7 +481,7 @@ const CodeEditor = ({
               </button>
               <button
                 onClick={() => {
-                  setAiCode(""); // Clear AI response
+                  setAiCode(""); 
                   setIsAiResponseVisible(false);
                 }}
                 className="px-3 py-1 bg-red-600 text-white rounded text-sm"
@@ -510,7 +501,6 @@ const CodeEditor = ({
           )}
         </div>
       )}
-      <LikeDislike modelName={model} />
     </div>
   );
 };

@@ -15,7 +15,7 @@ const ProtectedRoute = ({children}) => {
             // Check if the token is expired
             const currentTime = Math.floor(Date.now() / 1000);
 
-            if(decodedToken.exp < currentTime) return false; //token expired
+            if(decodedToken.exp < currentTime) return false; 
             return true;
         }
         catch(err){
@@ -26,6 +26,6 @@ const ProtectedRoute = ({children}) => {
     return isAuthenticated ? children : <Navigate to="/login" />;
 }
 ProtectedRoute.propTypes = {
-    children: PropTypes.node.isRequired, // Ensure `children` is a valid React node
+    children: PropTypes.node.isRequired, 
 };
 export default ProtectedRoute;

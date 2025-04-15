@@ -7,7 +7,7 @@ class AppActionRepository {
         appActionName: appActionData.appActionName,
         language: appActionData.language,
         applicationName: appActionData.applicationName,
-        transcationLevelParamFields: appActionData.transcationLevelParamFields,
+        transactionLevelParamFields: appActionData.transactionLevelParamFields,
         code: appActionData.code,
         details: appActionData.details,
       });

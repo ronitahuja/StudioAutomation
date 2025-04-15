@@ -11,7 +11,7 @@ class FunctionRepository {
     }
   }
 
-  async searchByEmbedding(queryEmbedding, topK = 5) {
+  async searchByEmbedding(queryEmbedding, topK = 10) {
     try {
       const results = await FunctionModel.aggregate([
         {
@@ -32,7 +32,7 @@ class FunctionRepository {
     }
   }
 
-  async vectorSearch(queryEmbedding, topK = 5, threshold = 0.5) {
+  async vectorSearch(queryEmbedding, topK = 10, threshold = 0.5) {
     try {
       const queryVector = Array.from(queryEmbedding);
       const results = await FunctionModel.aggregate([
@@ -48,12 +48,12 @@ class FunctionRepository {
         },
         {
           $addFields: {
-            similarityScore: { $meta: "vectorSearchScore" }, 
+            similarityScore: { $meta: "vectorSearchScore" },
           },
         },
         {
           $match: {
-            similarityScore: { $gte: threshold }, 
+            similarityScore: { $gte: threshold },
           },
         },
         {

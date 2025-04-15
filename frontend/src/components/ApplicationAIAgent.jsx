@@ -1,22 +1,91 @@
-import React, { useState } from "react";
-import axios from "axios";
+import React, { useState, useRef, useEffect } from "react";
+import { io } from "socket.io-client";
 
 const ApplicationAIAgent = ({ setData, sendData }) => {
   const [showSidebar, setShowSidebar] = useState(true);
   const [prompt, setPrompt] = useState("");
   const [loading, setLoading] = useState(false);
+  const socketRef = useRef(null);
+  const [isConnected, setIsConnected] = useState(false);
+  const [firstTime, setFirstTime] = useState(false);
+  const [currQuestion, setCurrentQuestion] = useState("");
+
+  useEffect(() => {}, [currQuestion]);
+
+  useEffect(() => {
+    socketRef.current = io("http://localhost:8000");
+
+    socketRef.current.on("connect", () => {
+      console.log("Connected to server");
+      setIsConnected(true);
+    });
+
+    socketRef.current.on("disconnect", () => {
+      console.log("Disconnected from server");
+      setIsConnected(false);
+    });
+
+    socketRef.current.on("agent_question", (data) => {
+      console.log("Received from server:", data);
+      setCurrentQuestion(data.question);
+      setShowSidebar(true);
+      setLoading(false);
+    });
+
+    socketRef.current.on("crew_completed", (data) => {
+      console.log("Received from server:", data["output"]);
+      setFirstTime(false);
+      setShowSidebar(false);
+      setLoading(false);
+      setData(data["output"]);
+    });
+
+    return () => {
+      socketRef.current.disconnect();
+    };
+  }, []);
 
   const handleSend = async () => {
     if (!prompt.trim()) return alert("Please enter a prompt");
     setLoading(true);
     try {
       console.log(prompt);
-      const response = await axios.post(
-        "http://127.0.0.1:8000/api/user_prompt",
-        { prompt }
-      );
-      console.log(response.data.results);
-      setData(response.data.results);
+      if (!firstTime) {
+        const payload = {
+          prompt,
+          currState: {
+            appName: localStorage.getItem("appName"),
+            authenticationType: localStorage.getItem("authenticationType"),
+            appDescription: localStorage.getItem("appDescription"),
+            appCategory: localStorage.getItem("appCategory"),
+            connectionLevelParamFields: localStorage.getItem(
+              "ConnectionLevelParamFields"
+            ),
+            transactionLevelParamFields: localStorage.getItem(
+              "TransactionLevelParamFields"
+            ),
+          },
+        };
+        socketRef.current.emit("start_crew", payload);
+        setFirstTime(true);
+      } else {
+        const currState={
+            appName: localStorage.getItem("appName"),
+            authenticationType: localStorage.getItem("authenticationType"),
+            appDescription: localStorage.getItem("appDescription"),
+            appCategory: localStorage.getItem("appCategory"),
+            connectionLevelParamFields: localStorage.getItem(
+              "ConnectionLevelParamFields"
+            ),
+            transactionLevelParamFields: localStorage.getItem(
+              "TransactionLevelParamFields"
+            ),
+          }
+        socketRef.current.emit("provide_answer", {
+          answer: {prompt,currState}
+        });
+      }
+      setPrompt("");
     } catch (error) {
       console.error("Error calling API:", error);
     } finally {
@@ -38,6 +107,11 @@ const ApplicationAIAgent = ({ setData, sendData }) => {
               ✖
             </button>
           </div>
+          {currQuestion && (
+            <p className=" border-2 rounded p-2  bg-blue-1000 mb-4 text-white">
+              {currQuestion}
+            </p>
+          )}
           <textarea
             className="w-full h-64 p-3 rounded-md text-black resize-none"
             placeholder="Enter prompt to create application..."
@@ -54,7 +128,6 @@ const ApplicationAIAgent = ({ setData, sendData }) => {
         </div>
       )}
 
-      {/* Main Content */}
       {!showSidebar && (
         <div className="flex-1  p-2 absolute ">
           <button
@@ -63,7 +136,6 @@ const ApplicationAIAgent = ({ setData, sendData }) => {
           >
             ☰ Show Sidebar
           </button>
-          {/* Main content goes here */}
         </div>
       )}
     </div>

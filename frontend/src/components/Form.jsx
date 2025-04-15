@@ -18,7 +18,6 @@ const Form = () => {
   const [isSaving, setIsSaving] = useState(false);
   const [saveMessage, setSaveMessage] = useState({ type: "", message: "" });
 
-  // Fetch applications from backend
   useEffect(() => {
     const fetchApplications = async () => {
       try {
@@ -48,12 +47,11 @@ const Form = () => {
     fetchApplications();
   }, []);
 
-  // Fetch Connection Level Params when an application is selected
   useEffect(() => {
     const fetchParams = async () => {
       try {
         if (!formData.applicationName) {
-          setConnectionLevelParams([]); // Reset when no application is selected
+          setConnectionLevelParams([]); 
           return;
         }
 
@@ -78,13 +76,12 @@ const Form = () => {
       }
     };
     fetchParams();
-  }, [formData.applicationName]); // Runs whenever application changes
+  }, [formData.applicationName]); 
 
   const handleChange = (e) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
   };
 
-  // Function to update code from MonacoEditor
   const updateCode = (code) => {
     setFormData((prev) => ({ ...prev, code }));
   };
@@ -98,7 +95,6 @@ const Form = () => {
     setSaveMessage({ type: "", message: "" });
 
     try {
-      // Validate required fields
       if (
         !formData.appActionName ||
         !formData.applicationName ||
@@ -114,16 +110,14 @@ const Form = () => {
         return;
       }
 
-      // Prepare data for submission
       const appActionData = {
         appActionName: formData.appActionName,
         language: localStorage.getItem("language"),
         applicationName: formData.applicationName,
-        transcationLevelParamFields: rows, // From ParamTable
+        transactionLevelParamFields: rows, 
         code: localStorage.getItem("code"),
         details: formData.details || "",
       };
-      // Send data to backend
       await axios.post(
         "http://localhost:3000/api/v1/appActions/createAppActions",
         appActionData,
@@ -137,8 +131,6 @@ const Form = () => {
       localStorage.clear();
       window.location.reload();
 
-      // Optional: Reset form or redirect
-      // resetForm();
     } catch (error) {
       console.error("Error saving app action:", error);
       setSaveMessage({
@@ -149,7 +141,6 @@ const Form = () => {
       });
     } finally {
       setIsSaving(false);
-      // Clear message after 5 seconds
       setTimeout(() => {
         setSaveMessage({ type: "", message: "" });
       }, 5000);
