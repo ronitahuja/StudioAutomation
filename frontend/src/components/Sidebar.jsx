@@ -14,24 +14,24 @@ function Sidebar({ payload, setPayLoad }) {
         isCollapsed ? "w-10" : "bg-gray-100 shadow-lg w-96"
       }`}
     >
-        {
-            isCollapsed && <button
-            onClick={toggleSidebar}
-            className="w-12 h-12  p-2 bg-blue-600 text-white "
-          >
-            {!isCollapsed ? ">" : "<"}
-          </button>
-        }
+      {isCollapsed && (
+        <button
+          onClick={toggleSidebar}
+          className="p-2 bg-blue-600 text-white text-sm font-medium rounded shadow ml-[-6rem] mt-1"
+        >
+          See Available Apps
+        </button>
+      )}
 
       <div className={`overflow-y-auto ${isCollapsed ? "hidden" : "block"}`}>
-      {
-            !isCollapsed && <button
+        {!isCollapsed && (
+          <button
             onClick={toggleSidebar}
             className="w-12 h-12  p-2 bg-blue-600 text-white "
           >
             {!isCollapsed ? ">" : "<"}
           </button>
-        }
+        )}
         <h3 className="ml-3 mt-2 text-xl font-semibold text-gray-800 mb-4">
           Application Table
         </h3>
