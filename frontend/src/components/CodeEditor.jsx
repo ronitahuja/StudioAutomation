@@ -26,7 +26,9 @@ const CodeEditor = ({
 
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [loading, setLoading] = useState(false);
-  const [position, setPosition] = useState(null);
+  //   const [position, setPosition] = useState(null);
+  const [position, setPosition] = useState({ top: 0, left: 0 });
+
   const [inputValue, setInputvalue] = useState("");
   const [aiCode, setAiCode] = useState("");
   const [isAiResponseVisible, setIsAiResponseVisible] = useState(true);
@@ -106,7 +108,6 @@ const CodeEditor = ({
       },
     ]);
 
-
     clearDecorations();
     setCurrentSuggestion(null);
     currentSuggestionRef.current = null;
@@ -123,28 +124,28 @@ const CodeEditor = ({
     debounce(async (code, position) => {
       try {
         setIsLoading(true);
-  
+
         currentSuggestionRef.current = "";
-  
+
         const suggestion = await getAISuggestions(code, position);
         setCurrentSuggestion(suggestion);
-  
+
         currentSuggestionRef.current = suggestion;
         console.log(currentSuggestionRef.current);
-  
-        if (!editorRef.current ) return;
-  
+
+        if (!editorRef.current) return;
+
         const model = editorRef.current.getModel();
         if (!model) return;
-  
+
         if (decorationIds.length > 0) {
           setDecorationIds([]);
           editorRef.current.deltaDecorations(decorationIds, []);
         }
-  
+
         const editorPosition = editorRef.current.getPosition();
         if (!editorPosition) return;
-  
+
         const newDecorations = editorRef.current.deltaDecorations(
           [],
           [
@@ -164,19 +165,19 @@ const CodeEditor = ({
             },
           ]
         );
-  
+
         setDecorationIds(newDecorations);
       } catch (error) {
         console.error("Error fetching suggestions:", error);
       } finally {
         setIsLoading(false);
       }
-    }, 5000), 
+    }, 5000),
     [editorRef.current, decorationIds]
   );
-  useEffect(()=>{
+  useEffect(() => {
     currentSuggestionRef.current = "";
-  },[])
+  }, []);
 
   // Save state to localStorage
   useEffect(() => {
@@ -243,10 +244,16 @@ const CodeEditor = ({
         event.preventDefault();
         if (editorRef.current) {
           const editor = editorRef.current;
-          const selection = editor.getSelection();
-          const pos = editor.getScrolledVisiblePosition(selection);
-          setPosition(pos);
-          setIsModalOpen(true);
+          const position = editor.getPosition();
+          const coords = editor.getScrolledVisiblePosition(position);
+
+          if (coords) {
+            setPosition({
+              top: coords.top + coords.height, 
+              left: coords.left,
+            });
+            setIsModalOpen(true);
+          }
         }
       }
     };
@@ -271,7 +278,7 @@ const CodeEditor = ({
 
   const handleEditorDidMount = (editor, monaco) => {
     editorRef.current = editor;
-  
+
     // Add AI suggestion style
     const style = document.createElement("style");
     style.textContent = `
@@ -282,7 +289,7 @@ const CodeEditor = ({
       }
     `;
     document.head.appendChild(style);
-  
+
     editor.addCommand(monaco.KeyCode.Tab, () => {
       if (currentSuggestionRef.current) {
         acceptSuggestion();
@@ -291,24 +298,24 @@ const CodeEditor = ({
       return false;
     });
   };
-  
+
   const handleEditorChange = (value) => {
     if (value.trim() === "") localStorage.setItem("code", "");
     if (!value || !editorRef.current) return;
-  
+
     const position = editorRef.current.getPosition();
     if (!position) return;
-  
+
     debouncedSuggestions(value, position);
-  
+
     setCode(value || "");
-  
+
     if (onCodeChange) {
       onCodeChange(value || "");
     }
   };
   const handleLanguageChange = (newLanguage) => {
-    setLanguage(newLanguage); 
+    setLanguage(newLanguage);
 
     if (onLanguageChange) {
       onLanguageChange(newLanguage);
@@ -392,7 +399,7 @@ const CodeEditor = ({
         {isModalOpen && position && (
           <div
             className="absolute bg-white p-3 rounded-lg shadow-lg border w-96"
-            style={{ top: position.top + 20, left: position.left }}
+            style={{ top: position.top + 20, left: position.left,zIndex:100 }}
           >
             <h2 className="text-sm font-bold mb-2">Write a Query</h2>
             <form onSubmit={handleSubmit}>
@@ -472,7 +479,7 @@ const CodeEditor = ({
                       onCodeChange(updatedCode);
                     }
 
-                    setIsAiResponseVisible(false); 
+                    setIsAiResponseVisible(false);
                   }
                 }}
                 className="px-3 py-1 bg-green-600 text-white rounded text-sm"
@@ -481,7 +488,7 @@ const CodeEditor = ({
               </button>
               <button
                 onClick={() => {
-                  setAiCode(""); 
+                  setAiCode("");
                   setIsAiResponseVisible(false);
                 }}
                 className="px-3 py-1 bg-red-600 text-white rounded text-sm"
@@ -515,4 +522,3 @@ CodeEditor.propTypes = {
 };
 
 export default CodeEditor;
- 

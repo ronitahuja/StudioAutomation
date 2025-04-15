@@ -1,8 +1,10 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
 import ParamTable from "./PramTable";
-import ApplicationTable from "./ApplicationTable";
 import ApplicationAIAgent from "./ApplicationAIAgent";
+import Loader from "./Loader";
+import ApplicationTable from "./ApplicationTable";
+import Sidebar from "./Sidebar";
 
 function AppForm() {
   const [rows, setRows] = useState([]);
@@ -14,6 +16,8 @@ function AppForm() {
   const [authTypes, setAuthTypes] = useState([]);
   const [payload, setPayLoad] = useState(null);
   const [aiagentResponse, setAiagentresponse] = useState("");
+
+  const [loader, setLoader] = useState(false);
 
   useEffect(() => {
     const fetchDropdownOptions = async () => {
@@ -121,6 +125,7 @@ function AppForm() {
           { withCredentials: true }
         );
         alert("Application updated successfully!");
+        
       } else {
         await axios.post("http://localhost:3000/api/v1/app/", newPayLoad, {
           withCredentials: true,
@@ -134,6 +139,7 @@ function AppForm() {
       setDescription("");
       setRows([]);
       setPayLoad(null);
+      localStorage.clear();
       window.location.reload();
     } catch (error) {
       console.error("Error saving application:", error);
@@ -143,11 +149,14 @@ function AppForm() {
 
   return (
     <>
-      <div className="flex ">
-        <ApplicationAIAgent setData={setData} sendData={setAiagentresponse} />
-
-        <div className="flex flex-col items-center">
-          <div className="bg-gray-50  p-6">
+      <div className="flex h-[93vh] relative">
+        {
+            loader && <Loader />
+        }
+        <ApplicationAIAgent setLoader={setLoader} setData={setData} sendData={setAiagentresponse} />
+        <div className="flex flex-row w-full">
+          {/* Main Form */}
+          <div className="w-3/4 flex flex-col items-center p-6">
             <div className="max-w-7xl mx-auto bg-white rounded-lg shadow-sm p-6">
               <div className="space-y-6">
                 <div className="space-y-2">
@@ -261,9 +270,8 @@ function AppForm() {
               </div>
             </div>
           </div>
-
-          <ApplicationTable payload={payload} setPayLoad={setPayLoad} />
         </div>
+        <Sidebar payload={payload} setPayLoad={setPayLoad} />
       </div>
     </>
   );
