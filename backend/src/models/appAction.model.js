@@ -1,13 +1,13 @@
 const mongoose = require("mongoose");
 
-const transcationLevelParamFieldsSchema = new mongoose.Schema({
+const transactionLevelParamFields = new mongoose.Schema({
   paramName: {
     type: String,
     required: true,
   },
   paramType: {
     type: String,
-    enum: ["Text", "Number","Boolean"], // Added 'type' for the field
+    enum: ["Text", "Number", "Boolean"], // Added 'type' for the field
     required: true,
   },
   mandatory: {
@@ -42,7 +42,7 @@ const AppActionSchema = new mongoose.Schema({
     type: String,
     required: true,
   },
-  transcationLevelParamFields: [transcationLevelParamFieldsSchema], // Embed the schema here
+  transactionLevelParamFields: [transactionLevelParamFields], // Embed the schema here
   code: {
     type: String,
     required: true,

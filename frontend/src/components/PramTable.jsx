@@ -53,7 +53,6 @@ const ParamTable = ({ rows, setRows }) => {
     if (!isAddButtonDisabled()) {
       setRows([...rows, newRowInput]);
 
-      // Reset the new row input
       setNewRowInput({
         paramName: "",
         paramType: "Text",
@@ -227,7 +226,6 @@ const ParamTable = ({ rows, setRows }) => {
               />
             </td>
             <td className="border p-2 text-center">
-              {/* Cell intentionally left empty */}
             </td>
           </tr>
         </tbody>

@@ -1,30 +1,44 @@
-const Groq = require("groq-sdk");
+// const Groq = require("groq-sdk");
+const { OpenAI } = require("openai");
+
+const openai = new OpenAI({
+  apiKey: process.env.OPENAI_API_KEY, // make sure your key is stored securely
+});
 const dotenv = require("dotenv");
 const { spawn } = require('child_process');
 dotenv.config();
 
-const groq = new Groq({
-  apiKey: process.env.MY_GROQ_API_KEY,
-});
+// const groq = new Groq({
+//   apiKey: process.env.MY_GROQ_API_KEY,
+// });
 
 class LLMService {
-  constructor(model = "llama-3.3-70b-specdec") {
+  constructor(model = "gpt-4.1") {
     this.model = model;
   }
   async queryLLM(systemPrompt) {
     try {
       const prompt = systemPrompt;
-      const response = await groq.chat.completions.create({
-        messages: [{ role: "user", content: prompt }],
+      // const response = await groq.chat.completions.create({
+      //   messages: [{ role: "user", content: prompt }],
+      //   model: this.model,
+      //   temperature: 1,
+      //   max_completion_tokens: 1024,
+      //   top_p: 1,
+      //   stream: false,
+      //   stop: null,
+      // });
+      const response = await openai.chat.completions.create({
         model: this.model,
+        messages: [{ role: "user", content: prompt }],
         temperature: 1,
-        max_completion_tokens: 1024,
+        max_tokens: 1024,
         top_p: 1,
         stream: false,
         stop: null,
       });
-      const generatedCode =
-        response.choices[0]?.message?.content || "no output";
+      console.log(response.choices[0]?.message?.content);
+      const generatedCode = response.choices[0]?.message?.content || "no output";
       return generatedCode;
     } catch (error) {
       console.error("Error querying LLM:", error);

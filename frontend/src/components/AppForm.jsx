@@ -15,7 +15,6 @@ function AppForm() {
   const [payload, setPayLoad] = useState(null);
   const [aiagentResponse, setAiagentresponse] = useState("");
 
-  // Fetch dropdown options from the backend
   useEffect(() => {
     const fetchDropdownOptions = async () => {
       try {
@@ -41,29 +40,25 @@ function AppForm() {
     if (localStorage.getItem("ConnectionLevelParamFields")) {
       let data = JSON.parse(localStorage.getItem("ConnectionLevelParamFields"));
       console.log("data", data);
-      // for(let i=0;i<data.length;i++){
-      //   data[i]=JSON.parse(data[i]);
-      // }
       if (data !== null) {
         setRows(data);
       }
     }
-    if(localStorage.getItem("appName")) {
+    if (localStorage.getItem("appName")) {
       setAppName(localStorage.getItem("appName"));
     }
-    if(localStorage.getItem("authenticationType")) {
+    if (localStorage.getItem("authenticationType")) {
       setAuthenticationType(localStorage.getItem("authenticationType"));
     }
-    if(localStorage.getItem("appDescription")) {  
-      setDescription(localStorage.getItem("appDescription")); 
+    if (localStorage.getItem("appDescription")) {
+      setDescription(localStorage.getItem("appDescription"));
     }
-    if(localStorage.getItem("appCategory")) {
+    if (localStorage.getItem("appCategory")) {
       setAppCategory(localStorage.getItem("appCategory"));
     }
     fetchDropdownOptions();
   }, []);
 
-  // Populate form fields when editing
   useEffect(() => {
     if (payload) {
       setAppName(payload.appName || "");
@@ -79,7 +74,7 @@ function AppForm() {
     setAppName(aiagentResponse?.appName || "");
     setAuthenticationType(aiagentResponse?.authenticationType);
     setDescription(aiagentResponse?.appDescription);
-    setAppCategory(aiagentResponse?.appDescription);
+    setAppCategory(aiagentResponse?.appCategory);
     setRows(aiagentResponse?.connectionLevelParamFields);
 
     localStorage.setItem(
@@ -92,7 +87,7 @@ function AppForm() {
       aiagentResponse?.authenticationType
     );
     localStorage.setItem("appDescription", aiagentResponse?.appDescription);
-    localStorage.setItem("appCategory", aiagentResponse?.appDescription);
+    localStorage.setItem("appCategory", aiagentResponse?.appCategory);
     localStorage.setItem(
       "authenticationType",
       aiagentResponse?.authenticationType
@@ -103,7 +98,6 @@ function AppForm() {
     );
   };
 
-  // Handle Save Button Click
   const handleSave = async () => {
     const newPayLoad = {
       appName,
@@ -114,7 +108,6 @@ function AppForm() {
     };
 
     try {
-      // Check if the application already exists
       const { data } = await axios.get(
         `http://localhost:3000/api/v1/app/${appName}`,
         { withCredentials: true }
@@ -129,14 +122,12 @@ function AppForm() {
         );
         alert("Application updated successfully!");
       } else {
-        // Create new application
         await axios.post("http://localhost:3000/api/v1/app/", newPayLoad, {
           withCredentials: true,
         });
         alert("Application saved successfully!");
       }
 
-      // Clear form after save
       setAppName("");
       setAppCategory("");
       setAuthenticationType("");
@@ -159,7 +150,6 @@ function AppForm() {
           <div className="bg-gray-50  p-6">
             <div className="max-w-7xl mx-auto bg-white rounded-lg shadow-sm p-6">
               <div className="space-y-6">
-                {/* Application Name */}
                 <div className="space-y-2">
                   <label className="flex items-center gap-1">
                     Application Name<span className="text-red-500">*</span>
@@ -167,21 +157,25 @@ function AppForm() {
 
                   <input
                     type="text"
-                    // value={appName}
                     value={appName ?? ""}
-                    onChange={(e) => setAppName(e.target.value)}
+                    onChange={(e) => {
+                      setAppName(e.target.value);
+                      localStorage.setItem("appName", e.target.value);
+                    }}
                     className="w-full p-2 border rounded-md"
                     placeholder="Enter application name here"
-                    disabled={!!payload} // Disable appName during edit mode
+                    disabled={!!payload}
                   />
 
-                  {/* App Category Dropdown */}
                   <label className="flex items-center gap-1">
                     App Category<span className="text-red-500">*</span>
                   </label>
                   <select
                     value={appCategory}
-                    onChange={(e) => setAppCategory(e.target.value)}
+                    onChange={(e) => {
+                      setAppCategory(e.target.value);
+                      localStorage.setItem("appCategory", e.target.value);
+                    }}
                     className="w-full p-2 border rounded-md"
                   >
                     <option value="">Select Application Category</option>
@@ -192,13 +186,15 @@ function AppForm() {
                     ))}
                   </select>
 
-                  {/* Authentication Type Dropdown */}
                   <label className="flex items-center gap-1">
                     Authentication Type<span className="text-red-500">*</span>
                   </label>
                   <select
                     value={authenticationType}
-                    onChange={(e) => setAuthenticationType(e.target.value)}
+                    onChange={(e) => {
+                      setAuthenticationType(e.target.value)
+                      localStorage.setItem("authenticationType", e.target.value);
+                    }}
                     className="w-full p-2 border rounded-md"
                   >
                     <option value="">Select Authentication Type</option>
@@ -210,7 +206,6 @@ function AppForm() {
                   </select>
                 </div>
 
-                {/* App Description */}
                 <div className="space-y-2">
                   <label className="flex items-center gap-1">
                     App Description<span className="text-red-500">*</span>
@@ -218,14 +213,15 @@ function AppForm() {
                   <div className="border rounded-md">
                     <textarea
                       value={appDescription}
-                      onChange={(e) => setDescription(e.target.value)}
+                      onChange={(e) =>{setDescription(e.target.value)
+                      localStorage.setItem("appDescription", e.target.value);
+                      }}
                       className="w-full p-2 min-h-[100px] resize-none"
                       placeholder="Enter description..."
                     />
                   </div>
                 </div>
 
-                {/* Connection Parameters Table */}
                 <div className="space-y-2">
                   <div className="mt-8">
                     <h3 className="text-xl font-semibold text-gray-800 mb-4">
@@ -236,7 +232,6 @@ function AppForm() {
                 </div>
               </div>
 
-              {/* Action Buttons */}
               <div className="flex justify-end gap-2 mt-6">
                 {(appName ||
                   appCategory ||
@@ -246,7 +241,7 @@ function AppForm() {
                   <button
                     className="px-4 py-2 border rounded-md hover:bg-gray-50"
                     onClick={() => {
-                      setPayLoad(null); // Clear payload to reset form
+                      setPayLoad(null);
                       setAppName("");
                       setAppCategory("");
                       setAuthenticationType("");
@@ -267,7 +262,6 @@ function AppForm() {
             </div>
           </div>
 
-          {/* Application Table */}
           <ApplicationTable payload={payload} setPayLoad={setPayLoad} />
         </div>
       </div>

@@ -20,7 +20,7 @@ const Header = () => {
     Cookies.remove("lastName");
     Cookies.remove("email");
     Cookies.remove("id");
-    Cookies.remove("token"); // Remove auth token if stored
+    Cookies.remove("token"); 
     navigate("/login");
   };
 
@@ -51,14 +51,6 @@ const Header = () => {
             }
           >
             App Actions
-          </NavLink>
-          <NavLink
-            to="/curl"
-            className={({ isActive }) =>
-              `hover:text-gray-300 ${isActive ? "font-bold text-gray-200" : ""}`
-            }
-          >
-            Curl
           </NavLink>
         </div>
       </div>

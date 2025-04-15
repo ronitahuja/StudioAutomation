@@ -20,6 +20,7 @@
     "mongoose": "^8.12.1",
     "ollama": "^0.5.14",
     "onnxruntime-node": "^1.21.0",
+    "openai": "^4.94.0",
     "winston": "^3.17.0",
     "winston-mongodb": "^6.0.0"
   },
