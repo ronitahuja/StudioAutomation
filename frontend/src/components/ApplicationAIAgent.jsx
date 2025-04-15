@@ -1,7 +1,7 @@
 import React, { useState, useRef, useEffect } from "react";
 import { io } from "socket.io-client";
 
-const ApplicationAIAgent = ({ setData, sendData }) => {
+const ApplicationAIAgent = ({ setLoader, setData, sendData }) => {
   const [showSidebar, setShowSidebar] = useState(true);
   const [prompt, setPrompt] = useState("");
   const [loading, setLoading] = useState(false);
@@ -30,6 +30,7 @@ const ApplicationAIAgent = ({ setData, sendData }) => {
       setCurrentQuestion(data.question);
       setShowSidebar(true);
       setLoading(false);
+      setLoader(false);
     });
 
     socketRef.current.on("crew_completed", (data) => {
@@ -37,6 +38,7 @@ const ApplicationAIAgent = ({ setData, sendData }) => {
       setFirstTime(false);
       setShowSidebar(false);
       setLoading(false);
+      setLoader(false);
       setData(data["output"]);
     });
 
@@ -46,9 +48,11 @@ const ApplicationAIAgent = ({ setData, sendData }) => {
   }, []);
 
   const handleSend = async () => {
-    if (!prompt.trim()) return alert("Please enter a prompt");
+      if (!prompt.trim()) return alert("Please enter a prompt");
+    setLoader(true);
     setLoading(true);
     try {
+        
       console.log(prompt);
       if (!firstTime) {
         const payload = {
@@ -94,10 +98,10 @@ const ApplicationAIAgent = ({ setData, sendData }) => {
   };
 
   return (
-    <div className="flex mt-10 w-[400px] h-screen ">
+    <div className="flex mt-10 w-[400px]">
       {/* Sidebar */}
       {showSidebar && (
-        <div className="w-full  bg-gray-800 text-white p-4 transition-all duration-300">
+        <div className="w-full bg-gray-800 text-white p-4 transition-all duration-300">
           <div className="flex justify-between items-center mb-4">
             <h2 className="text-xl font-bold">App Builder</h2>
             <button
