@@ -3,7 +3,6 @@ import axios from "axios";
 import ParamTable from "./PramTable";
 import ApplicationAIAgent from "./ApplicationAIAgent";
 import Loader from "./Loader";
-import ApplicationTable from "./ApplicationTable";
 import Sidebar from "./Sidebar";
 
 function AppForm() {

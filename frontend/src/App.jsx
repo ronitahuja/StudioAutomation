@@ -8,7 +8,6 @@ import Analysis from "./components/Analysis";
 import Login from "./components/Login";
 import Signup from "./components/Signup";
 import ProtectedRoute from "./components/ProtectedRoute";
-import CurlInput from "./components/CurlInput";
 
 function App() {
   return (
@@ -18,7 +17,6 @@ function App() {
       <Routes>
         <Route path="/login" element={<Login />} />
         <Route path="/signup" element={<Signup />} />
-        {/* <Route path="/curl" element={<CurlInput />} /> */}
         <Route path="/" element={<ProtectedRoute><Analysis /></ProtectedRoute>} />
         <Route path="/app" element={<ProtectedRoute><AppForm /></ProtectedRoute>} />
         <Route path="/appActions" element={<ProtectedRoute><Form /></ProtectedRoute>} />
