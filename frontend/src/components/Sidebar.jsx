@@ -32,9 +32,6 @@ function Sidebar({ payload, setPayLoad }) {
             {!isCollapsed ? ">" : "<"}
           </button>
         )}
-        <h3 className="ml-3 mt-2 text-xl font-semibold text-gray-800 mb-4">
-          Application Table
-        </h3>
         <ApplicationTable payload={payload} setPayLoad={setPayLoad} />
       </div>
     </div>
