@@ -103,7 +103,7 @@ const ApplicationAIAgent = ({ setLoader, setData, sendData }) => {
       {showSidebar && (
         <div className="w-full bg-gray-800 text-white p-4 transition-all duration-300">
           <div className="flex justify-between items-center mb-4">
-            <h2 className="text-xl font-bold">App Builder</h2>
+            <h2 className="text-xl font-bold">StudioAutomation</h2>
             <button
               className="text-gray-300 hover:text-white"
               onClick={() => setShowSidebar(false)}
@@ -138,7 +138,7 @@ const ApplicationAIAgent = ({ setLoader, setData, sendData }) => {
             className=" bg-gray-800 text-white px-3 py-1 rounded hover:bg-gray-700"
             onClick={() => setShowSidebar(true)}
           >
-            ☰ Show Sidebar
+            ☰ Chat With DarwinAI
           </button>
         </div>
       )}
