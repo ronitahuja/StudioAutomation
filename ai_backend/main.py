@@ -2,8 +2,6 @@ from crewai import Crew, Process, LLM,Agent
 from tasks import TASKS
 from agents import AGENTS
 from crewai.knowledge.source.string_knowledge_source import StringKnowledgeSource
-
-
 from flask import Flask, request, jsonify
 from flask_socketio import SocketIO
 from flask_cors import CORS
@@ -11,8 +9,10 @@ from dotenv import load_dotenv
 import os
 import asyncio
 import json
+from contextlib import redirect_stdout
 
 from socket_manager import socketio 
+from stdio_manager import StreamToSocket
 
 load_dotenv()
 app = Flask(__name__)
@@ -62,11 +62,18 @@ manager = Agent(
 def ping():
     return jsonify({"message": "Hiii"})
 
+@socketio.on('frontend_disconnect')
+def handle_disconnect():
+    print("Frontend disconnected")
+
 @socketio.on('start_crew')
 def start_crew(data):
     try:
         prompt = data.get("prompt")
         curr_state = data.get("currState")
+        sid = data.get("sid")
+        import context
+        context.sid = sid
 
         if not prompt:
             return jsonify({"error": "Prompt is required"}), 400
@@ -85,7 +92,10 @@ def start_crew(data):
             # planning=True
         )
 
-        results = crew.kickoff_for_each(inputs=[{"query": user_input}])
+        # results = crew.kickoff_for_each(inputs=[{"query": user_input}])
+        buffer = StreamToSocket()
+        with redirect_stdout(buffer):
+            results = crew.kickoff_for_each(inputs=[{"query": user_input}])
         results=results[0]
         print(results)
         if isinstance(results.raw,str):
@@ -109,20 +119,12 @@ def start_crew(data):
 def handle_answer(data):
     prompt = data.get("answer").get("prompt")
     curr_state = data.get("answer").get("currState")
-    print(f"Received answer from frontend: {data}")
-    # print(f"Received answer from frontend: {curr_state}")
     if not prompt:
         return jsonify({"error": "Prompt is required"}), 400
-    print("dummmmmyyyy")
     user_input = prompt.lower()+" currect State: "+json.dumps(curr_state)
-    print(f"Received answer from frontend: {data}")
-    print("comingggggg hereeeee")
     import context
     context.user_answer = user_input
-    print(f"Setting user_answer to: {context.user_answer}")
     context.waiting_event.set()  
-    print("comming")
-
 
 if __name__ == '__main__':
     socketio.run(app,host="0.0.0.0", port=8000, debug=True)

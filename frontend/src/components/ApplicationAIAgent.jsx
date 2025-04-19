@@ -1,58 +1,40 @@
-import React, { useState, useRef, useEffect } from "react";
-import { io } from "socket.io-client";
+import React, { useState, useRef, useEffect, useContext, use } from "react";
+import SocketContext from "./socketContext";
 
-const ApplicationAIAgent = ({ setLoader, setData, sendData }) => {
-  const [showSidebar, setShowSidebar] = useState(true);
+const ApplicationAIAgent = () => {
+  const socketContext = useContext(SocketContext);
+
+  const socketRef = socketContext.socket;
+  const [showSidebar, setShowSidebar] = [
+    socketContext.showSidebar,
+    socketContext.setShowSidebar,
+  ];
   const [prompt, setPrompt] = useState("");
-  const [loading, setLoading] = useState(false);
-  const socketRef = useRef(null);
-  const [isConnected, setIsConnected] = useState(false);
-  const [firstTime, setFirstTime] = useState(false);
-  const [currQuestion, setCurrentQuestion] = useState("");
+  const [loading, setLoading] = [
+    socketContext.loading,
+    socketContext.setLoading,
+  ];
+  const [isConnected, setIsConnected] = [
+    socketContext.isConnected,
+    socketContext.setIsConnected,
+  ];
+  const [firstTime, setFirstTime] = [
+    socketContext.firstTime,
+    socketContext.setFirstTime,
+  ];
+  const [currQuestion, setCurrentQuestion] = [
+    socketContext.currQuestion,
+    socketContext.setCurrentQuestion,
+  ];
+  const [loader, setLoader] = [socketContext.loader, socketContext.setLoader];
 
-  useEffect(() => {}, [currQuestion]);
-
-  useEffect(() => {
-    socketRef.current = io("http://localhost:8000");
-
-    socketRef.current.on("connect", () => {
-      console.log("Connected to server");
-      setIsConnected(true);
-    });
-
-    socketRef.current.on("disconnect", () => {
-      console.log("Disconnected from server");
-      setIsConnected(false);
-    });
-
-    socketRef.current.on("agent_question", (data) => {
-      console.log("Received from server:", data);
-      setCurrentQuestion(data.question);
-      setShowSidebar(true);
-      setLoading(false);
-      setLoader(false);
-    });
-
-    socketRef.current.on("crew_completed", (data) => {
-      console.log("Received from server:", data["output"]);
-      setFirstTime(false);
-      setShowSidebar(false);
-      setLoading(false);
-      setLoader(false);
-      setData(data["output"]);
-    });
-
-    return () => {
-      socketRef.current.disconnect();
-    };
-  }, []);
+  useEffect(() => {}, [socketContext.currQuestion]);
 
   const handleSend = async () => {
-      if (!prompt.trim()) return alert("Please enter a prompt");
+    if (!prompt.trim()) return alert("Please enter a prompt");
     setLoader(true);
     setLoading(true);
     try {
-        
       console.log(prompt);
       if (!firstTime) {
         const payload = {
@@ -69,24 +51,25 @@ const ApplicationAIAgent = ({ setLoader, setData, sendData }) => {
               "TransactionLevelParamFields"
             ),
           },
+          sid: socketRef.current.id,
         };
         socketRef.current.emit("start_crew", payload);
         setFirstTime(true);
       } else {
-        const currState={
-            appName: localStorage.getItem("appName"),
-            authenticationType: localStorage.getItem("authenticationType"),
-            appDescription: localStorage.getItem("appDescription"),
-            appCategory: localStorage.getItem("appCategory"),
-            connectionLevelParamFields: localStorage.getItem(
-              "ConnectionLevelParamFields"
-            ),
-            transactionLevelParamFields: localStorage.getItem(
-              "TransactionLevelParamFields"
-            ),
-          }
+        const currState = {
+          appName: localStorage.getItem("appName"),
+          authenticationType: localStorage.getItem("authenticationType"),
+          appDescription: localStorage.getItem("appDescription"),
+          appCategory: localStorage.getItem("appCategory"),
+          connectionLevelParamFields: localStorage.getItem(
+            "ConnectionLevelParamFields"
+          ),
+          transactionLevelParamFields: localStorage.getItem(
+            "TransactionLevelParamFields"
+          ),
+        };
         socketRef.current.emit("provide_answer", {
-          answer: {prompt,currState}
+          answer: { prompt, currState},
         });
       }
       setPrompt("");
@@ -96,6 +79,20 @@ const ApplicationAIAgent = ({ setLoader, setData, sendData }) => {
       setLoading(false);
     }
   };
+
+  useEffect(() => {
+    const handleBeforeUnload = () => {
+      if (socketRef.current && socketRef.current.connected) {
+        socketRef.current.emit("frontend_disconnect");
+      }
+    };
+
+    window.addEventListener("beforeunload", handleBeforeUnload);
+
+    return () => {
+      window.removeEventListener("beforeunload", handleBeforeUnload);
+    };
+  }, []);
 
   return (
     <div className="flex mt-10 w-[400px]">
@@ -121,6 +118,12 @@ const ApplicationAIAgent = ({ setLoader, setData, sendData }) => {
             placeholder="Enter prompt to create application..."
             value={prompt}
             onChange={(e) => setPrompt(e.target.value)}
+            onKeyDown={(e) => {
+              if (e.key === "Enter" && !e.shiftKey) {
+                e.preventDefault();
+                handleSend();
+              }
+            }}
           ></textarea>
           <button
             onClick={handleSend}
