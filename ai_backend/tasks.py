@@ -1,4 +1,3 @@
-
 from crewai import Task
 from agents import AGENTS
 from crewai.tasks.task_output import TaskOutput
@@ -42,7 +41,7 @@ fetch_app_from_mongodb_task = Task(
 )
 
 return_new_app_details_task = Task(
-    description="If the app is not present in MongoDB, build the app details from the request and return them. If anything is missing, ask the user for the missing details. No need to create the app if it exists(means exists:true). If it exists just dont return anything and end your task. To create the app, you will get details conneection_level_parameters, transaction_level_parameters, app_name, app_category, authentication_type and description from the previous task. Now you need to divide each connection_level_parameters and transaction_level_parameters into paramName, paramType (Text/Number/Boolean), mandatory (true/false), sensitive (true/false), description, and variableName. Return app details with appName, appCategory, authenticationType, appDescription, connectionLevelParamFields and transactionLevelParamFields.",
+    description="If the app is not present in MongoDB, build the app details from the request and return them. If anything is missing, ask the user for the missing details. No need to create the app if it exists(means exists:true). If it exists ,so return every filed as empty JSON,follow the expected output. To create the app, you will get details conneection_level_parameters, transaction_level_parameters, app_name, app_category, authentication_type and description from the previous task. Now you need to divide each connection_level_parameters and transaction_level_parameters into paramName, paramType (Text/Number/Boolean), mandatory (true/false), sensitive (true/false), description, and variableName. Return app details with appName, appCategory, authenticationType, appDescription, connectionLevelParamFields and transactionLevelParamFields.",
     agent=AGENTS["return_new_app_details_agent"],
     condition=is_app_absent,
     expected_output="""{

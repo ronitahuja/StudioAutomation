@@ -1,22 +1,46 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useContext } from "react";
 import axios from "axios";
 import ParamTable from "./PramTable";
 import ApplicationAIAgent from "./ApplicationAIAgent";
 import Loader from "./Loader";
 import Sidebar from "./Sidebar";
+import SocketContext from "./socketContext";
 
 function AppForm() {
-  const [rows, setRows] = useState([]);
-  const [appName, setAppName] = useState("");
-  const [allCat, setAllCat] = useState([]);
-  const [appCategory, setAppCategory] = useState("");
-  const [authenticationType, setAuthenticationType] = useState("");
-  const [appDescription, setDescription] = useState("");
-  const [authTypes, setAuthTypes] = useState([]);
-  const [payload, setPayLoad] = useState(null);
-  const [aiagentResponse, setAiagentresponse] = useState("");
+  const socketContext = useContext(SocketContext);
 
-  const [loader, setLoader] = useState(false);
+  const [rows, setRows] = [socketContext.rows, socketContext.setRows];
+  const [appName, setAppName] = [
+    socketContext.appName,
+    socketContext.setAppName,
+  ];
+  const [allCat, setAllCat] = [socketContext.allCat, socketContext.setAllCat];
+  const [appCategory, setAppCategory] = [
+    socketContext.appCategory,
+    socketContext.setAppCategory,
+  ];
+  const [authenticationType, setAuthenticationType] = [
+    socketContext.authenticationType,
+    socketContext.setAuthenticationType,
+  ];
+  const [appDescription, setDescription] = [
+    socketContext.appDescription,
+    socketContext.setDescription,
+  ];
+  const [authTypes, setAuthTypes] = [
+    socketContext.authTypes,
+    socketContext.setAuthTypes,
+  ];
+  const [payload, setPayLoad] = [
+    socketContext.payload,
+    socketContext.setPayLoad,
+  ];
+  const [aiagentResponse, setAiagentresponse] = [
+    socketContext.aiagentResponse,
+    socketContext.setAiagentresponse,
+  ];
+
+  const [loader, setLoader] = [socketContext.loader, socketContext.setLoader];
 
   useEffect(() => {
     const fetchDropdownOptions = async () => {
@@ -72,35 +96,6 @@ function AppForm() {
     }
   }, [payload]);
 
-  const setData = (aiagentResponse) => {
-    console.log(aiagentResponse);
-    setAppName(aiagentResponse?.appName || "");
-    setAuthenticationType(aiagentResponse?.authenticationType);
-    setDescription(aiagentResponse?.appDescription);
-    setAppCategory(aiagentResponse?.appCategory);
-    setRows(aiagentResponse?.connectionLevelParamFields);
-
-    localStorage.setItem(
-      "ConnectionLevelParamFields",
-      JSON.stringify(aiagentResponse?.connectionLevelParamFields)
-    );
-    localStorage.setItem("appName", aiagentResponse?.appName);
-    localStorage.setItem(
-      "authenticationType",
-      aiagentResponse?.authenticationType
-    );
-    localStorage.setItem("appDescription", aiagentResponse?.appDescription);
-    localStorage.setItem("appCategory", aiagentResponse?.appCategory);
-    localStorage.setItem(
-      "authenticationType",
-      aiagentResponse?.authenticationType
-    );
-    localStorage.setItem(
-      "TransactionLevelParamFields",
-      JSON.stringify(aiagentResponse?.transactionLevelParamFields)
-    );
-  };
-
   const handleSave = async () => {
     const newPayLoad = {
       appName,
@@ -124,7 +119,6 @@ function AppForm() {
           { withCredentials: true }
         );
         alert("Application updated successfully!");
-        
       } else {
         await axios.post("http://localhost:3000/api/v1/app/", newPayLoad, {
           withCredentials: true,
@@ -149,10 +143,8 @@ function AppForm() {
   return (
     <>
       <div className="flex h-[93vh] relative">
-        {
-            loader && <Loader />
-        }
-        <ApplicationAIAgent setLoader={setLoader} setData={setData} sendData={setAiagentresponse} />
+        {loader && <Loader />}
+        <ApplicationAIAgent />
         <div className="flex flex-row w-full">
           {/* Main Form */}
           <div className="w-3/4 flex flex-col items-center p-6">
@@ -200,8 +192,11 @@ function AppForm() {
                   <select
                     value={authenticationType}
                     onChange={(e) => {
-                      setAuthenticationType(e.target.value)
-                      localStorage.setItem("authenticationType", e.target.value);
+                      setAuthenticationType(e.target.value);
+                      localStorage.setItem(
+                        "authenticationType",
+                        e.target.value
+                      );
                     }}
                     className="w-full p-2 border rounded-md"
                   >
@@ -221,8 +216,9 @@ function AppForm() {
                   <div className="border rounded-md">
                     <textarea
                       value={appDescription}
-                      onChange={(e) =>{setDescription(e.target.value)
-                      localStorage.setItem("appDescription", e.target.value);
+                      onChange={(e) => {
+                        setDescription(e.target.value);
+                        localStorage.setItem("appDescription", e.target.value);
                       }}
                       className="w-full p-2 min-h-[100px] resize-none"
                       placeholder="Enter description..."
